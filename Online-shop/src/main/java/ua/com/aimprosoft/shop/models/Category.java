@@ -1,16 +1,17 @@
-package ua.com.aimprosoft.models;
+package ua.com.aimprosoft.shop.models;
 
 public class Category
 {
-	private int code;
+	private int id;
+	private String code;
 	private String name;
 
-	public int getCode()
+	public String getCode()
 	{
 		return code;
 	}
 
-	public void setCode(final int code)
+	public void setCode(final String code)
 	{
 		this.code = code;
 	}

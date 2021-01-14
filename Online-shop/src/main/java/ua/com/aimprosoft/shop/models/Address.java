@@ -1,13 +1,23 @@
-package ua.com.aimprosoft.models;
+package ua.com.aimprosoft.shop.models;
 
 public class Address
 {
+	private int id;
 	private String street;
-	private int postalCode;
+	private String postalCode;
 	private String town;
 	private String region;
 	private String country;
-	private Customer customer;
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(final int id)
+	{
+		this.id = id;
+	}
 
 	public String getStreet()
 	{
@@ -19,12 +29,12 @@ public class Address
 		this.street = street;
 	}
 
-	public int getPostalCode()
+	public String getPostalCode()
 	{
 		return postalCode;
 	}
 
-	public void setPostalCode(final int postalCode)
+	public void setPostalCode(final String postalCode)
 	{
 		this.postalCode = postalCode;
 	}
@@ -57,15 +67,5 @@ public class Address
 	public void setCountry(final String country)
 	{
 		this.country = country;
-	}
-
-	public Customer getCustomer()
-	{
-		return customer;
-	}
-
-	public void setCustomer(final Customer customer)
-	{
-		this.customer = customer;
 	}
 }

@@ -1,11 +1,33 @@
-package ua.com.aimprosoft.models;
+package ua.com.aimprosoft.shop.models;
 
 public class CartEntry
 {
+	private int id;
 	private int quantity;
 	private int entryNumber;
-	private int totalPrice;
+	private double totalPrice;
 	private Product product;
+	private Cart cart;
+
+	public Cart getCart()
+	{
+		return cart;
+	}
+
+	public void setCart(final Cart cart)
+	{
+		this.cart = cart;
+	}
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(final int id)
+	{
+		this.id = id;
+	}
 
 	public int getQuantity()
 	{
@@ -27,12 +49,12 @@ public class CartEntry
 		this.entryNumber = entryNumber;
 	}
 
-	public int getTotalPrice()
+	public double getTotalPrice()
 	{
 		return totalPrice;
 	}
 
-	public void setTotalPrice(final int totalPrice)
+	public void setTotalPrice(final double totalPrice)
 	{
 		this.totalPrice = totalPrice;
 	}

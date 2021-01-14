@@ -1,39 +1,39 @@
-package ua.com.aimprosoft.models;
+package ua.com.aimprosoft.shop.models;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 
 public class Customer
 {
+	private int id;
 	private String email;
+	private String password;
+	private String firstName;
+	private String lastName;
+	private Gender gender;
+	private Date birthdayDate;
+	private String phoneNumber;
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(final int id)
+	{
+		this.id = id;
+	}
 
 	public String getEmail()
 	{
 		return email;
 	}
 
-	private String password;
-	private String firstName, lastName;
-	private String gender;
-	private LocalDate birthdayDate;
-	private String phoneNumber;
-	private Cart cart;
-
 	public void setEmail(final String email)
 	{
 		this.email = email;
 	}
 
-	public Cart getCart()
-	{
-		return cart;
-	}
-
-	public void setCart(final Cart cart)
-	{
-		this.cart = cart;
-	}
-	
 	public String getPassword()
 	{
 		return password;
@@ -64,22 +64,22 @@ public class Customer
 		this.lastName = lastName;
 	}
 
-	public String getGender()
+	public Gender getGender()
 	{
 		return gender;
 	}
 
-	public void setGender(final String gender)
+	public void setGender(final Gender gender)
 	{
 		this.gender = gender;
 	}
 
-	public LocalDate getBirthdayDate()
+	public Date getBirthdayDate()
 	{
 		return birthdayDate;
 	}
 
-	public void setBirthdayDate(final LocalDate birthdayDate)
+	public void setBirthdayDate(final Date birthdayDate)
 	{
 		this.birthdayDate = birthdayDate;
 	}
