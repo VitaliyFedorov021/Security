@@ -4,9 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 
-public class Cart
+public class Cart extends Entity
 {
-	private int id;
 	private String code;
 	private double totalPrice;
 	private Date placedDate;
@@ -32,16 +31,6 @@ public class Cart
 	public void setCustomer(final Customer customer)
 	{
 		this.customer = customer;
-	}
-
-	public int getId()
-	{
-		return id;
-	}
-
-	public void setId(final int id)
-	{
-		this.id = id;
 	}
 
 	public String getCode()

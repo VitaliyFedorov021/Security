@@ -3,9 +3,8 @@ package ua.com.aimprosoft.shop.models;
 import java.util.Date;
 
 
-public class Customer
+public class Customer extends Entity
 {
-	private int id;
 	private String email;
 	private String password;
 	private String firstName;
@@ -13,16 +12,6 @@ public class Customer
 	private Gender gender;
 	private Date birthdayDate;
 	private String phoneNumber;
-
-	public int getId()
-	{
-		return id;
-	}
-
-	public void setId(final int id)
-	{
-		this.id = id;
-	}
 
 	public String getEmail()
 	{

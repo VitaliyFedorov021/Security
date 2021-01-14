@@ -1,8 +1,7 @@
 package ua.com.aimprosoft.shop.models;
 
-public class Category
+public class Category extends Entity
 {
-	private int id;
 	private String code;
 	private String name;
 

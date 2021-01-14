@@ -1,23 +1,13 @@
 package ua.com.aimprosoft.shop.models;
 
-public class Product
+public class Product extends Entity
 {
-	private int id;
 	private String code;
 	private String name;
 	private double price;
 	private String description;
 	private Category category;
 
-	public int getId()
-	{
-		return id;
-	}
-
-	public void setId(final int id)
-	{
-		this.id = id;
-	}
 
 	public Category getCategory()
 	{

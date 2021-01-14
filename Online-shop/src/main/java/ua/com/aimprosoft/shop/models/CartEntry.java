@@ -1,8 +1,7 @@
 package ua.com.aimprosoft.shop.models;
 
-public class CartEntry
+public class CartEntry extends Entity
 {
-	private int id;
 	private int quantity;
 	private int entryNumber;
 	private double totalPrice;
@@ -17,16 +16,6 @@ public class CartEntry
 	public void setCart(final Cart cart)
 	{
 		this.cart = cart;
-	}
-
-	public int getId()
-	{
-		return id;
-	}
-
-	public void setId(final int id)
-	{
-		this.id = id;
 	}
 
 	public int getQuantity()

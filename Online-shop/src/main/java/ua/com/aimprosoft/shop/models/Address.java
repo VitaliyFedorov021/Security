@@ -1,23 +1,12 @@
 package ua.com.aimprosoft.shop.models;
 
-public class Address
+public class Address extends Entity
 {
-	private int id;
 	private String street;
 	private String postalCode;
 	private String town;
 	private String region;
 	private String country;
-
-	public int getId()
-	{
-		return id;
-	}
-
-	public void setId(final int id)
-	{
-		this.id = id;
-	}
 
 	public String getStreet()
 	{
