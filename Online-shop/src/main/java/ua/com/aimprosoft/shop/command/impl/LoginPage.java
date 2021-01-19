@@ -7,11 +7,10 @@ import javax.servlet.ServletException;
 import ua.com.shop.aimprosoft.command.AbstractCommand;
 
 
-public class HomePageCommand extends AbstractCommand
+public class LoginPage extends AbstractCommand
 {
-
 	public void process() throws ServletException, IOException
 	{
-		forward("/home");
+		forward("/LoginPage");
 	}
 }

@@ -23,11 +23,14 @@ public abstract class AbstractCommand
 		this.response = response;
 	}
 
+	public void init() {
+	}
+
 	public abstract void process() throws ServletException, IOException;
 
 	protected void forward(String page) throws ServletException, IOException
 	{
-		RequestDispatcher rDispatcher = servletContext.getRequestDispatcher(page);
+		RequestDispatcher rDispatcher = servletContext.getRequestDispatcher("/" + page + ".jsp");
 		rDispatcher.forward(request, response);
 	}
 }

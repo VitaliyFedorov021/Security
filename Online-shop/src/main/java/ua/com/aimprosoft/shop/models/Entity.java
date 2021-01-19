@@ -1,4 +1,4 @@
-package ua.com.aimprosoft.shop.models;
+package ua.com.shop.aimprosoft.models;
 
 public class Entity
 {

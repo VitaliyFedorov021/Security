@@ -1,4 +1,7 @@
-package ua.com.aimprosoft.shop.models;
+package ua.com.shop.aimprosoft.models;
+
+import java.util.Objects;
+
 
 public class CartEntry extends Entity
 {
@@ -7,6 +10,45 @@ public class CartEntry extends Entity
 	private double totalPrice;
 	private Product product;
 	private Cart cart;
+
+	public CartEntry()
+	{
+	}
+
+	public CartEntry(final int quantity, final int entryNumber, final double totalPrice, final Product product,
+			final Cart cart)
+	{
+		this.quantity = quantity;
+		this.entryNumber = entryNumber;
+		this.totalPrice = totalPrice;
+		this.product = product;
+		this.cart = cart;
+	}
+
+	@Override
+	public boolean equals(final Object o)
+	{
+		if (this == o)
+		{
+			return true;
+		}
+		if (o == null || getClass() != o.getClass())
+		{
+			return false;
+		}
+		final CartEntry cartEntry = (CartEntry) o;
+		return quantity == cartEntry.quantity &&
+				entryNumber == cartEntry.entryNumber &&
+				Double.compare(cartEntry.totalPrice, totalPrice) == 0 &&
+				Objects.equals(product, cartEntry.product) &&
+				Objects.equals(cart, cartEntry.cart);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(quantity, entryNumber, totalPrice, product, cart);
+	}
 
 	public Cart getCart()
 	{
