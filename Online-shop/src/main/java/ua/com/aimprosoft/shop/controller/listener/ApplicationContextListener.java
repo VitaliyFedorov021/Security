@@ -1,26 +1,27 @@
-package ua.com.shop.aimprosoft.controller.listener;
+package ua.com.aimprosoft.shop.controller.listener;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
-import ua.com.shop.aimprosoft.database.dao.impl.CustomerDaoImpl;
-import ua.com.shop.aimprosoft.database.impl.HikariDataSourceImpl;
-import ua.com.shop.aimprosoft.database.service.CustomerService;
-import ua.com.shop.aimprosoft.database.service.impl.CustomerServiceImpl;
-import ua.com.shop.aimprosoft.util.Validator;
+import ua.com.aimprosoft.shop.dao.impl.CustomerDaoImpl;
+import ua.com.aimprosoft.shop.database.impl.HikariDataSourceImpl;
+import ua.com.aimprosoft.shop.service.CustomerService;
+import ua.com.aimprosoft.shop.service.impl.CustomerServiceImpl;
+import ua.com.aimprosoft.shop.util.CustomerValidator;
 
-
+@WebListener
 public class ApplicationContextListener implements ServletContextListener
 {
 	@Override
 	public void contextInitialized(final ServletContextEvent sce)
 	{
-		CustomerService customerService = new CustomerServiceImpl(new CustomerDaoImpl(new HikariDataSourceImpl()));
-		ServletContext context = sce.getServletContext();
+		final CustomerService customerService = new CustomerServiceImpl(new CustomerDaoImpl(new HikariDataSourceImpl()));
+		final ServletContext context = sce.getServletContext();
 		context.setAttribute("customerService", customerService);
-		Validator validator = new Validator();
-		context.setAttribute("valid", validator);
+		final CustomerValidator customerValidator = new CustomerValidator();
+		context.setAttribute("valid", customerValidator);
 		System.out.println("context initialized");
 	}
 

@@ -1,4 +1,4 @@
-package ua.com.shop.aimprosoft.command;
+package ua.com.aimprosoft.shop.controller.command;
 
 import java.io.IOException;
 
@@ -23,14 +23,17 @@ public abstract class AbstractCommand
 		this.response = response;
 	}
 
+
+
 	public void init() {
+
 	}
 
 	public abstract void process() throws ServletException, IOException;
 
-	protected void forward(String page) throws ServletException, IOException
+	protected void forward(final String page) throws ServletException, IOException
 	{
-		RequestDispatcher rDispatcher = servletContext.getRequestDispatcher("/" + page + ".jsp");
+		final RequestDispatcher rDispatcher = servletContext.getRequestDispatcher(page);
 		rDispatcher.forward(request, response);
 	}
 }

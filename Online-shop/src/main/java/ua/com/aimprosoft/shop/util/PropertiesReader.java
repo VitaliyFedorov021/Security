@@ -1,4 +1,4 @@
-package ua.com.shop.aimprosoft.util;
+package ua.com.aimprosoft.shop.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,12 +9,12 @@ public class PropertiesReader
 {
 	public static Properties readProperties()
 	{
-		Properties properties = new Properties();
-		try (InputStream reader = PropertiesReader.class.getClassLoader().getResourceAsStream("hikariDB.properties"))
+		final Properties properties = new Properties();
+		try (final InputStream reader = PropertiesReader.class.getClassLoader().getResourceAsStream("hikariDB.properties"))
 		{
 			properties.load(reader);
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
 			e.printStackTrace();
 		}

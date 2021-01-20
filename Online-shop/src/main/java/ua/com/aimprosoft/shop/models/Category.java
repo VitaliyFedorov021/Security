@@ -1,7 +1,4 @@
-package ua.com.shop.aimprosoft.models;
-
-import java.util.Objects;
-
+package ua.com.aimprosoft.shop.models;
 
 public class Category extends Entity
 {
@@ -16,28 +13,6 @@ public class Category extends Entity
 	{
 		this.code = code;
 		this.name = name;
-	}
-
-	@Override
-	public boolean equals(final Object o)
-	{
-		if (this == o)
-		{
-			return true;
-		}
-		if (o == null || getClass() != o.getClass())
-		{
-			return false;
-		}
-		final Category category = (Category) o;
-		return Objects.equals(code, category.code) &&
-				Objects.equals(name, category.name);
-	}
-
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(code, name);
 	}
 
 	public String getCode()

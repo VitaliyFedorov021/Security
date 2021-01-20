@@ -1,7 +1,6 @@
-package ua.com.shop.aimprosoft.models;
+package ua.com.aimprosoft.shop.models;
 
 import java.util.Date;
-import java.util.Objects;
 
 
 public class Customer extends Entity
@@ -16,33 +15,6 @@ public class Customer extends Entity
 
 	public Customer()
 	{
-	}
-
-	@Override
-	public boolean equals(final Object o)
-	{
-		if (this == o)
-		{
-			return true;
-		}
-		if (o == null || getClass() != o.getClass())
-		{
-			return false;
-		}
-		final Customer customer = (Customer) o;
-		return Objects.equals(email, customer.email) &&
-				Objects.equals(password, customer.password) &&
-				Objects.equals(firstName, customer.firstName) &&
-				Objects.equals(lastName, customer.lastName) &&
-				gender == customer.gender &&
-				Objects.equals(birthdayDate, customer.birthdayDate) &&
-				Objects.equals(phoneNumber, customer.phoneNumber);
-	}
-
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(email, password, firstName, lastName, gender, birthdayDate, phoneNumber);
 	}
 
 	public Customer(final String email, final String password, final String firstName, final String lastName,

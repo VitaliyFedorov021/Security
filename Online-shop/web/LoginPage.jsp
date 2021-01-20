@@ -14,7 +14,10 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<form action="/controller/" method="post">
+<div>
+    <a href="/"><button type="button" class="btn btn-primary">HOME</button></a>
+</div>
+<form action="/login?command=LOGIN" method="post">
     <div class="form-group col-md-4">
         <label for="email1">Login(email):</label>
         <input type="text" id="email1" name="email" class="form-control" placeholder="test@example.com" required><br>
@@ -23,17 +26,15 @@
         <label for="pass1">Password:</label>
         <input type="password" class="form-control" name="password" placeholder="Enter your password" required id="pass1"> <br>
     </div>
-    <br>${msg}
-    <br><br>
-    <input type="submit" value="Send" class="btn btn-primary"> <input type="reset" value="Reset" class="btn btn-secondary">
-    <input type="hidden" name="command" value="LOGIN">
+    <br>${message}<br>
+    <input type="submit" value="login" class="btn btn-primary">
 </form>
 
 <%--<div>--%>
 <%--    <p class="lead">--%>
 <%--        Have no account?--%>
 <%--    </p>--%>
-<%--    <a href="controller/signup?command=SignUpPage"><button type="button" class="btn btn-primary">Create account</button></a>--%>
+<%--    <a href="/signup?command=SignUpPage"><button type="button" class="btn btn-primary">Create account</button></a>--%>
 <%--</div>--%>
 
 </body>

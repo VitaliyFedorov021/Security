@@ -1,7 +1,4 @@
-package ua.com.shop.aimprosoft.models;
-
-import java.util.Objects;
-
+package ua.com.aimprosoft.shop.models;
 
 public class Address extends Entity
 {
@@ -13,41 +10,6 @@ public class Address extends Entity
 
 	public Address()
 	{
-	}
-
-	public Address(final String street, final String postalCode, final String town, final String region,
-			final String country)
-	{
-		this.street = street;
-		this.postalCode = postalCode;
-		this.town = town;
-		this.region = region;
-		this.country = country;
-	}
-
-	@Override
-	public boolean equals(final Object o)
-	{
-		if (this == o)
-		{
-			return true;
-		}
-		if (o == null || getClass() != o.getClass())
-		{
-			return false;
-		}
-		final Address address = (Address) o;
-		return Objects.equals(street, address.street) &&
-				Objects.equals(postalCode, address.postalCode) &&
-				Objects.equals(town, address.town) &&
-				Objects.equals(region, address.region) &&
-				Objects.equals(country, address.country);
-	}
-
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(street, postalCode, town, region, country);
 	}
 
 	public String getStreet()

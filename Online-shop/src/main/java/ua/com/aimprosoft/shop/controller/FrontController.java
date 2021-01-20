@@ -1,4 +1,4 @@
-package ua.com.shop.aimprosoft.controller;
+package ua.com.aimprosoft.shop.controller;
 
 import java.io.IOException;
 
@@ -8,17 +8,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ua.com.shop.aimprosoft.command.AbstractCommand;
-import ua.com.shop.aimprosoft.command.CommandFactory;
+import ua.com.aimprosoft.shop.controller.command.AbstractCommand;
+import ua.com.aimprosoft.shop.controller.command.CommandFactory;
 
-
+@WebServlet("/")
 public class FrontController extends HttpServlet
 {
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException
 	{
-		AbstractCommand command = getCommand(req);
+		final AbstractCommand command = getCommand(req);
 		command.init(getServletContext(), req, resp);
 		command.process();
 	}
@@ -35,7 +35,7 @@ public class FrontController extends HttpServlet
 		doGet(req, resp);
 	}
 
-	private AbstractCommand getCommand(HttpServletRequest request)
+	private AbstractCommand getCommand(final HttpServletRequest request)
 	{
 		return CommandFactory.getCommand(request);
 	}
