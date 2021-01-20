@@ -9,65 +9,74 @@ import javax.servlet.http.HttpSession;
 import ua.com.aimprosoft.shop.controller.command.AbstractCommand;
 import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.service.CustomerService;
+import ua.com.aimprosoft.shop.service.impl.CustomerServiceImpl;
 import ua.com.aimprosoft.shop.util.Cryptor;
-import ua.com.aimprosoft.shop.util.CustomerValidator;
+import ua.com.aimprosoft.shop.util.Validator;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
+import ua.com.aimprosoft.shop.util.impl.CustomerValidator;
 
 
 public class LoginCommand extends AbstractCommand
 {
-	private CustomerService customerService;
-	private CustomerValidator customerValidator;
-
-	@Override
-	public void init() {
-		this.customerService = (CustomerService) servletContext.getAttribute("customerService");
-		this.customerValidator = (CustomerValidator) servletContext.getAttribute("valid");
-	}
+	private final CustomerService customerService = new CustomerServiceImpl();
+	private final Validator<Customer> customerValidator = new CustomerValidator();
 
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		init();
 		final String email = request.getParameter(ApplicationConstant.EMAIL);
 		final String password = request.getParameter(ApplicationConstant.PASSWORD);
-		if (!isDataExists(email, password))
+		final Customer customerFromDB = customerService.getCustomerByEmail(email);
+		final Customer tempCustomer = new Customer(email, password);
+
+		if (isCustomerExists(customerFromDB, tempCustomer)) {
+			final HttpSession session = request.getSession();
+			session.setAttribute(ApplicationConstant.CUSTOMER, customerFromDB);
+			response.sendRedirect(ApplicationConstant.HOME);
+		}
+	}
+
+	private boolean isCustomerExists(final Customer currentCustomer, final Customer tempCustomer)
+			throws ServletException, IOException
+	{
+		if (!isDataExists(tempCustomer))
 		{
 			request.setAttribute(ApplicationConstant.MESSAGE, "empty data");
-			forward(ApplicationConstant.LOGIN_PAGE_);
-		}
-		if (!customerValidator.validateEmail(email) || !customerValidator.validatePassword(password))
-		{
-			request.setAttribute(ApplicationConstant.MESSAGE, "login/password doesn't match to requirements");
-			forward(ApplicationConstant.LOGIN_PAGE_);
-			return;
-		}
-		final Customer customer = customerService.getCustomerByEmail(email);
-		if (!isCustomerExists(customer, password))
-		{
-			request.setAttribute(ApplicationConstant.MESSAGE, "Invalid login/password");
-			forward(ApplicationConstant.LOGIN_PAGE_);
-			return;
-		}
-		final HttpSession session = request.getSession();
-		session.setAttribute(ApplicationConstant.CUSTOMER, customer);
-		response.sendRedirect(ApplicationConstant.SLASH);
-	}
-
-	private boolean isDataExists(final String email, final String password)
-	{
-		if (email == null) {
+			forward(ApplicationConstant.LOGIN_PAGE);
 			return false;
 		}
-		return password != null;
+
+		if (!customerValidator.isValid(tempCustomer))
+		{
+			request.setAttribute(ApplicationConstant.MESSAGE, "login/password doesn't match to requirements");
+			forward(ApplicationConstant.LOGIN_PAGE);
+			return false;
+		}
+
+		if (!isPasswordCorrect(currentCustomer, tempCustomer))
+		{
+			request.setAttribute(ApplicationConstant.MESSAGE, "Invalid login/password");
+			forward(ApplicationConstant.LOGIN_PAGE);
+			return false;
+		}
+		return true;
+
 	}
 
-	private boolean isCustomerExists(final Customer customer, final String password)
+	private boolean isDataExists(final Customer tempCustomer)
+	{
+		if (tempCustomer.getEmail() == null) {
+			return false;
+		}
+		return tempCustomer.getPassword() != null;
+	}
+
+	private boolean isPasswordCorrect(final Customer customer, final Customer tempCustomer)
 	{
 		String encryptedPassword = null;
 		try
 		{
-			encryptedPassword = Cryptor.cryptPassword(password);
+			encryptedPassword = Cryptor.cryptPassword(tempCustomer.getPassword());
 		}
 		catch (final NoSuchAlgorithmException e)
 		{

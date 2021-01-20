@@ -14,7 +14,7 @@ public class HomePage extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		forward(ApplicationConstant.HOME_PAGE_);
+		forward(ApplicationConstant.HOME_PAGE);
 	}
 
 }

@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ua.com.aimprosoft.shop.controller.command.AbstractCommand;
-import ua.com.aimprosoft.shop.controller.command.CommandFactory;
+import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
+
 
 @WebServlet("/")
 public class FrontController extends HttpServlet
@@ -37,6 +38,17 @@ public class FrontController extends HttpServlet
 
 	private AbstractCommand getCommand(final HttpServletRequest request)
 	{
-		return CommandFactory.getCommand(request);
+		try
+		{
+			final Class t = Class.forName(String.format(ApplicationConstant.COMMAND_PATH,
+					request.getParameter(ApplicationConstant.COMMAND)));
+			final AbstractCommand abstractCommand = (AbstractCommand) t.asSubclass(AbstractCommand.class).newInstance();
+			return abstractCommand;
+		}
+		catch (final Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

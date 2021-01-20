@@ -5,6 +5,7 @@ import static ua.com.aimprosoft.shop.util.Cryptor.cryptPassword;
 import java.security.NoSuchAlgorithmException;
 
 import ua.com.aimprosoft.shop.dao.CustomerDao;
+import ua.com.aimprosoft.shop.dao.impl.CustomerDaoImpl;
 import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.service.CustomerService;
 
@@ -12,12 +13,7 @@ import ua.com.aimprosoft.shop.service.CustomerService;
 public class CustomerServiceImpl implements CustomerService
 {
 
-	private final CustomerDao customerDao;
-
-	public CustomerServiceImpl(final CustomerDao customerDao)
-	{
-		this.customerDao = customerDao;
-	}
+	private final CustomerDao customerDao = new CustomerDaoImpl();
 
 	@Override
 	public Customer getCustomerByEmail(final String email)

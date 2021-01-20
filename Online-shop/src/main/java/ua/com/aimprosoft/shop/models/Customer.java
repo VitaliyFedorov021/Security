@@ -17,6 +17,12 @@ public class Customer extends Entity
 	{
 	}
 
+	public Customer(final String email, final String password)
+	{
+		this.email = email;
+		this.password = password;
+	}
+
 	public Customer(final String email, final String password, final String firstName, final String lastName,
 			final Gender gender, final Date birthdayDate, final String phoneNumber)
 	{

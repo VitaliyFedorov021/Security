@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import ua.com.aimprosoft.shop.dao.CustomerDao;
 import ua.com.aimprosoft.shop.database.DataSource;
+import ua.com.aimprosoft.shop.database.impl.HikariDataSourceImpl;
 import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.models.Gender;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
@@ -14,16 +15,11 @@ import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 public class CustomerDaoImpl implements CustomerDao
 {
-	private final DataSource dataSource;
+	private final DataSource dataSource = new HikariDataSourceImpl();
 	private static final String INSERT = "INSERT INTO customer "
 			+ "(email, password, first_name, last_name, gender, birthday_date, phone_number) "
 			+ "values (?, ?, ?, ?, ?, ?, ?)";
 	private static final String FIND_BY_EMAIL = "SELECT * FROM customer WHERE email = ?";
-
-	public CustomerDaoImpl(final DataSource dataSource)
-	{
-		this.dataSource = dataSource;
-	}
 
 	@Override
 	public Customer findCustomerByEmail(final String email)

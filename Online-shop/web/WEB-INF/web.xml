@@ -6,6 +6,6 @@
 
 
 	<welcome-file-list>
-		<welcome-file>HomePage.jsp</welcome-file>
+		<welcome-file>homePage.jsp</welcome-file>
 	</welcome-file-list>
 </web-app>
