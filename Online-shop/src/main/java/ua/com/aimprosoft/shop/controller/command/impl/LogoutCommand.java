@@ -18,6 +18,6 @@ public class LogoutCommand extends AbstractCommand
 		if (session != null) {
 			session.invalidate();
 		}
-		response.sendRedirect(ApplicationConstant.SLASH);
+		response.sendRedirect(ApplicationConstant.HOME);
 	}
 }

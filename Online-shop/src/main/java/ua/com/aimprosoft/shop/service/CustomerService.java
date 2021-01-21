@@ -1,11 +1,13 @@
 package ua.com.aimprosoft.shop.service;
 
+import java.util.Optional;
+
 import ua.com.aimprosoft.shop.models.Customer;
 
 
 public interface CustomerService
 {
-	Customer getCustomerByEmail(String email);
+	Optional<Customer> getCustomerByEmail(String email);
 
 	boolean addCustomer(Customer customer);
 }

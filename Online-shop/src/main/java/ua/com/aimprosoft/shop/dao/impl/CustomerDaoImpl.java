@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import ua.com.aimprosoft.shop.dao.CustomerDao;
 import ua.com.aimprosoft.shop.database.DataSource;
@@ -15,14 +16,20 @@ import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 public class CustomerDaoImpl implements CustomerDao
 {
-	private final DataSource dataSource = new HikariDataSourceImpl();
+	private final DataSource dataSource;
+
+	public CustomerDaoImpl()
+	{
+		this.dataSource = new HikariDataSourceImpl();
+	}
+
 	private static final String INSERT = "INSERT INTO customer "
 			+ "(email, password, first_name, last_name, gender, birthday_date, phone_number) "
 			+ "values (?, ?, ?, ?, ?, ?, ?)";
 	private static final String FIND_BY_EMAIL = "SELECT * FROM customer WHERE email = ?";
 
 	@Override
-	public Customer findCustomerByEmail(final String email)
+	public Optional<Customer> findCustomerByEmail(final String email)
 	{
 		Customer customer = null;
 		try (final Connection connection = dataSource.getConnection();
@@ -30,7 +37,8 @@ public class CustomerDaoImpl implements CustomerDao
 		{
 			pStatement.setString(1, email);
 			final ResultSet resultSet = pStatement.executeQuery();
-			while (resultSet.next()) {
+			while (resultSet.next())
+			{
 				customer = mapCustomer(resultSet);
 			}
 		}
@@ -38,7 +46,8 @@ public class CustomerDaoImpl implements CustomerDao
 		{
 			e.printStackTrace();
 		}
-		return customer;
+		final Optional<Customer> optional = Optional.ofNullable(customer);
+		return optional;
 	}
 
 	@Override

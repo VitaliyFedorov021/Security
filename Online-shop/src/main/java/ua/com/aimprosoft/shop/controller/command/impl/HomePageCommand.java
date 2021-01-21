@@ -8,7 +8,7 @@ import ua.com.aimprosoft.shop.controller.command.AbstractCommand;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 
-public class HomePage extends AbstractCommand
+public class HomePageCommand extends AbstractCommand
 {
 
 	@Override
@@ -16,5 +16,4 @@ public class HomePage extends AbstractCommand
 	{
 		forward(ApplicationConstant.HOME_PAGE);
 	}
-
 }

@@ -16,12 +16,12 @@
 </head>
 <body>
 <c:if test="${customer == null}">
-    <h1 class="display-1">Welcome to our shop!</h1>   <div><a href="/login?command=LOGIN_PAGE"><button type="button" class="btn btn-primary">Sign in</button></a></div>
+    <h1 class="display-1">Welcome to our shop!</h1>   <div><a href="/login?command=LoginPage"><button type="button" class="btn btn-primary">Sign in</button></a></div>
 </c:if>
 <c:if test="${customer != null}">
     <h1 class="display-1">Welcome to our shop, ${customer.firstName} ${customer.lastName}!</h1>
     <div>
-        <a href="/logout?command=LOGOUT"><button type="button" class="btn btn-primary">Logout</button></a>
+        <a href="/logout?command=Logout"><button type="button" class="btn btn-primary">Logout</button></a>
     </div>
 </c:if>
 </body>

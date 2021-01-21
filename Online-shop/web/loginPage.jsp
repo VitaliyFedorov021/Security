@@ -17,25 +17,25 @@
 <div>
     <a href="/"><button type="button" class="btn btn-primary">HOME</button></a>
 </div>
-<form action="/login?command=LOGIN" method="post">
+<form action="/login?command=Login" method="post">
     <div class="form-group col-md-4">
         <label for="email1">Login(email):</label>
-        <input type="text" id="email1" name="email" class="form-control" placeholder="test@example.com" required><br>
+        <input type="text" id="email1" name="email" class="form-control" placeholder="test@example.com"><br>
     </div>
     <div class="form-group col-md-4">
         <label for="pass1">Password:</label>
-        <input type="password" class="form-control" name="password" placeholder="Enter your password" required id="pass1"> <br>
+        <input type="password" class="form-control" name="password" placeholder="Enter your password" id="pass1"> <br>
     </div>
     <br>${message}<br>
     <input type="submit" value="login" class="btn btn-primary">
 </form>
 
-<%--<div>--%>
-<%--    <p class="lead">--%>
-<%--        Have no account?--%>
-<%--    </p>--%>
-<%--    <a href="/signup?command=SignUpPage"><button type="button" class="btn btn-primary">Create account</button></a>--%>
-<%--</div>--%>
+<div>
+    <p class="lead">
+        Have no account?
+    </p>
+    <a href="signup?command=SignUpPage"><button type="button" class="btn btn-primary">Create account</button></a>
+</div>
 
 </body>
 </html>

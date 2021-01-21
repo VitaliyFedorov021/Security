@@ -9,25 +9,22 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import ua.com.aimprosoft.shop.database.DataSource;
 import ua.com.aimprosoft.shop.util.PropertiesReader;
+import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 
 public class HikariDataSourceImpl implements DataSource
 {
-	private static HikariConfig config;
 	private static HikariDataSource dataSource;
 
-	private static HikariDataSource initDataSource() {
-		final Properties properties = PropertiesReader.readProperties();
-		config = new HikariConfig();
+	public HikariDataSourceImpl()
+	{
+		final Properties properties = PropertiesReader.readProperties(ApplicationConstant.DB_PROPERTIES);
+		final HikariConfig config = new HikariConfig();
 		config.setJdbcUrl(properties.getProperty("jdbcUrl"));
 		config.setUsername(properties.getProperty("username"));
 		config.setPassword(properties.getProperty("password"));
 		config.setDataSourceProperties(properties);
 		dataSource = new HikariDataSource(config);
-		return dataSource;
-	}
-	static {
-		initDataSource();
 	}
 
 	@Override

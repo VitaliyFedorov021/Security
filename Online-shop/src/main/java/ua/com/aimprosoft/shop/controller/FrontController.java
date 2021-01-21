@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ua.com.aimprosoft.shop.controller.command.AbstractCommand;
+import ua.com.aimprosoft.shop.controller.command.impl.HomePageCommand;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 
@@ -25,11 +26,6 @@ public class FrontController extends HttpServlet
 	}
 
 	@Override
-	public void init() throws ServletException
-	{
-	}
-
-	@Override
 	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException
 	{
@@ -40,15 +36,19 @@ public class FrontController extends HttpServlet
 	{
 		try
 		{
-			final Class t = Class.forName(String.format(ApplicationConstant.COMMAND_PATH,
-					request.getParameter(ApplicationConstant.COMMAND)));
-			final AbstractCommand abstractCommand = (AbstractCommand) t.asSubclass(AbstractCommand.class).newInstance();
-			return abstractCommand;
+			final String command = request.getParameter(ApplicationConstant.COMMAND);
+			final String s = String.format(ApplicationConstant.COMMAND_PATH, command);
+			if (command != null)
+			{
+				final Class<?> t = Class.forName(s);
+				final AbstractCommand abstractCommand = t.asSubclass(AbstractCommand.class).newInstance();
+				return abstractCommand;
+			}
 		}
 		catch (final Exception e)
 		{
 			e.printStackTrace();
-			return null;
 		}
+		return new HomePageCommand();
 	}
 }

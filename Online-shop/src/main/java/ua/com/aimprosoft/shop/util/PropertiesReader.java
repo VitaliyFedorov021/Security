@@ -7,10 +7,10 @@ import java.util.Properties;
 
 public class PropertiesReader
 {
-	public static Properties readProperties()
+	public static Properties readProperties(final String name)
 	{
 		final Properties properties = new Properties();
-		try (final InputStream reader = PropertiesReader.class.getClassLoader().getResourceAsStream("hikariDB.properties"))
+		try (final InputStream reader = PropertiesReader.class.getClassLoader().getResourceAsStream(name))
 		{
 			properties.load(reader);
 		}
