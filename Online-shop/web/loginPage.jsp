@@ -20,11 +20,11 @@
 <form action="/login?command=Login" method="post">
     <div class="form-group col-md-4">
         <label for="email1">Login(email):</label>
-        <input type="text" id="email1" name="email" class="form-control" placeholder="test@example.com"><br>
+        <input type="text" id="email1" name="email" class="form-control" placeholder="test@example.com" required><br>
     </div>
     <div class="form-group col-md-4">
         <label for="pass1">Password:</label>
-        <input type="password" class="form-control" name="password" placeholder="Enter your password" id="pass1"> <br>
+        <input type="password" class="form-control" name="password" placeholder="Enter your password" id="pass1" required> <br>
     </div>
     <br>${message}<br>
     <input type="submit" value="login" class="btn btn-primary">
@@ -34,7 +34,7 @@
     <p class="lead">
         Have no account?
     </p>
-    <a href="signup?command=SignUpPage"><button type="button" class="btn btn-primary">Create account</button></a>
+    <a href="/signup?command=SignUpPage"><button type="button" class="btn btn-primary">Create account</button></a>
 </div>
 
 </body>

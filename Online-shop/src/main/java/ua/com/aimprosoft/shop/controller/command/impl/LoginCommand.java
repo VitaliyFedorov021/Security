@@ -15,7 +15,6 @@ import ua.com.aimprosoft.shop.util.Cryptor;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 import ua.com.aimprosoft.shop.util.constant.ErrorConstant;
 
-
 public class LoginCommand extends AbstractCommand
 {
 	private final CustomerService customerService;
@@ -28,6 +27,7 @@ public class LoginCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
+
 		final String email = request.getParameter(ApplicationConstant.EMAIL);
 		final String password = request.getParameter(ApplicationConstant.PASSWORD);
 		if (email == null || email.isEmpty())
