@@ -9,6 +9,6 @@ public interface CustomerService
 {
 	Optional<Customer> getCustomerByEmail(String email);
 
-	boolean addCustomer(Customer customer);
+	boolean registerCustomer(Customer customer);
 }
 

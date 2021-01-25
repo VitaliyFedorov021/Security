@@ -10,17 +10,24 @@ public class ApplicationConstant
 	public static final String BIRTHDAY = "birthday_date";
 	public static final String NUMBER = "phone_number";
 
+	public static final String CATEGORY_ID = "category_id";
+
 	public static final String HOME_PAGE = "/homePage.jsp";
 	public static final String LOGIN_PAGE = "/loginPage.jsp";
 	public static final String SIGN_UP_PAGE = "/signUpPage.jsp";
 	public static final String HOME = "/";
 	public static final String DB_PROPERTIES = "hikariDB.properties";
 	public static final String LOGIN_PATH = "/login?command=Login";
+	public static final String CATEGORIES_PAGE = "/categoriesPage.jsp";
+	public static final String PLP_PATH = "/PLP.jsp";
+	public static final String ERROR_PATH = "/error.jsp";
 
 	public static final String MESSAGE = "message";
 	public static final String CUSTOMER = "customer";
 	public static final String COMMAND = "command";
 	public static final String EMPTY = "empty";
+	public static final String CATEGORIES = "categories";
+	public static final String PRODUCTS = "products";
 
 	public static final String SLASH = "/";
 	public static final String ALGORITHM = "MD5";
@@ -30,4 +37,5 @@ public class ApplicationConstant
 	public static final String PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[\\d])[a-zA-Z\\d]{6,}";
 	public static final String NAME_PATTERN = "^[A-Z][a-z]*$";
 	public static final String NUMBER_PATTERN = "^[0-9]{10}$";
+	public static final String DATE_PATTERN = "yyyy-MM-dd";
 }

@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService
 	}
 
 	@Override
-	public boolean addCustomer(final Customer customer)
+	public boolean registerCustomer(final Customer customer)
 	{
 		try
 		{

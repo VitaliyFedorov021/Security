@@ -24,5 +24,8 @@
         <a href="/logout?command=Logout"><button type="button" class="btn btn-primary">Logout</button></a>
     </div>
 </c:if>
+<div>
+    <a href="/categories?command=ShowCategories"><button type="button" class="btn btn-primary">Show categories</button></a>
+</div>
 </body>
 </html>

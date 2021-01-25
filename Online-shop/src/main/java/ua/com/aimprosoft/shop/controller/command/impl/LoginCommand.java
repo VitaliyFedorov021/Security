@@ -42,10 +42,14 @@ public class LoginCommand extends AbstractCommand
 			return;
 		}
 		final Optional<Customer> customer = customerService.getCustomerByEmail(email);
-
-		if (!isDataCorrect(customer, email, password))
+		if (!customer.isPresent())
 		{
-			sendWithErrorMessage(ErrorConstant.INCORRECT_LOGIN_OR_PASSWORD);
+			sendWithErrorMessage(ErrorConstant.INCORRECT_LOGIN);
+			return;
+		}
+		if (!isPasswordCorrect(customer.get(), password))
+		{
+			sendWithErrorMessage(ErrorConstant.INCORRECT_PASSWORD);
 			return;
 		}
 		final HttpSession session = request.getSession();
@@ -60,13 +64,9 @@ public class LoginCommand extends AbstractCommand
 		return;
 	}
 
-	private boolean isDataCorrect(final Optional<Customer> optionalCustomer, final String email, final String password)
+	private boolean isPasswordCorrect(final Customer customer, final String password)
 	{
-		if (!optionalCustomer.isPresent())
-		{
-			return false;
-		}
-		final Customer customer = optionalCustomer.get();
+
 		String encryptedPassword = null;
 		try
 		{
@@ -75,10 +75,6 @@ public class LoginCommand extends AbstractCommand
 		catch (final NoSuchAlgorithmException e)
 		{
 			e.printStackTrace();
-		}
-		if (!customer.getEmail().equals(email))
-		{
-			return false;
 		}
 
 		return customer.getPassword().equals(encryptedPassword);

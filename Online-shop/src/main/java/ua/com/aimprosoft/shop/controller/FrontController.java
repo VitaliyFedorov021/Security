@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ua.com.aimprosoft.shop.controller.command.AbstractCommand;
-import ua.com.aimprosoft.shop.controller.command.impl.HomePageCommand;
+import ua.com.aimprosoft.shop.controller.command.impl.UnknownCommand;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 
@@ -37,18 +37,17 @@ public class FrontController extends HttpServlet
 		try
 		{
 			final String command = request.getParameter(ApplicationConstant.COMMAND);
-			final String s = String.format(ApplicationConstant.COMMAND_PATH, command);
 			if (command != null)
 			{
-				final Class<?> t = Class.forName(s);
-				final AbstractCommand abstractCommand = t.asSubclass(AbstractCommand.class).newInstance();
-				return abstractCommand;
+				final String formattedPath = String.format(ApplicationConstant.COMMAND_PATH, command);
+				final Class<?> commandInstance = Class.forName(formattedPath);
+				return commandInstance.asSubclass(AbstractCommand.class).newInstance();
 			}
 		}
 		catch (final Exception e)
 		{
 			e.printStackTrace();
 		}
-		return new HomePageCommand();
+		return new UnknownCommand();
 	}
 }

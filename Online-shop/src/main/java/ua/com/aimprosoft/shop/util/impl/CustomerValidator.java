@@ -1,11 +1,12 @@
 package ua.com.aimprosoft.shop.util.impl;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-
+import ua.com.aimprosoft.shop.exceptions.IncorrectInputException;
 import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.service.CustomerService;
 import ua.com.aimprosoft.shop.util.Validator;
@@ -15,103 +16,107 @@ import ua.com.aimprosoft.shop.util.constant.ErrorConstant;
 
 public class CustomerValidator implements Validator<Customer>
 {
-	private Pattern pattern;
-	private final HttpServletRequest request;
 	private final CustomerService customerService;
 
-	public CustomerValidator(final HttpServletRequest request, final CustomerService customerService)
+	public CustomerValidator(final CustomerService customerService)
 	{
-		this.request = request;
 		this.customerService = customerService;
 	}
 
 	@Override
-	public boolean validate(final Customer entity)
+	public boolean validate(final Customer entity, final List<Exception> exceptions)
 	{
-		if (isEmptyData(entity))
-		{
-			return false;
-		}
-		if (!checkForMatching(entity))
-		{
-			return false;
-		}
-		return isUniqueEmail(entity.getEmail());
+		return isEmailValid(entity, exceptions) && isPasswordValid(entity, exceptions) &&
+				isDateValid(entity, exceptions) && isNameValid(entity, exceptions) &&
+				isNumberValid(entity, exceptions);
 	}
 
-	private boolean isEmptyData(final Customer c)
+	public boolean isEmailValid(final Customer customer, final List<Exception> exceptions)
 	{
-		if (c.getEmail() == null || c.getEmail().isEmpty())
+		final String email = customer.getEmail();
+		if (email == null || email.isEmpty())
 		{
-			request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.EMPTY_EMAIL);
-			return true;
-		}
-		if (c.getPassword() == null || c.getPassword().isEmpty())
-		{
-			request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.EMPTY_PASSWORD);
-			return true;
-		}
-		if (c.getPhoneNumber() == null)
-		{
-			request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.EMPTY_NUMBER);
-			return true;
-		}
-		if (c.getFirstName() == null || c.getFirstName().isEmpty())
-		{
-			request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.EMPTY_FIRST_NAME);
-			return true;
-		}
-		if (c.getLastName() == null || c.getLastName().isEmpty())
-		{
-			request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.EMPTY_LAST_NAME);
-			return true;
-		}
-		return c.getBirthdayDate() == null;
-	}
-
-	private boolean checkForMatching(final Customer c)
-	{
-		if (!isMatches(ApplicationConstant.EMAIL_PATTERN, c.getEmail()))
-		{
-			request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.EMAIL_NOT_MATCHES);
+			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_EMAIL));
 			return false;
 		}
-		if (!isMatches(ApplicationConstant.PASSWORD_PATTERN, c.getPassword()))
+		final Pattern pattern = Pattern.compile(ApplicationConstant.EMAIL_PATTERN);
+		final Matcher matcher = pattern.matcher(email);
+		if (!matcher.matches())
 		{
-			request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.PASSWORD_NOT_MATCHES);
+			exceptions.add(new IncorrectInputException(ErrorConstant.EMAIL_NOT_MATCHES));
 			return false;
 		}
-		if (!isMatches(ApplicationConstant.NAME_PATTERN, c.getFirstName()))
+		final Optional<Customer> optionalCustomer = customerService.getCustomerByEmail(email);
+		if (optionalCustomer.isPresent())
 		{
-			request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.NAME_NOT_MATCHES);
-			return false;
-		}
-		if (!isMatches(ApplicationConstant.NAME_PATTERN, c.getLastName()))
-		{
-			request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.NAME_NOT_MATCHES);
-			return false;
-		}
-		if (!isMatches(ApplicationConstant.NUMBER_PATTERN, c.getPhoneNumber()))
-		{
-			request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.NUMBER_NOT_MATCHES);
+			exceptions.add(new IncorrectInputException(ErrorConstant.NOT_UNIQUE_EMAIL));
 			return false;
 		}
 		return true;
 	}
 
-	private boolean isMatches(final String pattern, final String data)
+	public boolean isPasswordValid(final Customer customer, final List<Exception> exceptions)
 	{
-		this.pattern = Pattern.compile(pattern);
-		final Matcher matcher = this.pattern.matcher(data);
-		return matcher.matches();
+		final String password = customer.getPassword();
+		if (password == null || password.isEmpty())
+		{
+			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_PASSWORD));
+			return false;
+		}
+		final Pattern pattern = Pattern.compile(ApplicationConstant.PASSWORD_PATTERN);
+		final Matcher matcher = pattern.matcher(password);
+		if (!matcher.matches())
+		{
+			exceptions.add(new IncorrectInputException(ErrorConstant.PASSWORD_NOT_MATCHES));
+			return false;
+		}
+		return true;
 	}
 
-	private boolean isUniqueEmail(final String email)
+	public boolean isNameValid(final Customer customer, final List<Exception> exceptions)
 	{
-		final Optional<Customer> customer = customerService.getCustomerByEmail(email);
-		if (customer.isPresent())
+		final String firstName = customer.getFirstName();
+		final String lastName = customer.getLastName();
+		if (firstName == null || lastName == null)
 		{
-			request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.NOT_UNIQUE_EMAIL);
+			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_NAME));
+			return false;
+		}
+		final Pattern pattern = Pattern.compile(ApplicationConstant.NAME_PATTERN);
+		final Matcher firstMatcher = pattern.matcher(firstName);
+		final Matcher secondMatcher = pattern.matcher(lastName);
+		if (!firstMatcher.matches() || !secondMatcher.matches())
+		{
+			exceptions.add(new IncorrectInputException(ErrorConstant.NAME_NOT_MATCHES));
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isNumberValid(final Customer customer, final List<Exception> exceptions)
+	{
+		final String number = customer.getPhoneNumber();
+		if (number == null)
+		{
+			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_NUMBER));
+			return false;
+		}
+		final Pattern pattern = Pattern.compile(ApplicationConstant.NUMBER_PATTERN);
+		final Matcher matcher = pattern.matcher(number);
+		if (!matcher.matches())
+		{
+			exceptions.add(new IncorrectInputException(ErrorConstant.NUMBER_NOT_MATCHES));
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isDateValid(final Customer customer, final List<Exception> exceptions)
+	{
+		final Date date = customer.getBirthdayDate();
+		if (date == null)
+		{
+			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_DATE));
 			return false;
 		}
 		return true;
