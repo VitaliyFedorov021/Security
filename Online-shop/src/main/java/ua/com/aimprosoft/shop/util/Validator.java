@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface Validator<T>
 {
-	boolean validate(T entity, List<Exception> exceptions);
+	void validate(T entity, List<Exception> exceptions);
 }

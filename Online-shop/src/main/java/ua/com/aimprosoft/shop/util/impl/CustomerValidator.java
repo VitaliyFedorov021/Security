@@ -24,63 +24,61 @@ public class CustomerValidator implements Validator<Customer>
 	}
 
 	@Override
-	public boolean validate(final Customer entity, final List<Exception> exceptions)
+	public void validate(final Customer entity, final List<Exception> exceptions)
 	{
-		return isEmailValid(entity, exceptions) && isPasswordValid(entity, exceptions) &&
-				isDateValid(entity, exceptions) && isNameValid(entity, exceptions) &&
-				isNumberValid(entity, exceptions);
+		isEmailValid(entity, exceptions);
+		isPasswordValid(entity, exceptions);
+		isDateValid(entity, exceptions);
+		isNameValid(entity, exceptions);
+		isNumberValid(entity, exceptions);
 	}
 
-	public boolean isEmailValid(final Customer customer, final List<Exception> exceptions)
+	public void isEmailValid(final Customer customer, final List<Exception> exceptions)
 	{
 		final String email = customer.getEmail();
 		if (email == null || email.isEmpty())
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_EMAIL));
-			return false;
+			return;
 		}
 		final Pattern pattern = Pattern.compile(ApplicationConstant.EMAIL_PATTERN);
 		final Matcher matcher = pattern.matcher(email);
 		if (!matcher.matches())
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.EMAIL_NOT_MATCHES));
-			return false;
+			return;
 		}
 		final Optional<Customer> optionalCustomer = customerService.getCustomerByEmail(email);
 		if (optionalCustomer.isPresent())
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.NOT_UNIQUE_EMAIL));
-			return false;
 		}
-		return true;
 	}
 
-	public boolean isPasswordValid(final Customer customer, final List<Exception> exceptions)
+	public void isPasswordValid(final Customer customer, final List<Exception> exceptions)
 	{
 		final String password = customer.getPassword();
 		if (password == null || password.isEmpty())
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_PASSWORD));
-			return false;
+			return;
 		}
 		final Pattern pattern = Pattern.compile(ApplicationConstant.PASSWORD_PATTERN);
 		final Matcher matcher = pattern.matcher(password);
 		if (!matcher.matches())
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.PASSWORD_NOT_MATCHES));
-			return false;
 		}
-		return true;
 	}
 
-	public boolean isNameValid(final Customer customer, final List<Exception> exceptions)
+	public void isNameValid(final Customer customer, final List<Exception> exceptions)
 	{
 		final String firstName = customer.getFirstName();
 		final String lastName = customer.getLastName();
 		if (firstName == null || lastName == null)
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_NAME));
-			return false;
+			return;
 		}
 		final Pattern pattern = Pattern.compile(ApplicationConstant.NAME_PATTERN);
 		final Matcher firstMatcher = pattern.matcher(firstName);
@@ -88,37 +86,31 @@ public class CustomerValidator implements Validator<Customer>
 		if (!firstMatcher.matches() || !secondMatcher.matches())
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.NAME_NOT_MATCHES));
-			return false;
 		}
-		return true;
 	}
 
-	public boolean isNumberValid(final Customer customer, final List<Exception> exceptions)
+	public void isNumberValid(final Customer customer, final List<Exception> exceptions)
 	{
 		final String number = customer.getPhoneNumber();
 		if (number == null)
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_NUMBER));
-			return false;
+			return;
 		}
 		final Pattern pattern = Pattern.compile(ApplicationConstant.NUMBER_PATTERN);
 		final Matcher matcher = pattern.matcher(number);
 		if (!matcher.matches())
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.NUMBER_NOT_MATCHES));
-			return false;
 		}
-		return true;
 	}
 
-	public boolean isDateValid(final Customer customer, final List<Exception> exceptions)
+	public void isDateValid(final Customer customer, final List<Exception> exceptions)
 	{
 		final Date date = customer.getBirthdayDate();
 		if (date == null)
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_DATE));
-			return false;
 		}
-		return true;
 	}
 }

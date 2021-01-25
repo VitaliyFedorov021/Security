@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: vitalij
@@ -17,23 +18,23 @@
 <div>
     <a href="/"><button type="button" class="btn btn-primary">HOME</button></a>
 </div>
-<form action="/sign_up?command=SignUp" method="post" class="row g-3 needs-validation" novalidate>
+<form action="/sign_up?command=SignUp" method="post" class="needs-validation" novalidate>
     <div class="form-group col-md-3">
         <label for="email1">Email</label>
         <input type="email" id="email1" name="email" placeholder="email@example.com" required class="form-control">
-
+        <br>
     </div>
 
     <div class="form-group col-md-3">
         <label for="first_name">First name</label>
         <input type="text" id="first_name" name="first_name" placeholder="First name" required class="form-control">
-
+        <br>
     </div>
     <div class="form-group col-md-3">
         <label for="last_name">Last name</label>
         <input type="text" id="last_name" name="last_name" placeholder="Last name" required class="form-control">
     </div>
-    <div class="col-12 col-md-3">
+    <div class="col-12 col-md-4">
         <label for="Gender" class="form-label">Gender</label>
         <select class="form-select" id="Gender" name="gender" required>
             <option>Male</option>
@@ -42,7 +43,7 @@
         </select>
     </div>
     <div class="form-group col-md-2">
-        <label for="date">Birthday:</label>
+        <label for="date">Birthday</label>
         <input type="date" id="date" name="birthday_date" required class="form-control" max="2009-01-01">
     </div>
     <div class="form-group col-md-3">
@@ -52,12 +53,14 @@
     <input type="hidden" name="command" value="SignUpCommand">
     <br>
     <div class="col-12 col-md-2">
-        <label for="pass1">Password:</label>
+        <label for="pass1">Password</label>
         <input type="password" class="form-control" name="password" placeholder="Enter your password" required id="pass1"> <br>
         <p class="lead">Password must have at least 1 capital latin letter, 1 number and consists of greater than 6 symbols</p>
     </div>
     <div class="col-12">
-        ${message}
+        <c:forEach var="e" items="${message}">
+            <h1 class="text-danger">${e.message}</h1>
+        </c:forEach>
     </div>
 
     <div class="col-12">

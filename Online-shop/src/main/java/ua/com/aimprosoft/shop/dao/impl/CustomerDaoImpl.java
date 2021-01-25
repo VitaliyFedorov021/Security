@@ -10,7 +10,8 @@ import ua.com.aimprosoft.shop.dao.CustomerDao;
 import ua.com.aimprosoft.shop.database.DataSource;
 import ua.com.aimprosoft.shop.database.impl.HikariDataSourceImpl;
 import ua.com.aimprosoft.shop.models.Customer;
-import ua.com.aimprosoft.shop.util.Extractor;
+import ua.com.aimprosoft.shop.models.Gender;
+import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 
 public class CustomerDaoImpl implements CustomerDao
@@ -38,7 +39,7 @@ public class CustomerDaoImpl implements CustomerDao
 			final ResultSet resultSet = pStatement.executeQuery();
 			while (resultSet.next())
 			{
-				customer = Extractor.mapCustomer(resultSet);
+				customer = mapCustomer(resultSet);
 			}
 		}
 		catch (final SQLException e)
@@ -72,5 +73,18 @@ public class CustomerDaoImpl implements CustomerDao
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	private Customer mapCustomer(final ResultSet resultSet) throws SQLException
+	{
+		final Customer customer = new Customer();
+		customer.setEmail(resultSet.getString(ApplicationConstant.EMAIL));
+		customer.setPassword(resultSet.getString(ApplicationConstant.PASSWORD));
+		customer.setFirstName(resultSet.getString(ApplicationConstant.FIRST_NAME));
+		customer.setLastName(resultSet.getString(ApplicationConstant.LAST_NAME));
+		customer.setGender(Gender.valueOf(resultSet.getString(ApplicationConstant.GENDER)));
+		customer.setBirthdayDate(resultSet.getDate(ApplicationConstant.BIRTHDAY));
+		customer.setPhoneNumber(resultSet.getString(ApplicationConstant.NUMBER));
+		return customer;
 	}
 }

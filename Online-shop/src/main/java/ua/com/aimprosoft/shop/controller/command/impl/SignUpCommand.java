@@ -10,6 +10,7 @@ import ua.com.aimprosoft.shop.controller.command.AbstractCommand;
 import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.service.CustomerService;
 import ua.com.aimprosoft.shop.service.impl.CustomerServiceImpl;
+import ua.com.aimprosoft.shop.util.CustomerExtractor;
 import ua.com.aimprosoft.shop.util.Extractor;
 import ua.com.aimprosoft.shop.util.Validator;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
@@ -20,21 +21,24 @@ public class SignUpCommand extends AbstractCommand
 {
 	private final CustomerService customerService;
 	private final Validator<Customer> validator;
+	private final Extractor<Customer> extractor;
 
 	public SignUpCommand()
 	{
 		this.customerService = new CustomerServiceImpl();
 		validator = new CustomerValidator(customerService);
+		extractor = new CustomerExtractor();
 	}
 
 	@Override
 	public void process() throws ServletException, IOException
 	{
 		final List<Exception> exceptions = new ArrayList<>();
-		final Customer customer = Extractor.mapCustomer(request);
-		if (!validator.validate(customer, exceptions))
+		final Customer customer = extractor.map(request);
+		validator.validate(customer, exceptions);
+		if (exceptions.size() > 0)
 		{
-			request.setAttribute(ApplicationConstant.MESSAGE, exceptions.get(0).getLocalizedMessage());
+			request.setAttribute(ApplicationConstant.MESSAGE, exceptions);
 			forward(ApplicationConstant.SIGN_UP_PAGE);
 			return;
 		}
