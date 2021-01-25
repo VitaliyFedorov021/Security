@@ -17,6 +17,10 @@ import ua.com.aimprosoft.shop.util.constant.ErrorConstant;
 public class CustomerValidator implements Validator<Customer>
 {
 	private final CustomerService customerService;
+	private final Pattern emailPattern = Pattern.compile(ApplicationConstant.EMAIL_PATTERN);
+	private final Pattern passwordPattern = Pattern.compile(ApplicationConstant.PASSWORD_PATTERN);
+	private final Pattern namePattern = Pattern.compile(ApplicationConstant.NAME_PATTERN);
+	private final Pattern numberPattern = Pattern.compile(ApplicationConstant.NUMBER_PATTERN);
 
 	public CustomerValidator(final CustomerService customerService)
 	{
@@ -26,14 +30,14 @@ public class CustomerValidator implements Validator<Customer>
 	@Override
 	public void validate(final Customer entity, final List<Exception> exceptions)
 	{
-		isEmailValid(entity, exceptions);
-		isPasswordValid(entity, exceptions);
-		isDateValid(entity, exceptions);
-		isNameValid(entity, exceptions);
-		isNumberValid(entity, exceptions);
+		checkEmail(entity, exceptions);
+		checkPassword(entity, exceptions);
+		checkDate(entity, exceptions);
+		checkName(entity, exceptions);
+		checkNumber(entity, exceptions);
 	}
 
-	public void isEmailValid(final Customer customer, final List<Exception> exceptions)
+	public void checkEmail(final Customer customer, final List<Exception> exceptions)
 	{
 		final String email = customer.getEmail();
 		if (email == null || email.isEmpty())
@@ -41,8 +45,7 @@ public class CustomerValidator implements Validator<Customer>
 			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_EMAIL));
 			return;
 		}
-		final Pattern pattern = Pattern.compile(ApplicationConstant.EMAIL_PATTERN);
-		final Matcher matcher = pattern.matcher(email);
+		final Matcher matcher = emailPattern.matcher(email);
 		if (!matcher.matches())
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.EMAIL_NOT_MATCHES));
@@ -55,7 +58,7 @@ public class CustomerValidator implements Validator<Customer>
 		}
 	}
 
-	public void isPasswordValid(final Customer customer, final List<Exception> exceptions)
+	public void checkPassword(final Customer customer, final List<Exception> exceptions)
 	{
 		final String password = customer.getPassword();
 		if (password == null || password.isEmpty())
@@ -63,15 +66,14 @@ public class CustomerValidator implements Validator<Customer>
 			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_PASSWORD));
 			return;
 		}
-		final Pattern pattern = Pattern.compile(ApplicationConstant.PASSWORD_PATTERN);
-		final Matcher matcher = pattern.matcher(password);
+		final Matcher matcher = passwordPattern.matcher(password);
 		if (!matcher.matches())
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.PASSWORD_NOT_MATCHES));
 		}
 	}
 
-	public void isNameValid(final Customer customer, final List<Exception> exceptions)
+	public void checkName(final Customer customer, final List<Exception> exceptions)
 	{
 		final String firstName = customer.getFirstName();
 		final String lastName = customer.getLastName();
@@ -80,16 +82,15 @@ public class CustomerValidator implements Validator<Customer>
 			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_NAME));
 			return;
 		}
-		final Pattern pattern = Pattern.compile(ApplicationConstant.NAME_PATTERN);
-		final Matcher firstMatcher = pattern.matcher(firstName);
-		final Matcher secondMatcher = pattern.matcher(lastName);
+		final Matcher firstMatcher = namePattern.matcher(firstName);
+		final Matcher secondMatcher = namePattern.matcher(lastName);
 		if (!firstMatcher.matches() || !secondMatcher.matches())
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.NAME_NOT_MATCHES));
 		}
 	}
 
-	public void isNumberValid(final Customer customer, final List<Exception> exceptions)
+	public void checkNumber(final Customer customer, final List<Exception> exceptions)
 	{
 		final String number = customer.getPhoneNumber();
 		if (number == null)
@@ -97,15 +98,14 @@ public class CustomerValidator implements Validator<Customer>
 			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_NUMBER));
 			return;
 		}
-		final Pattern pattern = Pattern.compile(ApplicationConstant.NUMBER_PATTERN);
-		final Matcher matcher = pattern.matcher(number);
+		final Matcher matcher = numberPattern.matcher(number);
 		if (!matcher.matches())
 		{
 			exceptions.add(new IncorrectInputException(ErrorConstant.NUMBER_NOT_MATCHES));
 		}
 	}
 
-	public void isDateValid(final Customer customer, final List<Exception> exceptions)
+	public void checkDate(final Customer customer, final List<Exception> exceptions)
 	{
 		final Date date = customer.getBirthdayDate();
 		if (date == null)
