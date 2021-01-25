@@ -1,4 +1,4 @@
-package ua.com.aimprosoft.shop.util;
+package ua.com.aimprosoft.shop.util.impl;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.models.Gender;
+import ua.com.aimprosoft.shop.util.Extractor;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 
