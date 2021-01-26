@@ -20,7 +20,7 @@
         <button type="button" class="btn btn-primary">HOME</button>
     </a>
 </div>
-<form action="/products?command=Product" method="post">
+<form action="/products?command=ShowProducts" method="post">
     <table class="table table-bordered">
         <tr>
             <td></td>

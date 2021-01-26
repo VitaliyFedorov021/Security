@@ -2,14 +2,15 @@
   Created by IntelliJ IDEA.
   User: vitalij
   Date: 26.01.2021
-  Time: 09:56
+  Time: 14:27
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Products</title>
+    <title>
+        Product ${product.code}
+    </title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css">
@@ -20,20 +21,11 @@
         <button type="button" class="btn btn-primary">HOME</button>
     </a>
 </div>
-<table class="table table-bordered">
-    <tr>
-        <td>Code</td>
-        <td>Name</td>
-        <td>Price</td>
-    </tr>
-    <c:forEach var="p" items="${products}">
-        <tr>
-            <td>${p.code}</td>
-            <td><a href="/product/?code=${p.code}&command=Product">${p.name}</a></td>
-            <td>${p.price}</td>
-        </tr>
-    </c:forEach>
-</table>
-
+    <h2 class="display-2">${product.name}</h2>
+    <h1 class="display-1">Description:</h1>
+    <p>${product.description}</p>
+    <br>
+    <h1>Price:</h1>
+    <h3 class="display-3">${product.price}$</h3>
 </body>
 </html>

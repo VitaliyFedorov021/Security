@@ -22,4 +22,10 @@ public class ProductServiceImpl implements ProductService
 	{
 		return productDao.findAllByCategoryId(categoryId);
 	}
+
+	@Override
+	public Product findByCode(final String code)
+	{
+		return productDao.findByCode(code);
+	}
 }

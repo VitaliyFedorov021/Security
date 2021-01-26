@@ -22,6 +22,10 @@ public class ProductDaoImpl implements ProductDao
 	private static final String PRODUCTS_BY_CATEGORY = "SELECT p.id, p.name, p.code, p.price, p.description,"
 			+ "c.code as c_code, c.id as c_id, c.name as c_name FROM product p "
 			+ "JOIN category c on p.category_id = c.id WHERE c.id = ?";
+	private static final String PRODUCT_BY_CODE = "SELECT p.id, p.name, p.code, p.price, p.description,"
+			+ " c.code as c_code, c.id as c_id, c.name as c_name FROM product p "
+			+ "JOIN category c on c.id = p.category_id "
+			+ "WHERE p.code = ?";
 
 	public ProductDaoImpl()
 	{
@@ -49,6 +53,25 @@ public class ProductDaoImpl implements ProductDao
 		return products;
 	}
 
+	@Override
+	public Product findByCode(final String code)
+	{
+		Product product = null;
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement pStatement = connection.prepareStatement(PRODUCT_BY_CODE))
+		{
+			pStatement.setString(1, code);
+			ResultSet rSet = pStatement.executeQuery();
+			rSet.next();
+			product = mapProduct(rSet);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return product;
+	}
+
 	private Product mapProduct(ResultSet resultSet) throws SQLException
 	{
 		Product product = new Product();
@@ -58,9 +81,9 @@ public class ProductDaoImpl implements ProductDao
 		product.setDescription(resultSet.getString(ApplicationConstant.DESCRIPTION));
 		product.setCode(resultSet.getString(ApplicationConstant.CODE));
 		Category category = new Category();
-		category.setId(resultSet.getInt(ApplicationConstant.CATEGORY_ID));
-		category.setName(resultSet.getString(ApplicationConstant.CATEGORY_NAME));
-		category.setCode(resultSet.getString(ApplicationConstant.CATEGORY_CODE));
+		category.setId(resultSet.getInt(ApplicationConstant.C_ID));
+		category.setName(resultSet.getString(ApplicationConstant.C_NAME));
+		category.setCode(resultSet.getString(ApplicationConstant.C_CODE));
 		product.setCategory(category);
 		return product;
 	}

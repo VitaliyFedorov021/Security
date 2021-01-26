@@ -1,6 +1,7 @@
 package ua.com.aimprosoft.shop.controller.command.impl;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 
@@ -11,11 +12,11 @@ import ua.com.aimprosoft.shop.service.impl.ProductServiceImpl;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 
-public class ProductCommand extends AbstractCommand
+public class ShowProductsCommand extends AbstractCommand
 {
 	private final ProductService productService;
 
-	public ProductCommand()
+	public ShowProductsCommand()
 	{
 		this.productService = new ProductServiceImpl();
 	}
@@ -23,9 +24,10 @@ public class ProductCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		String code = request.getParameter(ApplicationConstant.CODE);
-		Product product = productService.findByCode(code);
-		request.setAttribute(ApplicationConstant.PRODUCT, product);
-		forward(ApplicationConstant.PDP_PATH);
+		int categoryId = Integer.parseInt(request.getParameter(ApplicationConstant.C_ID));
+		List<Product> products = productService.getAllByCategoryId(categoryId);
+		request.setAttribute(ApplicationConstant.PRODUCTS, products);
+		forward(ApplicationConstant.PLP_PATH);
+
 	}
 }

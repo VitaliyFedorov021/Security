@@ -16,9 +16,9 @@ public class ApplicationConstant
 	public static final String BIRTHDAY = "birthday_date";
 	public static final String NUMBER = "phone_number";
 
-	public static final String CATEGORY_ID = "c_id";
-	public static final String CATEGORY_NAME = "c_name";
-	public static final String CATEGORY_CODE = "c_code";
+	public static final String C_ID = "c_id";
+	public static final String C_NAME = "c_name";
+	public static final String C_CODE = "c_code";
 
 	public static final String CODE = "code";
 	public static final String NAME = "name";
@@ -36,6 +36,7 @@ public class ApplicationConstant
 	public static final String LOGIN_PATH = "/login?command=Login";
 	public static final String CATEGORIES_PAGE = "/categoriesPage.jsp";
 	public static final String PLP_PATH = "/plp.jsp";
+	public static final String PDP_PATH = "/pdp.jsp";
 	public static final String ERROR_PATH = "/error.jsp";
 
 	public static final String MESSAGE = "message";
@@ -44,6 +45,7 @@ public class ApplicationConstant
 	public static final String EMPTY = "empty";
 	public static final String CATEGORIES = "categories";
 	public static final String PRODUCTS = "products";
+	public static final String PRODUCT = "product";
 
 	public static final String SLASH = "/";
 	public static final String ALGORITHM = "MD5";
