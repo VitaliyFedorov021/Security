@@ -23,6 +23,7 @@ public class ApplicationConstant
 	public static final String CODE = "code";
 	public static final String NAME = "name";
 	public static final String ID = "id";
+	public static final String PRODUCT_QUANTITY = "p_q";
 
 	public static final String PRICE = "price";
 	public static final String DESCRIPTION = "description";

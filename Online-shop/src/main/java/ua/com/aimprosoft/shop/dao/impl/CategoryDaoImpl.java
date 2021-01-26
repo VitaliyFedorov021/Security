@@ -18,8 +18,9 @@ public class CategoryDaoImpl implements CategoryDao
 {
 	private final DataSource dataSource;
 
-	private static final String ALL_CATEGORIES = "SELECT * FROM category";
-	private static final String PRODUCTS_QUANTITY = "SELECT COUNT(*) as q FROM product p WHERE category_id = ?";
+	private static final String ALL_CATEGORIES = "SELECT c.*, COUNT(p.category_id) as p_q FROM category c "
+			+ "LEFT JOIN product p ON c.id = p.category_id "
+			+ "GROUP BY c.id ;";
 
 	public CategoryDaoImpl()
 	{
@@ -47,23 +48,6 @@ public class CategoryDaoImpl implements CategoryDao
 		return categories;
 	}
 
-	private int findProductsQuantity(final int categoryId)
-	{
-		int result = 0;
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement pStatement = connection.prepareStatement(PRODUCTS_QUANTITY);)
-		{
-			pStatement.setInt(1, categoryId);
-			ResultSet rSet = pStatement.executeQuery();
-			rSet.next();
-			result = rSet.getInt("q");
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-		return result;
-	}
 
 	private Category mapCategory(ResultSet rSet) throws SQLException
 	{
@@ -72,7 +56,7 @@ public class CategoryDaoImpl implements CategoryDao
 		category.setId(id);
 		category.setCode(rSet.getString(ApplicationConstant.CODE));
 		category.setName(rSet.getString(ApplicationConstant.NAME));
-		category.setQuantityOfProducts(findProductsQuantity(id));
+		category.setQuantityOfProducts(rSet.getInt(ApplicationConstant.PRODUCT_QUANTITY));
 		return category;
 	}
 }

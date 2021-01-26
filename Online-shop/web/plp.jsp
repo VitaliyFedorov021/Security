@@ -20,7 +20,6 @@
         <button type="button" class="btn btn-primary">HOME</button>
     </a>
 </div>
-<h1><c:out value="${c_name}"/></h1>
 <table class="table table-bordered">
     <tr>
         <td>Code</td>
