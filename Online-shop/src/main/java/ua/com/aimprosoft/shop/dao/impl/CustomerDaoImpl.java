@@ -54,9 +54,11 @@ public class CustomerDaoImpl implements CustomerDao
 	public boolean insertCustomer(final Customer customer)
 	{
 		boolean result = false;
-		try (final Connection connection = dataSource.getConnection();
-				final PreparedStatement pStatement = connection.prepareStatement(INSERT))
+		Connection connection = null;
+		try
 		{
+			connection = dataSource.getConnection();
+			PreparedStatement pStatement = connection.prepareStatement(INSERT);
 			connection.setAutoCommit(false);
 			pStatement.setString(1, customer.getEmail());
 			pStatement.setString(2, customer.getPassword());
@@ -70,9 +72,37 @@ public class CustomerDaoImpl implements CustomerDao
 		}
 		catch (final SQLException e)
 		{
+			rollback(connection);
 			e.printStackTrace();
+		} finally
+		{
+			close(connection);
 		}
 		return result;
+	}
+
+	private void close(Connection connection)
+	{
+		try
+		{
+			connection.close();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void rollback(Connection connection)
+	{
+		try
+		{
+			connection.rollback();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private Customer mapCustomer(final ResultSet resultSet) throws SQLException

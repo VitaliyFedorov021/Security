@@ -4,9 +4,20 @@ public class Category extends Entity
 {
 	private String code;
 	private String name;
+	private int quantityOfProducts;
 
 	public Category()
 	{
+	}
+
+	public int getQuantityOfProducts()
+	{
+		return quantityOfProducts;
+	}
+
+	public void setQuantityOfProducts(final int quantityOfProducts)
+	{
+		this.quantityOfProducts = quantityOfProducts;
 	}
 
 	public Category(final String code, final String name)

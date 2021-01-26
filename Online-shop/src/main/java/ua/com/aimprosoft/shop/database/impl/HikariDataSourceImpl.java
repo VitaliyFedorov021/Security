@@ -20,9 +20,9 @@ public class HikariDataSourceImpl implements DataSource
 	{
 		final Properties properties = PropertiesReader.readProperties(ApplicationConstant.DB_PROPERTIES);
 		final HikariConfig config = new HikariConfig();
-		config.setJdbcUrl(properties.getProperty("jdbcUrl"));
-		config.setUsername(properties.getProperty("username"));
-		config.setPassword(properties.getProperty("password"));
+		config.setJdbcUrl(properties.getProperty(ApplicationConstant.JDBC_URL));
+		config.setUsername(properties.getProperty(ApplicationConstant.USERNAME));
+		config.setPassword(properties.getProperty(ApplicationConstant.PASSWORD));
 		config.setDataSourceProperties(properties);
 		dataSource = new HikariDataSource(config);
 	}

@@ -1,7 +1,13 @@
 package ua.com.aimprosoft.shop.util.constant;
 
+
+
+
 public class ApplicationConstant
 {
+	public static final String JDBC_URL = "jdbcUrl";
+	public static final String USERNAME = "username";
+
 	public static final String EMAIL = "email";
 	public static final String PASSWORD = "password";
 	public static final String FIRST_NAME = "first_name";
@@ -10,7 +16,16 @@ public class ApplicationConstant
 	public static final String BIRTHDAY = "birthday_date";
 	public static final String NUMBER = "phone_number";
 
-	public static final String CATEGORY_ID = "category_id";
+	public static final String CATEGORY_ID = "c_id";
+	public static final String CATEGORY_NAME = "c_name";
+	public static final String CATEGORY_CODE = "c_code";
+
+	public static final String CODE = "code";
+	public static final String NAME = "name";
+	public static final String ID = "id";
+
+	public static final String PRICE = "price";
+	public static final String DESCRIPTION = "description";
 
 	public static final String HOME_PAGE = "/homePage.jsp";
 	public static final String LOGIN_PAGE = "/loginPage.jsp";
@@ -19,7 +34,7 @@ public class ApplicationConstant
 	public static final String DB_PROPERTIES = "hikariDB.properties";
 	public static final String LOGIN_PATH = "/login?command=Login";
 	public static final String CATEGORIES_PAGE = "/categoriesPage.jsp";
-	public static final String PLP_PATH = "/PLP.jsp";
+	public static final String PLP_PATH = "/plp.jsp";
 	public static final String ERROR_PATH = "/error.jsp";
 
 	public static final String MESSAGE = "message";
