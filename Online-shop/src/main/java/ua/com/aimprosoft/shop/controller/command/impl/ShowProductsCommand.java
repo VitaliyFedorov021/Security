@@ -24,10 +24,9 @@ public class ShowProductsCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		int categoryId = Integer.parseInt(request.getParameter(ApplicationConstant.ID));
-		List<Product> products = productService.getAllByCategoryId(categoryId);
+		final int categoryId = Integer.parseInt(request.getParameter(ApplicationConstant.ID));
+		final List<Product> products = productService.getAllByCategoryId(categoryId);
 		request.setAttribute(ApplicationConstant.PRODUCTS, products);
 		forward(ApplicationConstant.PLP_PATH);
-
 	}
 }
