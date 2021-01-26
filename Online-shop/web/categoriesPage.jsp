@@ -20,22 +20,18 @@
         <button type="button" class="btn btn-primary">HOME</button>
     </a>
 </div>
-<form action="/products?command=ShowProducts" method="post">
     <table class="table table-bordered">
         <tr>
-            <td></td>
             <td>Name</td>
             <td>Quantity of products</td>
         </tr>
         <c:forEach items="${categories}" var="c">
             <tr>
-                <td><input type="radio" value="${c.id}" name="c_id"></td>
-                <td>${c.name}</td>
+                <td><a href="/products?id=${c.id}&command=ShowProducts">${c.name}</a></td>
                 <td>${c.quantityOfProducts}</td>
             </tr>
         </c:forEach>
     </table>
-   <button type="submit" class="btn btn-primary">Choose</button>
 </form>
 </body>
 </html>
