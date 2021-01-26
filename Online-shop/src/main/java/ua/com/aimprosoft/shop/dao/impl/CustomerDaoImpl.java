@@ -58,7 +58,7 @@ public class CustomerDaoImpl implements CustomerDao
 		try
 		{
 			connection = dataSource.getConnection();
-			PreparedStatement pStatement = connection.prepareStatement(INSERT);
+			final PreparedStatement pStatement = connection.prepareStatement(INSERT);
 			connection.setAutoCommit(false);
 			pStatement.setString(1, customer.getEmail());
 			pStatement.setString(2, customer.getPassword());
@@ -74,32 +74,33 @@ public class CustomerDaoImpl implements CustomerDao
 		{
 			rollback(connection);
 			e.printStackTrace();
-		} finally
+		}
+		finally
 		{
 			close(connection);
 		}
 		return result;
 	}
 
-	private void close(Connection connection)
+	private void close(final Connection connection)
 	{
 		try
 		{
 			connection.close();
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
 			e.printStackTrace();
 		}
 	}
 
-	private void rollback(Connection connection)
+	private void rollback(final Connection connection)
 	{
 		try
 		{
 			connection.rollback();
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
 			e.printStackTrace();
 		}

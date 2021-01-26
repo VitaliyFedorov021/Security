@@ -30,29 +30,28 @@ public class CategoryDaoImpl implements CategoryDao
 	@Override
 	public List<Category> findAll()
 	{
-		List<Category> categories = new ArrayList<>();
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement pStatement = connection.prepareStatement(ALL_CATEGORIES);)
+		final List<Category> categories = new ArrayList<>();
+		try (final Connection connection = dataSource.getConnection();
+				final PreparedStatement pStatement = connection.prepareStatement(ALL_CATEGORIES);)
 		{
 
-			ResultSet resultSet = pStatement.executeQuery();
+			final ResultSet resultSet = pStatement.executeQuery();
 			while (resultSet.next())
 			{
 				categories.add(mapCategory(resultSet));
 			}
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
 			e.printStackTrace();
 		}
 		return categories;
 	}
 
-
-	private Category mapCategory(ResultSet rSet) throws SQLException
+	private Category mapCategory(final ResultSet rSet) throws SQLException
 	{
-		int id = rSet.getInt(ApplicationConstant.ID);
-		Category category = new Category();
+		final int id = rSet.getInt(ApplicationConstant.ID);
+		final Category category = new Category();
 		category.setId(id);
 		category.setCode(rSet.getString(ApplicationConstant.CODE));
 		category.setName(rSet.getString(ApplicationConstant.NAME));

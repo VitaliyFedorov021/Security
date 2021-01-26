@@ -10,7 +10,6 @@ import ua.com.aimprosoft.shop.controller.command.AbstractCommand;
 import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.service.CustomerService;
 import ua.com.aimprosoft.shop.service.impl.CustomerServiceImpl;
-
 import ua.com.aimprosoft.shop.util.Extractor;
 import ua.com.aimprosoft.shop.util.Validator;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;

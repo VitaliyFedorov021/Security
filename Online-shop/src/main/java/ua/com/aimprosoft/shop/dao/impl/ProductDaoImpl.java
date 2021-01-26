@@ -33,20 +33,20 @@ public class ProductDaoImpl implements ProductDao
 	}
 
 	@Override
-	public List<Product> findAllByCategoryId(int categoryId)
+	public List<Product> findAllByCategoryId(final int categoryId)
 	{
-		List<Product> products = new ArrayList<>();
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement pStatement = connection.prepareStatement(PRODUCTS_BY_CATEGORY);)
+		final List<Product> products = new ArrayList<>();
+		try (final Connection connection = dataSource.getConnection();
+				final PreparedStatement pStatement = connection.prepareStatement(PRODUCTS_BY_CATEGORY);)
 		{
 			pStatement.setInt(1, categoryId);
-			ResultSet resultSet = pStatement.executeQuery();
+			final ResultSet resultSet = pStatement.executeQuery();
 			while (resultSet.next())
 			{
 				products.add(mapProduct(resultSet));
 			}
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
 			e.printStackTrace();
 		}
@@ -57,30 +57,30 @@ public class ProductDaoImpl implements ProductDao
 	public Product findByCode(final String code)
 	{
 		Product product = null;
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement pStatement = connection.prepareStatement(PRODUCT_BY_CODE))
+		try (final Connection connection = dataSource.getConnection();
+				final PreparedStatement pStatement = connection.prepareStatement(PRODUCT_BY_CODE))
 		{
 			pStatement.setString(1, code);
-			ResultSet rSet = pStatement.executeQuery();
+			final ResultSet rSet = pStatement.executeQuery();
 			rSet.next();
 			product = mapProduct(rSet);
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
 			e.printStackTrace();
 		}
 		return product;
 	}
 
-	private Product mapProduct(ResultSet resultSet) throws SQLException
+	private Product mapProduct(final ResultSet resultSet) throws SQLException
 	{
-		Product product = new Product();
+		final Product product = new Product();
 		product.setId(resultSet.getInt(ApplicationConstant.ID));
 		product.setPrice(resultSet.getInt(ApplicationConstant.PRICE));
 		product.setName(resultSet.getString(ApplicationConstant.NAME));
 		product.setDescription(resultSet.getString(ApplicationConstant.DESCRIPTION));
 		product.setCode(resultSet.getString(ApplicationConstant.CODE));
-		Category category = new Category();
+		final Category category = new Category();
 		category.setId(resultSet.getInt(ApplicationConstant.C_ID));
 		category.setName(resultSet.getString(ApplicationConstant.C_NAME));
 		category.setCode(resultSet.getString(ApplicationConstant.C_CODE));
