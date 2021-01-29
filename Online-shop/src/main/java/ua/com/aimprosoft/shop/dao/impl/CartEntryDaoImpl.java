@@ -112,11 +112,9 @@ public class CartEntryDaoImpl implements CartEntryDao
 	public List<CartEntry> findEntriesByCartId(final int cartId)
 	{
 		final List<CartEntry> cartEntries = new ArrayList<>();
-		Connection connection = null;
-		try
+		try (final Connection connection = dataSource.getConnection();
+				final PreparedStatement pStatement = connection.prepareStatement(GET_ENTRIES);)
 		{
-			connection = dataSource.getConnection();
-			final PreparedStatement pStatement = connection.prepareStatement(GET_ENTRIES);
 			pStatement.setInt(1, cartId);
 			final ResultSet rSet = pStatement.executeQuery();
 			while (rSet.next())

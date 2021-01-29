@@ -37,7 +37,7 @@ public class ProductDaoImpl implements ProductDao
 	{
 		final List<Product> products = new ArrayList<>();
 		try (final Connection connection = dataSource.getConnection();
-				final PreparedStatement pStatement = connection.prepareStatement(PRODUCTS_BY_CATEGORY);)
+				final PreparedStatement pStatement = connection.prepareStatement(PRODUCTS_BY_CATEGORY))
 		{
 			pStatement.setInt(1, categoryId);
 			final ResultSet resultSet = pStatement.executeQuery();

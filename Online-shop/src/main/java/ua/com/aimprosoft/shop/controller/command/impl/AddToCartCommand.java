@@ -73,7 +73,7 @@ public class AddToCartCommand extends AbstractCommand
 		final CartEntry cartEntry = entries.get(entries.size() - 1);
 		final int newQuantity = cartEntry.getQuantity() + quantity;
 		cartEntry.setQuantity(newQuantity);
-		cartEntry.setTotalPrice(product.getPrice() * quantity);
+		cartEntry.setTotalPrice(product.getPrice() * newQuantity);
 		cart.setTotalPrice(cart.getTotalPrice() + product.getPrice() * quantity);
 		cartEntryService.updateEntry(cartEntry);
 		cartService.updateCart(cart);
