@@ -12,6 +12,7 @@ public class Customer extends Entity
 	private Gender gender;
 	private Date birthdayDate;
 	private String phoneNumber;
+	private Cart cart;
 
 	public Customer()
 	{
@@ -21,6 +22,16 @@ public class Customer extends Entity
 	{
 		this.email = email;
 		this.password = password;
+	}
+
+	public Cart getCart()
+	{
+		return cart;
+	}
+
+	public void setCart(final Cart cart)
+	{
+		this.cart = cart;
 	}
 
 	public Customer(final String email, final String password, final String firstName, final String lastName,

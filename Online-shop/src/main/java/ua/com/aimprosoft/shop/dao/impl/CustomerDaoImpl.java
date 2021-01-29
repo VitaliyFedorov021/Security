@@ -109,6 +109,7 @@ public class CustomerDaoImpl implements CustomerDao
 	private Customer mapCustomer(final ResultSet resultSet) throws SQLException
 	{
 		final Customer customer = new Customer();
+		customer.setId(resultSet.getInt(ApplicationConstant.ID));
 		customer.setEmail(resultSet.getString(ApplicationConstant.EMAIL));
 		customer.setPassword(resultSet.getString(ApplicationConstant.PASSWORD));
 		customer.setFirstName(resultSet.getString(ApplicationConstant.FIRST_NAME));

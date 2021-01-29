@@ -20,6 +20,11 @@
         <button type="button" class="btn btn-primary">HOME</button>
     </a>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script>
+    <%@include file="addToCart.js"%>
+</script>
 <table class="table table-bordered">
     <tr>
         <td>Code</td>
@@ -30,7 +35,12 @@
         <tr>
             <td>${p.code}</td>
             <td><a href="/product/?code=${p.code}&command=Product">${p.name}</a></td>
-            <td>${p.price}</td>
+            <td>${p.price}<br>
+                <c:if test="${sessionScope.customer != null}">
+                    <button type="button" value="${p.code}" id="productCode" name="productCode" class="btn btn-cart">Add to cart</button>
+                    <input type="hidden" id="quantity" name="quantity" value="1">
+                </c:if>
+            </td>
         </tr>
     </c:forEach>
 </table>
