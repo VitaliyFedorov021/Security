@@ -37,7 +37,7 @@
         <button type="button" value="${product.code}" id="productCode" name="productCode" class="btn btn-cart">Add to cart</button>
         <div class="form-group col-md-1">
             <label for="quantity">Quantity</label>
-            <input type="text" id="quantity" name="quantity" defaultValue="1">
+            <input type="number" id="quantity" name="quantity" max="15" value="1">
         </div>
     </c:if>
 </body>
