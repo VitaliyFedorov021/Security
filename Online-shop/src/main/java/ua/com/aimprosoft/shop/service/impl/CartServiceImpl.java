@@ -26,22 +26,20 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
-	public Cart getCart(final Customer customer)
+	public Optional<Cart> getCart(final Customer customer)
 	{
 		final Optional<Cart> cartOptional = cartDao.findActiveCart(customer.getEmail());
-		Cart cart = null;
-		if (cartOptional.isPresent())
-		{
-			cart = cartOptional.get();
-		}
-		else
-		{
-			cart = new Cart();
-			cart.setCode(generateCode());
-			customer.setCart(cart);
-			cart.setCustomer(customer);
-			cartDao.insertCart(cart);
-		}
+		return cartOptional;
+	}
+
+	@Override
+	public Cart saveCart(final Customer customer)
+	{
+		final Cart cart = new Cart();
+		cart.setCode(generateCode());
+		customer.setCart(cart);
+		cart.setCustomer(customer);
+		cartDao.insertCart(cart);
 		return cart;
 	}
 

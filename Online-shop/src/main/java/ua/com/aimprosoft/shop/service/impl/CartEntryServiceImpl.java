@@ -29,7 +29,8 @@ public class CartEntryServiceImpl implements CartEntryService
 	@Override
 	public void addEntryToCart(final Customer customer, final int quantity, final String code)
 	{
-		final Cart cart = cartService.getCart(customer);
+		final Optional<Cart> optionalCart = cartService.getCart(customer);
+		final Cart cart = optionalCart.orElseGet(() -> cartService.saveCart(customer));
 		addEntry(code, cart, quantity);
 	}
 
