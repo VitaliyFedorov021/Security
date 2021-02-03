@@ -1,17 +1,12 @@
 package ua.com.aimprosoft.shop.service;
 
-import java.util.List;
-
 import ua.com.aimprosoft.shop.models.Cart;
+import ua.com.aimprosoft.shop.models.Customer;
 
 
 public interface CartService
 {
-	boolean saveCart(Cart cart);
-
-	List<Cart> getCartByCustomerId(int customerId);
+	Cart getCart(Customer customer);
 
 	boolean updateCart(Cart cart);
-
-	boolean deleteCart(Cart cart);
 }

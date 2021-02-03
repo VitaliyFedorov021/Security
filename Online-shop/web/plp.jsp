@@ -37,8 +37,10 @@
             <td><a href="/product/?code=${p.code}&command=Product">${p.name}</a></td>
             <td>${p.price}<br>
                 <c:if test="${sessionScope.customer != null}">
-                    <button type="button" value="${p.code}" id="productCode" name="productCode" class="btn btn-cart">Add to cart</button>
-                    <input type="hidden" id="quantity" name="quantity" value="1">
+                    <div>
+                        <button type="button" value="${p.code}" id="productCode" name="productCode" class="btn btn-cart">Add to cart</button>
+                        <input type="hidden" id="quantity" name="quantity" value="1">
+                    </div>
                 </c:if>
             </td>
         </tr>

@@ -6,16 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import ua.com.aimprosoft.shop.dao.CartEntryDao;
 import ua.com.aimprosoft.shop.database.DataSource;
 import ua.com.aimprosoft.shop.database.impl.HikariDataSourceImpl;
-import ua.com.aimprosoft.shop.models.Address;
-import ua.com.aimprosoft.shop.models.Cart;
 import ua.com.aimprosoft.shop.models.CartEntry;
-import ua.com.aimprosoft.shop.models.Category;
-import ua.com.aimprosoft.shop.models.Customer;
-import ua.com.aimprosoft.shop.models.Gender;
 import ua.com.aimprosoft.shop.models.Product;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
@@ -26,26 +22,35 @@ public class CartEntryDaoImpl implements CartEntryDao
 
 	public CartEntryDaoImpl()
 	{
-		this.dataSource = new HikariDataSourceImpl();
+		this.dataSource = HikariDataSourceImpl.getInstance();
 	}
 
-	public static final String ADD_ENTRY = "INSERT INTO cartEntry "
+	private static final String ADD_ENTRY = "INSERT INTO cartEntry "
 			+ "(entry_number, quantity, total_price, cart_id, product_id) "
 			+ "VALUES (?, ?, ?, ?, ?)";
-	public static final String UPDATE_ENTRY = "UPDATE cartEntry SET entry_number = ?, quantity = ?,"
-			+ " total_price = ?, cart_id = ?, product_id = ? WHERE id = ?";
-	public static final String DELETE_ENTRY = "DELETE FROM cartEntry WHERE id = ?";
-	public static final String GET_ENTRIES = "SELECT ce.id, entry_number, quantity AS p_q, ce.total_price,"
-			+ " c2.id as c2_id, c2.code as c2_code, c2.total_price as c2_total_price, placed_date,"
-			+ " p.id as p_id, p.code as p_code, p.name as p_name, price, description, c2.id, c.id as c_id, c.code as c_code, c.name as c_name, "
-			+ "cus.id as cus_id, cus.email, "
-			+ "cus.birthday_date, cus.first_name, cus.gender, cus.last_name, cus.password, cus.phone_number, "
-			+ "a.id as a_id, street, postal_code, town, region, country FROM cartEntry ce "
-			+ "JOIN cart c2 on c2.id = ce.cart_id "
-			+ "JOIN product p on p.id = ce.product_id "
-			+ "JOIN category c on p.category_id = c.id "
-			+ "JOIN customer cus ON c2.customer_id = cus.id LEFT JOIN address a "
-			+ "ON c2.address_id = a.id WHERE ce.cart_id = ?";
+	private static final String UPDATE_ENTRY = "UPDATE cartEntry SET quantity = ?,"
+			+ " total_price = ? WHERE id = ?";
+	private static final String DELETE_ENTRY = "DELETE FROM cartEntry WHERE id = ?";
+	private static final String GET_ENTRIES =
+			"SELECT cartEntry.id, entry_number, quantity AS product_quantity, cartEntry.total_price,"
+					+ " product.id as product_id, product.code as product_code, product.name as product_name, price, description FROM cartEntry "
+					+ "JOIN product on product.id = cartEntry.product_id "
+					+ "JOIN cart on cart.id = cartEntry.cart_id "
+					+ "WHERE cart.code = ?";
+	private static final String GET_ENTRY =
+			"SELECT cartEntry.id, entry_number, quantity AS product_quantity, cartEntry.total_price,"
+					+ " product.id as product_id, product.code as product_code, product.name as product_name, price, description "
+					+ "FROM cartEntry "
+					+ "JOIN product ON cartEntry.product_id = product.id "
+					+ "WHERE cartEntry.entry_number = ?";
+	private static final String GET_ENTRY_BY_PRODUCT_CODE =
+			"SELECT cartEntry.id, entry_number, quantity AS product_quantity, cartEntry.total_price,"
+					+ " product.id as product_id, product.code as product_code, product.name as product_name, price, description "
+					+ "FROM cartEntry "
+					+ "JOIN product ON cartEntry.product_id = product.id "
+					+ "WHERE product.code = ?";
+	private static final String CURRENT_ENTRY_NUMBER = "SELECT MAX(cartEntry.entry_number) as current_entry "
+			+ "FROM cartEntry JOIN cart ON cart.id = cartEntry.cart_id WHERE cart.code = ?";
 
 	@Override
 	public boolean insertEntry(final CartEntry cartEntry)
@@ -86,13 +91,10 @@ public class CartEntryDaoImpl implements CartEntryDao
 		{
 			connection = dataSource.getConnection();
 			connection.setAutoCommit(false);
-			final PreparedStatement pStatement = connection.prepareStatement(UPDATE_ENTRY, 1);
-			pStatement.setInt(1, cartEntry.getEntryNumber());
-			pStatement.setInt(2, cartEntry.getQuantity());
-			pStatement.setDouble(3, cartEntry.getTotalPrice());
-			pStatement.setInt(4, cartEntry.getCart().getId());
-			pStatement.setInt(5, cartEntry.getProduct().getId());
-			pStatement.setInt(6, cartEntry.getId());
+			final PreparedStatement pStatement = connection.prepareStatement(UPDATE_ENTRY);
+			pStatement.setInt(1, cartEntry.getQuantity());
+			pStatement.setDouble(2, cartEntry.getTotalPrice());
+			pStatement.setInt(3, cartEntry.getId());
 			result = pStatement.execute();
 			connection.commit();
 		}
@@ -109,13 +111,13 @@ public class CartEntryDaoImpl implements CartEntryDao
 	}
 
 	@Override
-	public List<CartEntry> findEntriesByCartId(final int cartId)
+	public List<CartEntry> findEntriesByCartCode(final String cartCode)
 	{
 		final List<CartEntry> cartEntries = new ArrayList<>();
 		try (final Connection connection = dataSource.getConnection();
-				final PreparedStatement pStatement = connection.prepareStatement(GET_ENTRIES);)
+				final PreparedStatement pStatement = connection.prepareStatement(GET_ENTRIES))
 		{
-			pStatement.setInt(1, cartId);
+			pStatement.setString(1, cartCode);
 			final ResultSet rSet = pStatement.executeQuery();
 			while (rSet.next())
 			{
@@ -130,7 +132,49 @@ public class CartEntryDaoImpl implements CartEntryDao
 	}
 
 	@Override
-	public boolean deleteEntry(final CartEntry cartEntry)
+	public Optional<CartEntry> findByProductCode(final String productCode)
+	{
+		CartEntry cartEntry = null;
+		try (final Connection connection = dataSource.getConnection();
+				final PreparedStatement pStatement = connection.prepareStatement(GET_ENTRY_BY_PRODUCT_CODE))
+		{
+			pStatement.setString(1, productCode);
+			final ResultSet rSet = pStatement.executeQuery();
+			if (rSet.next())
+			{
+				cartEntry = mapCartEntry(rSet);
+			}
+		}
+		catch (final SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return Optional.ofNullable(cartEntry);
+	}
+
+	@Override
+	public int findCurrentEntryNumber(final String cartCode)
+	{
+		int result = 0;
+		try (final Connection connection = dataSource.getConnection();
+				final PreparedStatement pStatement = connection.prepareStatement(CURRENT_ENTRY_NUMBER))
+		{
+			pStatement.setString(1, cartCode);
+			final ResultSet resultSet = pStatement.executeQuery();
+			if (resultSet.next())
+			{
+				result = resultSet.getInt(ApplicationConstant.CURRENT_ENTRY_NUMBER);
+			}
+		}
+		catch (final SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public boolean deleteEntry(final int id)
 	{
 		boolean res = false;
 		Connection connection = null;
@@ -139,7 +183,7 @@ public class CartEntryDaoImpl implements CartEntryDao
 			connection = dataSource.getConnection();
 			connection.setAutoCommit(false);
 			final PreparedStatement pStatement = connection.prepareStatement(DELETE_ENTRY);
-			pStatement.setInt(1, cartEntry.getId());
+			pStatement.setInt(1, id);
 			res = pStatement.execute();
 			connection.commit();
 		}
@@ -159,7 +203,10 @@ public class CartEntryDaoImpl implements CartEntryDao
 	{
 		try
 		{
-			connection.close();
+			if (connection != null)
+			{
+				connection.close();
+			}
 		}
 		catch (final SQLException e)
 		{
@@ -171,7 +218,10 @@ public class CartEntryDaoImpl implements CartEntryDao
 	{
 		try
 		{
-			connection.rollback();
+			if (connection != null)
+			{
+				connection.rollback();
+			}
 		}
 		catch (final SQLException e)
 		{
@@ -186,47 +236,12 @@ public class CartEntryDaoImpl implements CartEntryDao
 		cartEntry.setQuantity(rSet.getInt(ApplicationConstant.PRODUCT_QUANTITY));
 		cartEntry.setId(rSet.getInt(ApplicationConstant.ID));
 		cartEntry.setTotalPrice(rSet.getDouble(ApplicationConstant.TOTAL_PRICE));
-		final Cart cart = new Cart();
-		cart.setId(rSet.getInt(ApplicationConstant.C2_ID));
-		cart.setCode(rSet.getString(ApplicationConstant.C2_CODE));
-		cart.setPlacedDate(rSet.getDate(ApplicationConstant.PLACED_DATE));
-		cart.setTotalPrice(rSet.getDouble(ApplicationConstant.C2_TOTAL_PRICE));
-		final Customer customer = new Customer();
-		customer.setId(rSet.getInt(ApplicationConstant.CUS_ID));
-		customer.setEmail(rSet.getString(ApplicationConstant.EMAIL));
-		customer.setPassword(rSet.getString(ApplicationConstant.PASSWORD));
-		customer.setFirstName(rSet.getString(ApplicationConstant.FIRST_NAME));
-		customer.setLastName(rSet.getString(ApplicationConstant.LAST_NAME));
-		customer.setGender(Gender.valueOf(rSet.getString(ApplicationConstant.GENDER)));
-		customer.setBirthdayDate(rSet.getDate(ApplicationConstant.BIRTHDAY));
-		customer.setPhoneNumber(rSet.getString(ApplicationConstant.NUMBER));
-		cart.setCustomer(customer);
-		Address address = null;
-		final String country = rSet.getString(ApplicationConstant.COUNTRY);
-		if (country != null)
-		{
-			address = new Address();
-			rSet.getInt(ApplicationConstant.A_ID);
-			address.setCountry(country);
-			address.setPostalCode(rSet.getString(ApplicationConstant.POSTAL_CODE));
-			address.setRegion(rSet.getString(ApplicationConstant.REGION));
-			address.setTown(rSet.getString(ApplicationConstant.TOWN));
-			address.setStreet(rSet.getString(ApplicationConstant.STREET));
-			cart.setDeliveryAddress(address);
-		}
-		cart.setDeliveryAddress(address);
-		cartEntry.setCart(cart);
 		final Product product = new Product();
-		product.setId(rSet.getInt(ApplicationConstant.P_ID));
+		product.setId(rSet.getInt(ApplicationConstant.PRODUCT_ID));
 		product.setPrice(rSet.getInt(ApplicationConstant.PRICE));
-		product.setName(rSet.getString(ApplicationConstant.P_NAME));
+		product.setName(rSet.getString(ApplicationConstant.PRODUCT_NAME));
 		product.setDescription(rSet.getString(ApplicationConstant.DESCRIPTION));
-		product.setCode(rSet.getString(ApplicationConstant.P_CODE));
-		final Category category = new Category();
-		category.setId(rSet.getInt(ApplicationConstant.C_ID));
-		category.setName(rSet.getString(ApplicationConstant.C_NAME));
-		category.setCode(rSet.getString(ApplicationConstant.C_CODE));
-		product.setCategory(category);
+		product.setCode(rSet.getString(ApplicationConstant.PRODUCT_CODE_DB));
 		cartEntry.setProduct(product);
 		return cartEntry;
 	}

@@ -1,10 +1,12 @@
 package ua.com.aimprosoft.shop.service.impl;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 import ua.com.aimprosoft.shop.dao.CartDao;
 import ua.com.aimprosoft.shop.dao.impl.CartDaoImpl;
 import ua.com.aimprosoft.shop.models.Cart;
+import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.service.CartService;
 
 
@@ -18,26 +20,44 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
-	public boolean saveCart(final Cart cart)
-	{
-		return cartDao.insertCart(cart);
-	}
-
-	@Override
-	public List<Cart> getCartByCustomerId(final int customerId)
-	{
-		return cartDao.findCartByCustomerId(customerId);
-	}
-
-	@Override
 	public boolean updateCart(final Cart cart)
 	{
 		return cartDao.updateCart(cart);
 	}
 
 	@Override
-	public boolean deleteCart(final Cart cart)
+	public Cart getCart(final Customer customer)
 	{
-		return cartDao.deleteCart(cart);
+		final Optional<Cart> cartOptional = cartDao.findActiveCart(customer.getEmail());
+		Cart cart = null;
+		if (cartOptional.isPresent())
+		{
+			cart = cartOptional.get();
+		}
+		else
+		{
+			cart = new Cart();
+			cart.setCode(generateCode());
+			customer.setCart(cart);
+			cart.setCustomer(customer);
+			cartDao.insertCart(cart);
+		}
+		return cart;
+	}
+
+	private String generateCode()
+	{
+		final int leftLimit = 97;
+		final int rightLimit = 122;
+		final int targetStringLength = 10;
+		final Random random = new Random();
+		final StringBuilder buffer = new StringBuilder(targetStringLength);
+		for (int i = 0; i < targetStringLength; i++)
+		{
+			final int randomLimitedInt = leftLimit + (int)
+					(random.nextFloat() * (rightLimit - leftLimit + 1));
+			buffer.append((char) randomLimitedInt);
+		}
+		return buffer.toString();
 	}
 }

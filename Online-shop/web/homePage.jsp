@@ -20,6 +20,7 @@
 </c:if>
 <c:if test="${customer != null}">
     <h1 class="display-1">Welcome to our shop, ${customer.firstName} ${customer.lastName}!</h1>
+    <div><a href="/cart?command=ShowCart"><button type="button" class="btn btn-primary">Show cart</button></a></div>
     <div>
         <a href="/logout?command=Logout"><button type="button" class="btn btn-primary">Logout</button></a>
     </div>

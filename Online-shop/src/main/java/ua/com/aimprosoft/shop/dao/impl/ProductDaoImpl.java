@@ -20,16 +20,16 @@ public class ProductDaoImpl implements ProductDao
 	private final DataSource dataSource;
 
 	private static final String PRODUCTS_BY_CATEGORY = "SELECT p.id, p.name, p.code, p.price, p.description,"
-			+ "c.code as c_code, c.id as c_id, c.name as c_name FROM product p "
-			+ "JOIN category c on p.category_id = c.id WHERE c.id = ?";
+			+ "category.code as category_code, category.id as category_id, category.name as category_name FROM product p "
+			+ "JOIN category on p.category_id = category.id WHERE category.id = ?";
 	private static final String PRODUCT_BY_CODE = "SELECT p.id, p.name, p.code, p.price, p.description,"
-			+ " c.code as c_code, c.id as c_id, c.name as c_name FROM product p "
-			+ "JOIN category c on c.id = p.category_id "
+			+ " category.code as category_code, category.id as category_id, category.name as category_name FROM product p "
+			+ "JOIN category on category.id = p.category_id "
 			+ "WHERE p.code = ?";
 
 	public ProductDaoImpl()
 	{
-		this.dataSource = new HikariDataSourceImpl();
+		this.dataSource = HikariDataSourceImpl.getInstance();
 	}
 
 	@Override
@@ -81,9 +81,9 @@ public class ProductDaoImpl implements ProductDao
 		product.setDescription(resultSet.getString(ApplicationConstant.DESCRIPTION));
 		product.setCode(resultSet.getString(ApplicationConstant.CODE));
 		final Category category = new Category();
-		category.setId(resultSet.getInt(ApplicationConstant.C_ID));
-		category.setName(resultSet.getString(ApplicationConstant.C_NAME));
-		category.setCode(resultSet.getString(ApplicationConstant.C_CODE));
+		category.setId(resultSet.getInt(ApplicationConstant.CATEGORY_ID));
+		category.setName(resultSet.getString(ApplicationConstant.CATEGORY_NAME));
+		category.setCode(resultSet.getString(ApplicationConstant.CATEGORY_CODE));
 		product.setCategory(category);
 		return product;
 	}

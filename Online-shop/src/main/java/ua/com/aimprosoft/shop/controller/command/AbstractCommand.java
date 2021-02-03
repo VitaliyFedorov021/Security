@@ -22,7 +22,7 @@ public abstract class AbstractCommand
 		this.request = request;
 		this.response = response;
 	}
-	
+
 	public abstract void process() throws ServletException, IOException;
 
 	protected void forward(final String page) throws ServletException, IOException

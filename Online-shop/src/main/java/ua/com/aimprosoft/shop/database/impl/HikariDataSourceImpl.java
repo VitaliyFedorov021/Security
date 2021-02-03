@@ -14,20 +14,22 @@ import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 public class HikariDataSourceImpl implements DataSource
 {
-	private static final HikariConfig config;
-	private static final HikariDataSource dataSource;
+	private static DataSource instance;
+	private final HikariDataSource dataSource;
 
-	static
+	public static synchronized DataSource getInstance()
 	{
-		try
+		if (instance == null)
 		{
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			instance = new HikariDataSourceImpl();
 		}
-		catch (ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		config = new HikariConfig();
+		return instance;
+	}
+
+	private HikariDataSourceImpl()
+	{
+		registerDriver();
+		final HikariConfig config = new HikariConfig();
 		final Properties properties = PropertiesReader.readProperties(ApplicationConstant.DB_PROPERTIES);
 		config.setDataSourceProperties(properties);
 		config.setJdbcUrl(properties.getProperty(ApplicationConstant.JDBC_URL));
@@ -35,7 +37,19 @@ public class HikariDataSourceImpl implements DataSource
 		config.setPassword(properties.getProperty(ApplicationConstant.PASSWORD));
 		dataSource = new HikariDataSource(config);
 	}
-	
+
+	private void registerDriver()
+	{
+		try
+		{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		}
+		catch (final ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public Connection getConnection() throws SQLException
 	{

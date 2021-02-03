@@ -20,7 +20,7 @@ public class CustomerDaoImpl implements CustomerDao
 
 	public CustomerDaoImpl()
 	{
-		this.dataSource = new HikariDataSourceImpl();
+		this.dataSource = HikariDataSourceImpl.getInstance();
 	}
 
 	private static final String INSERT = "INSERT INTO customer "
@@ -86,7 +86,10 @@ public class CustomerDaoImpl implements CustomerDao
 	{
 		try
 		{
-			connection.close();
+			if (connection != null)
+			{
+				connection.close();
+			}
 		}
 		catch (final SQLException e)
 		{
@@ -98,7 +101,10 @@ public class CustomerDaoImpl implements CustomerDao
 	{
 		try
 		{
-			connection.rollback();
+			if (connection != null)
+			{
+				connection.rollback();
+			}
 		}
 		catch (final SQLException e)
 		{

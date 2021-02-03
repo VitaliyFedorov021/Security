@@ -18,13 +18,14 @@ public class CategoryDaoImpl implements CategoryDao
 {
 	private final DataSource dataSource;
 
-	private static final String ALL_CATEGORIES = "SELECT c.*, COUNT(p.category_id) as p_q FROM category c "
+	private static final String ALL_CATEGORIES = "SELECT c.*, COUNT(p.category_id) as product_quantity "
+			+ "FROM category c "
 			+ "LEFT JOIN product p ON c.id = p.category_id "
-			+ "GROUP BY c.id ;";
+			+ "GROUP BY c.id";
 
 	public CategoryDaoImpl()
 	{
-		this.dataSource = new HikariDataSourceImpl();
+		this.dataSource = HikariDataSourceImpl.getInstance();
 	}
 
 	@Override

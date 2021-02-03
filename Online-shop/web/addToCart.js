@@ -1,15 +1,17 @@
 $(document).ready(function () {
     $('.btn-cart').click(function () {
-        let d = $(this).val();
-        let q = $("#quantity").val();
+        let productCode = $(this).val();
+        let quantity = $("#quantity").val();
         $.ajax({
             url : "?command=AddToCart",
-            type : "POST",
-            dataType : "JSON",
-            data : {productCode: d,
-                    quantity: q}
+            type : "GET",
+            dataType : "TEXT",
+            data : {productCode: productCode,
+                    quantity: quantity},
+            success : function (response) {
+                alert(response)
+            }
         })
-        alert("Added");
     });
 })
 

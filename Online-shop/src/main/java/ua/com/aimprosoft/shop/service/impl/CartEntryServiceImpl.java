@@ -1,43 +1,69 @@
 package ua.com.aimprosoft.shop.service.impl;
 
-import java.util.List;
+import java.util.Optional;
 
 import ua.com.aimprosoft.shop.dao.CartEntryDao;
 import ua.com.aimprosoft.shop.dao.impl.CartEntryDaoImpl;
+import ua.com.aimprosoft.shop.models.Cart;
 import ua.com.aimprosoft.shop.models.CartEntry;
+import ua.com.aimprosoft.shop.models.Customer;
+import ua.com.aimprosoft.shop.models.Product;
 import ua.com.aimprosoft.shop.service.CartEntryService;
+import ua.com.aimprosoft.shop.service.CartService;
+import ua.com.aimprosoft.shop.service.ProductService;
 
 
 public class CartEntryServiceImpl implements CartEntryService
 {
 	private final CartEntryDao cartEntryDao;
+	private final CartService cartService;
+	private final ProductService productService;
 
 	public CartEntryServiceImpl()
 	{
 		this.cartEntryDao = new CartEntryDaoImpl();
+		this.cartService = new CartServiceImpl();
+		this.productService = new ProductServiceImpl();
 	}
 
 	@Override
-	public boolean addEntryToCart(final CartEntry cartEntry)
+	public void addEntryToCart(final Customer customer, final int quantity, final String code)
 	{
-		return cartEntryDao.insertEntry(cartEntry);
+		final Cart cart = cartService.getCart(customer);
+		addEntry(code, cart, quantity);
 	}
 
-	@Override
-	public boolean updateEntry(final CartEntry cartEntry)
+	private void addEntry(final String code, final Cart cart, final int quantity)
 	{
-		return cartEntryDao.updateEntry(cartEntry);
+		final Optional<CartEntry> entryOptional = cartEntryDao.findByProductCode(code);
+		CartEntry cartEntry = null;
+		final Product product = productService.findByCode(code);
+		if (!entryOptional.isPresent())
+		{
+			cartEntry = makeEntry(product, cart, quantity);
+			cartService.updateCart(cart);
+			cartEntryDao.insertEntry(cartEntry);
+			return;
+		}
+		cartEntry = entryOptional.get();
+		final int newQuantity = cartEntry.getQuantity() + quantity;
+		cartEntry.setQuantity(newQuantity);
+		cartEntry.setTotalPrice(product.getPrice() * newQuantity);
+		cart.setTotalPrice(cart.getTotalPrice() + product.getPrice() * quantity);
+		cartEntryDao.updateEntry(cartEntry);
+		cartService.updateCart(cart);
 	}
 
-	@Override
-	public List<CartEntry> getEntriesByCartId(final int cartId)
+	private CartEntry makeEntry(final Product product, final Cart cart, final int quantity)
 	{
-		return cartEntryDao.findEntriesByCartId(cartId);
-	}
-
-	@Override
-	public boolean deleteEntry(final CartEntry cartEntry)
-	{
-		return cartEntryDao.deleteEntry(cartEntry);
+		final int number = cartEntryDao.findCurrentEntryNumber(cart.getCode());
+		final CartEntry cartEntry = new CartEntry();
+		cartEntry.setProduct(product);
+		cartEntry.setTotalPrice(product.getPrice() * quantity);
+		cartEntry.setQuantity(quantity);
+		cartEntry.setEntryNumber(number + 1);
+		cart.setTotalPrice(cart.getTotalPrice() + cartEntry.getTotalPrice());
+		cartEntry.setCart(cart);
+		return cartEntry;
 	}
 }

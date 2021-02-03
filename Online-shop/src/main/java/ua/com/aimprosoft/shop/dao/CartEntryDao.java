@@ -1,6 +1,7 @@
 package ua.com.aimprosoft.shop.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import ua.com.aimprosoft.shop.models.CartEntry;
 
@@ -11,7 +12,11 @@ public interface CartEntryDao
 
 	boolean updateEntry(CartEntry cartEntry);
 
-	List<CartEntry> findEntriesByCartId(int cartId);
+	List<CartEntry> findEntriesByCartCode(String cartCode);
 
-	boolean deleteEntry(CartEntry cartEntry);
+	Optional<CartEntry> findByProductCode(String productCode);
+
+	int findCurrentEntryNumber(String cartCode);
+
+	boolean deleteEntry(int id);
 }
