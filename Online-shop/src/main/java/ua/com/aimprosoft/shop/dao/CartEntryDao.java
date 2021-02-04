@@ -14,9 +14,11 @@ public interface CartEntryDao
 
 	List<CartEntry> findEntriesByCartCode(String cartCode);
 
-	Optional<CartEntry> findByProductCode(String productCode);
+	Optional<CartEntry> findByProductCode(String productCode, String cartCode);
 
 	int findCurrentEntryNumber(String cartCode);
+
+	CartEntry findEntry(int entryId);
 
 	boolean deleteEntry(int id);
 }

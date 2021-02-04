@@ -37,6 +37,10 @@ public class CartDaoImpl implements CartDao
 			"SELECT cart.id, cart.code, cart.total_price, cart.placed_date FROM cart "
 					+ "JOIN customer on customer.id = cart.customer_id "
 					+ "WHERE email = ? AND cart.placed_date IS NULL";
+	private static final String FIND_CART_BY_ENTRY_ID =
+			"SELECT cart.id, cart.code, cart.total_price, cart.placed_date FROM cart "
+					+ "JOIN cartEntry on cart.id = cartEntry.cart_id "
+					+ "WHERE cartEntry.id = ?";
 
 	@Override
 	public boolean insertCart(final Cart cart)
@@ -110,6 +114,27 @@ public class CartDaoImpl implements CartDao
 			e.printStackTrace();
 		}
 		return Optional.ofNullable(cart);
+	}
+
+	@Override
+	public Cart findCartByEntryId(final int entryId)
+	{
+		Cart cart = null;
+		try (final Connection connection = dataSource.getConnection();
+				final PreparedStatement pStatement = connection.prepareStatement(FIND_CART_BY_ENTRY_ID))
+		{
+			pStatement.setInt(1, entryId);
+			final ResultSet rSet = pStatement.executeQuery();
+			if (rSet.next())
+			{
+				cart = mapCart(rSet);
+			}
+		}
+		catch (final SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return cart;
 	}
 
 	@Override

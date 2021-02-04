@@ -1,9 +1,14 @@
 package ua.com.aimprosoft.shop.service;
 
-import ua.com.aimprosoft.shop.models.Customer;
+import java.util.List;
+
+import ua.com.aimprosoft.shop.models.Cart;
+import ua.com.aimprosoft.shop.models.CartEntry;
 
 
 public interface CartEntryService
 {
-	void addEntryToCart(Customer customer, int quantity, String code);
+	void addEntry(final String code, final Cart cart, final int quantity);
+
+	List<CartEntry> getEntries(String code);
 }

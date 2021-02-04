@@ -7,40 +7,48 @@ import ua.com.aimprosoft.shop.dao.CartDao;
 import ua.com.aimprosoft.shop.dao.impl.CartDaoImpl;
 import ua.com.aimprosoft.shop.models.Cart;
 import ua.com.aimprosoft.shop.models.Customer;
+import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.CartService;
 
 
 public class CartServiceImpl implements CartService
 {
 	private final CartDao cartDao;
+	private final CartEntryService cartEntryService;
 
 	public CartServiceImpl()
 	{
 		this.cartDao = new CartDaoImpl();
+		this.cartEntryService = new CartEntryServiceImpl();
 	}
 
 	@Override
-	public boolean updateCart(final Cart cart)
+	public Cart getCartByEntryId(final int entryId)
 	{
-		return cartDao.updateCart(cart);
+		return cartDao.findCartByEntryId(entryId);
 	}
 
 	@Override
-	public Optional<Cart> getCart(final Customer customer)
+	public void addProductToCart(final Customer customer, final int quantity, final String code)
+	{
+		final Cart cart = getActiveCart(customer);
+		cartEntryService.addEntry(code, cart, quantity);
+		cartDao.updateCart(cart);
+	}
+
+	@Override
+	public Cart getActiveCart(final Customer customer)
 	{
 		final Optional<Cart> cartOptional = cartDao.findActiveCart(customer.getEmail());
-		return cartOptional;
-	}
-
-	@Override
-	public Cart saveCart(final Customer customer)
-	{
-		final Cart cart = new Cart();
-		cart.setCode(generateCode());
-		customer.setCart(cart);
-		cart.setCustomer(customer);
-		cartDao.insertCart(cart);
-		return cart;
+		if (!cartOptional.isPresent())
+		{
+			final Cart cart = new Cart();
+			cart.setCode(generateCode());
+			cart.setCustomer(customer);
+			cartDao.insertCart(cart);
+			return cart;
+		}
+		return cartOptional.get();
 	}
 
 	private String generateCode()

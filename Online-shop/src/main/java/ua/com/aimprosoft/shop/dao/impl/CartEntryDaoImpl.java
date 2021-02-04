@@ -42,13 +42,14 @@ public class CartEntryDaoImpl implements CartEntryDao
 					+ " product.id as product_id, product.code as product_code, product.name as product_name, price, description "
 					+ "FROM cartEntry "
 					+ "JOIN product ON cartEntry.product_id = product.id "
-					+ "WHERE cartEntry.entry_number = ?";
+					+ "WHERE cartEntry.id = ?";
 	private static final String GET_ENTRY_BY_PRODUCT_CODE =
 			"SELECT cartEntry.id, entry_number, quantity AS product_quantity, cartEntry.total_price,"
 					+ " product.id as product_id, product.code as product_code, product.name as product_name, price, description "
 					+ "FROM cartEntry "
 					+ "JOIN product ON cartEntry.product_id = product.id "
-					+ "WHERE product.code = ?";
+					+ "JOIN cart on cart.id = cartEntry.cart_id "
+					+ "WHERE product.code = ? AND cart.code = ?";
 	private static final String CURRENT_ENTRY_NUMBER = "SELECT MAX(cartEntry.entry_number) as current_entry "
 			+ "FROM cartEntry JOIN cart ON cart.id = cartEntry.cart_id WHERE cart.code = ?";
 
@@ -132,13 +133,14 @@ public class CartEntryDaoImpl implements CartEntryDao
 	}
 
 	@Override
-	public Optional<CartEntry> findByProductCode(final String productCode)
+	public Optional<CartEntry> findByProductCode(final String productCode, final String cartCode)
 	{
 		CartEntry cartEntry = null;
 		try (final Connection connection = dataSource.getConnection();
 				final PreparedStatement pStatement = connection.prepareStatement(GET_ENTRY_BY_PRODUCT_CODE))
 		{
 			pStatement.setString(1, productCode);
+			pStatement.setString(2, cartCode);
 			final ResultSet rSet = pStatement.executeQuery();
 			if (rSet.next())
 			{
@@ -171,6 +173,27 @@ public class CartEntryDaoImpl implements CartEntryDao
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	@Override
+	public CartEntry findEntry(final int entryId)
+	{
+		CartEntry cartEntry = null;
+		try (final Connection connection = dataSource.getConnection();
+				final PreparedStatement pStatement = connection.prepareStatement(GET_ENTRY))
+		{
+			pStatement.setInt(1, entryId);
+			final ResultSet rSet = pStatement.executeQuery();
+			if (rSet.next())
+			{
+				cartEntry = mapCartEntry(rSet);
+			}
+		}
+		catch (final SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return cartEntry;
 	}
 
 	@Override

@@ -14,5 +14,7 @@ public interface CartDao
 
 	Optional<Cart> findActiveCart(String customerEmail);
 
+	Cart findCartByEntryId(int entryId);
+
 	boolean updateCart(Cart cart);
 }

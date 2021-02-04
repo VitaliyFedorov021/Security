@@ -48,7 +48,7 @@
     </div>
     <div class="form-group col-md-3">
         <label for="number">Phone number:</label>
-        <input type="text" id="number" name="phone_number" placeholder="099 123 45 67" required class="form-control" maxlength="10">
+        <input type="number" id="number" name="phone_number" placeholder="099 123 45 67" required class="form-control" maxlength="10">
     </div>
     <input type="hidden" name="command" value="SignUpCommand">
     <br>
