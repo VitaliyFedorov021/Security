@@ -11,4 +11,8 @@ public interface CartEntryService
 	void addEntry(final String code, final Cart cart, final int quantity);
 
 	List<CartEntry> getEntries(String code);
+
+	void deleteEntry(String productCode, Cart cart);
+
+	void updateEntryQuantity(String code, int quantity, Cart cart);
 }

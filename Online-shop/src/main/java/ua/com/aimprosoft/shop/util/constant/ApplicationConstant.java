@@ -64,7 +64,7 @@ public class ApplicationConstant
 	public static final String ERROR_PATH = "/error.jsp";
 	public static final String EMPTY_CART = "/emptyCart.jsp";
 	public static final String SHOW_CART = "/showCart.jsp";
-	public static final String SHOW_CART_COMMAND = "/cart?command=ShowCart";
+	public static final String SHOW_CART_COMMAND = "/cart?command=CartPage";
 
 	public static final String MESSAGE = "message";
 	public static final String CUSTOMER = "customer";

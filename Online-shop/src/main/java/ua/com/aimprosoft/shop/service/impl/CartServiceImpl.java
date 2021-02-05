@@ -51,6 +51,22 @@ public class CartServiceImpl implements CartService
 		return cartOptional.get();
 	}
 
+	@Override
+	public void deleteProductFromCart(final Customer customer, final String code)
+	{
+		final Cart cart = getActiveCart(customer);
+		cartEntryService.deleteEntry(code, cart);
+		cartDao.updateCart(cart);
+	}
+
+	@Override
+	public void updateProductQuantity(final Customer customer, final int quantity, final String code)
+	{
+		final Cart cart = getActiveCart(customer);
+		cartEntryService.updateEntryQuantity(code, quantity, cart);
+		cartDao.updateCart(cart);
+	}
+
 	private String generateCode()
 	{
 		final int leftLimit = 97;
