@@ -5,6 +5,7 @@ import java.util.Random;
 
 import ua.com.aimprosoft.shop.dao.CartDao;
 import ua.com.aimprosoft.shop.dao.impl.CartDaoImpl;
+import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 import ua.com.aimprosoft.shop.models.Cart;
 import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.service.CartEntryService;
@@ -52,7 +53,7 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
-	public void deleteProductFromCart(final Customer customer, final String code)
+	public void deleteProductFromCart(final Customer customer, final String code) throws IncorrectOperationException
 	{
 		final Cart cart = getActiveCart(customer);
 		cartEntryService.deleteEntry(code, cart);
@@ -61,6 +62,7 @@ public class CartServiceImpl implements CartService
 
 	@Override
 	public void updateProductQuantity(final Customer customer, final int quantity, final String code)
+			throws IncorrectOperationException
 	{
 		final Cart cart = getActiveCart(customer);
 		cartEntryService.updateEntryQuantity(code, quantity, cart);

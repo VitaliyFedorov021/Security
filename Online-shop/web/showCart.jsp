@@ -15,40 +15,49 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<h1>Your order:</h1>
-<table class="table table-bordered">
-    <tr>
-        <td>Code</td>
-        <td>Name</td>
-        <td>Product price</td>
-        <td>Quantity</td>
-        <td>Price</td>
-        <td></td>
-    </tr>
-    <c:forEach var="cartEntry" items="${cart.cartEntries}">
-        <tr>
-            <td>${cartEntry.product.code}</td>
-            <td>${cartEntry.product.name}</td>
-            <td>${cartEntry.product.price}</td>
-            <td>
-                <form method="post" action="/quantity?command=ChangeQuantity">
-                    <input type="number" id="quantity" name="quantity" min="1" max="15" value="${cartEntry.quantity}">
-                    <input type="hidden" name="code" value="${cartEntry.product.code}">
-                    <input type="submit" class="btn btn-info" value="change">
-                </form>
-            </td>
-            <td>${cartEntry.totalPrice}</td>
-            <td>
-                <form action="/delete?command=Delete" method="post">
-                    <input type="hidden" name="code" value="${cartEntry.product.code}">
-                    <input type="submit" class="btn btn-delete" value="delete">
-                </form>
-            </td>
-        </tr>
-    </c:forEach>
-    <div>
-        <h3 class="display-3">Total price: ${cart.totalPrice}</h3>
-    </div>
-</table>
+<c:choose>
+    <c:when test="${cart.cartEntries.size() == 0}">
+        <h3>Your cart is empty, add products here</h3><br>
+        <a href="/categories?command=ShowCategories">Show categories</a>
+    </c:when>
+    <c:otherwise>
+        <h1>Your order:</h1>
+        <table class="table table-bordered">
+            <tr>
+                <td>Code</td>
+                <td>Name</td>
+                <td>Product price</td>
+                <td>Quantity</td>
+                <td>Price</td>
+                <td></td>
+            </tr>
+            <c:forEach var="cartEntry" items="${cart.cartEntries}">
+                <tr>
+                    <td>${cartEntry.product.code}</td>
+                    <td>${cartEntry.product.name}</td>
+                    <td>${cartEntry.product.price}</td>
+                    <td>
+                        <form method="post" action="/quantity?command=ChangeQuantity">
+                            <input type="number" id="quantity" name="quantity" min="1" max="15" value="${cartEntry.quantity}">
+                            <input type="hidden" name="productCode" value="${cartEntry.product.code}">
+                            <input type="submit" class="btn btn-info" value="change">
+                        </form>
+                    </td>
+                    <td>${cartEntry.totalPrice}</td>
+                    <td>
+                        <form action="/delete?command=DeleteProduct" method="post">
+                            <input type="hidden" name="productCode" value="${cartEntry.product.code}">
+                            <input type="submit" class="btn btn-delete" value="delete">
+                        </form>
+                    </td>
+                </tr>
+            </c:forEach>
+            <div>
+                <h3 class="display-3">Total price: ${cart.totalPrice}</h3>
+            </div>
+        </table>
+    </c:otherwise>
+</c:choose>
+<h1 class="text-danger">${message}</h1>
 </body>
 </html>

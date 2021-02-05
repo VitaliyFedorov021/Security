@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import ua.com.aimprosoft.shop.dao.CartEntryDao;
 import ua.com.aimprosoft.shop.dao.impl.CartEntryDaoImpl;
+import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 import ua.com.aimprosoft.shop.models.Cart;
 import ua.com.aimprosoft.shop.models.CartEntry;
 import ua.com.aimprosoft.shop.models.Product;
@@ -71,9 +72,13 @@ public class CartEntryServiceImpl implements CartEntryService
 	}
 
 	@Override
-	public void deleteEntry(final String productCode, final Cart cart)
+	public void deleteEntry(final String productCode, final Cart cart) throws IncorrectOperationException
 	{
 		final Optional<CartEntry> cartEntryOptional = cartEntryDao.findByProductCode(productCode, cart.getCode());
+		if (!cartEntryOptional.isPresent())
+		{
+			throw new IncorrectOperationException();
+		}
 		final CartEntry cartEntry = cartEntryOptional.get();
 		final double currentPrice = cartEntry.getTotalPrice();
 		cartEntryDao.deleteEntry(cartEntry.getId());
@@ -83,8 +88,13 @@ public class CartEntryServiceImpl implements CartEntryService
 
 	@Override
 	public void updateEntryQuantity(final String code, final int quantity, final Cart cart)
+			throws IncorrectOperationException
 	{
 		final Optional<CartEntry> cartEntryOptional = cartEntryDao.findByProductCode(code, cart.getCode());
+		if (!cartEntryOptional.isPresent())
+		{
+			throw new IncorrectOperationException();
+		}
 		final CartEntry cartEntry = cartEntryOptional.get();
 		updateEntry(cart, quantity, cartEntry);
 	}

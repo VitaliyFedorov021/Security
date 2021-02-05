@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 
 import ua.com.aimprosoft.shop.controller.command.AbstractCommand;
+import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.service.CartService;
 import ua.com.aimprosoft.shop.service.SessionService;
@@ -27,10 +28,17 @@ public class ChangeQuantityCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		final int quantity = Integer.parseInt(request.getParameter(ApplicationConstant.QUANTITY));
-		final String code = request.getParameter(ApplicationConstant.CODE);
-		final Customer customer = sessionService.getCurrentCustomer(request.getSession());
-		cartService.updateProductQuantity(customer, quantity, code);
-		response.sendRedirect(ApplicationConstant.SHOW_CART_COMMAND);
+		try
+		{
+			final int quantity = Integer.parseInt(request.getParameter(ApplicationConstant.QUANTITY));
+			final String productCode = request.getParameter(ApplicationConstant.PRODUCT_CODE);
+			final Customer customer = sessionService.getCurrentCustomer(request.getSession());
+			cartService.updateProductQuantity(customer, quantity, productCode);
+			response.sendRedirect(ApplicationConstant.SHOW_CART_COMMAND);
+		}
+		catch (final IncorrectOperationException e)
+		{
+			response.sendRedirect(ApplicationConstant.SHOW_CART_COMMAND);
+		}
 	}
 }

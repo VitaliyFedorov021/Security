@@ -1,5 +1,6 @@
 package ua.com.aimprosoft.shop.service;
 
+import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 import ua.com.aimprosoft.shop.models.Cart;
 import ua.com.aimprosoft.shop.models.Customer;
 
@@ -10,9 +11,9 @@ public interface CartService
 
 	Cart getActiveCart(Customer customer);
 
-	void deleteProductFromCart(Customer customer, String code);
+	void deleteProductFromCart(Customer customer, String code) throws IncorrectOperationException;
 
-	void updateProductQuantity(Customer customer, int quantity, String code);
+	void updateProductQuantity(Customer customer, int quantity, String code) throws IncorrectOperationException;
 
 	Cart getCartByEntryId(int entryId);
 }

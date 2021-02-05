@@ -37,11 +37,6 @@ public class CartPageCommand extends AbstractCommand
 		final Customer customer = sessionService.getCurrentCustomer(request.getSession());
 		final Cart cart = cartService.getActiveCart(customer);
 		final List<CartEntry> cartEntries = cartEntryService.getEntries(cart.getCode());
-		if (cartEntries.size() == 0)
-		{
-			forward(ApplicationConstant.EMPTY_CART);
-			return;
-		}
 		cart.setCartEntries(cartEntries);
 		request.setAttribute(ApplicationConstant.CART, cart);
 		forward(ApplicationConstant.SHOW_CART);
