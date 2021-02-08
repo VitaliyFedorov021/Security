@@ -9,6 +9,7 @@ import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 import ua.com.aimprosoft.shop.models.Cart;
 import ua.com.aimprosoft.shop.models.CartEntry;
 import ua.com.aimprosoft.shop.models.Product;
+import ua.com.aimprosoft.shop.service.CalculationService;
 import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.ProductService;
 
@@ -17,11 +18,13 @@ public class CartEntryServiceImpl implements CartEntryService
 {
 	private final CartEntryDao cartEntryDao;
 	private final ProductService productService;
+	private final CalculationService calculationService;
 
 	public CartEntryServiceImpl()
 	{
 		this.cartEntryDao = new CartEntryDaoImpl();
 		this.productService = new ProductServiceImpl();
+		this.calculationService = new CalculationServiceImpl();
 	}
 
 	@Override
@@ -34,8 +37,8 @@ public class CartEntryServiceImpl implements CartEntryService
 		{
 			product = productService.findByCode(code);
 			cartEntry = createEntry(product, cart, quantity);
+			calculationService.calculation(cart, cartEntry);
 			cartEntryDao.insertEntry(cartEntry);
-			cartCalculation(cart, cartEntry, 0);
 			return;
 		}
 		cartEntry = entryOptional.get();
@@ -45,12 +48,9 @@ public class CartEntryServiceImpl implements CartEntryService
 
 	private void updateEntry(final Cart cart, final int quantity, final CartEntry cartEntry)
 	{
-		final double currentPrice = cartEntry.getTotalPrice();
 		cartEntry.setQuantity(quantity);
-		final double newPrice = cartEntry.getProduct().getPrice() * quantity;
-		cartEntry.setTotalPrice(newPrice);
+		calculationService.calculation(cart, cartEntry);
 		cartEntryDao.updateEntry(cartEntry);
-		cartCalculation(cart, cartEntry, currentPrice);
 	}
 
 	private CartEntry createEntry(final Product product, final Cart cart, final int quantity)
@@ -60,7 +60,6 @@ public class CartEntryServiceImpl implements CartEntryService
 		cartEntry.setProduct(product);
 		cartEntry.setEntryNumber(number + 1);
 		cartEntry.setQuantity(quantity);
-		cartEntry.setTotalPrice(quantity * product.getPrice());
 		cartEntry.setCart(cart);
 		return cartEntry;
 	}
@@ -80,10 +79,9 @@ public class CartEntryServiceImpl implements CartEntryService
 			throw new IncorrectOperationException();
 		}
 		final CartEntry cartEntry = cartEntryOptional.get();
-		final double currentPrice = cartEntry.getTotalPrice();
+		cartEntry.setQuantity(0);
 		cartEntryDao.deleteEntry(cartEntry.getId());
-		cartEntry.setTotalPrice(0);
-		cartCalculation(cart, cartEntry, currentPrice);
+		calculationService.calculation(cart, cartEntry);
 	}
 
 	@Override
@@ -97,11 +95,5 @@ public class CartEntryServiceImpl implements CartEntryService
 		}
 		final CartEntry cartEntry = cartEntryOptional.get();
 		updateEntry(cart, quantity, cartEntry);
-	}
-
-	private void cartCalculation(final Cart cart, final CartEntry cartEntry, final double currentEntryPrice)
-	{
-		final double newPrice = cartEntry.getTotalPrice();
-		cart.setTotalPrice(cart.getTotalPrice() - currentEntryPrice + newPrice);
 	}
 }
