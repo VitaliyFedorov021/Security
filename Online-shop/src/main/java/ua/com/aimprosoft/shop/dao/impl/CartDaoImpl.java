@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class CartDaoImpl implements CartDao
 	private static final String ADD_TO_CART =
 			"INSERT INTO cart (code, total_price, customer_id)"
 					+ " values(?, ?, ?)";
-	private static final String UPDATE_CART = "UPDATE cart SET total_price = ? WHERE id = ?";
+	private static final String UPDATE_CART = "UPDATE cart SET total_price = ?, placed_date = ?, address_id = ? WHERE id = ?";
 	private static final String FIND_CART_BY_EMAIL =
 			"SELECT cart.id, cart.code, cart.total_price, cart.placed_date, customer.id as customer_id, customer.email FROM cart "
 					+ "JOIN customer ON cart.customer_id = customer.id "
@@ -140,7 +141,7 @@ public class CartDaoImpl implements CartDao
 	@Override
 	public boolean updateCart(final Cart cart)
 	{
-		boolean result = false;
+		final boolean result = false;
 		Connection connection = null;
 		try
 		{
@@ -148,8 +149,24 @@ public class CartDaoImpl implements CartDao
 			final PreparedStatement pStatement = connection.prepareStatement(UPDATE_CART);
 			connection.setAutoCommit(false);
 			pStatement.setDouble(1, cart.getTotalPrice());
-			pStatement.setInt(2, cart.getId());
-			result = pStatement.execute();
+			if (cart.getPlacedDate() != null)
+			{
+				pStatement.setDate(2, new java.sql.Date(cart.getPlacedDate().getTime()));
+			}
+			else
+			{
+				pStatement.setNull(2, Types.DATE);
+			}
+			if (cart.getDeliveryAddress() != null)
+			{
+				pStatement.setInt(3, cart.getDeliveryAddress().getId());
+			}
+			else
+			{
+				pStatement.setNull(3, Types.INTEGER);
+			}
+			pStatement.setInt(4, cart.getId());
+			pStatement.executeUpdate();
 			connection.commit();
 		}
 		catch (final SQLException e)

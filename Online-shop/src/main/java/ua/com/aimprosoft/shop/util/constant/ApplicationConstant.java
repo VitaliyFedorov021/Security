@@ -21,7 +21,8 @@ public class ApplicationConstant
 
 	public static final String ADDRESS_ID = "address_id";
 	public static final String COUNTRY = "country";
-	public static final String POSTAL_CODE = "postal_code";
+	public static final String POSTAL_CODE_DB = "postal_code";
+	public static final String POSTAL_CODE = "postalCode";
 	public static final String REGION = "region";
 	public static final String TOWN = "town";
 	public static final String STREET = "street";
@@ -58,6 +59,7 @@ public class ApplicationConstant
 	public static final String HOME = "/";
 	public static final String DB_PROPERTIES = "hikariDB.properties";
 	public static final String LOGIN_PATH = "/login?command=Login";
+	public static final String CONFIRMATION_PATH = "/confirmation?command=OrderConfirmationPage";
 	public static final String CATEGORIES_PAGE = "/categoriesPage.jsp";
 	public static final String PLP_PATH = "/plp.jsp";
 	public static final String PDP_PATH = "/pdp.jsp";
@@ -65,6 +67,8 @@ public class ApplicationConstant
 	public static final String EMPTY_CART = "/emptyCart.jsp";
 	public static final String SHOW_CART = "/showCart.jsp";
 	public static final String SHOW_CART_COMMAND = "/cart?command=CartPage";
+	public static final String CHECKOUT_PAGE = "/checkout.jsp";
+	public static final String CONFIRMATION_PAGE = "/orderConfirmation.jsp";
 
 	public static final String MESSAGE = "message";
 	public static final String CUSTOMER = "customer";

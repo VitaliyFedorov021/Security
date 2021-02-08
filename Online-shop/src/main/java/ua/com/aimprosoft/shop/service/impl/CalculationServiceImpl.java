@@ -27,7 +27,7 @@ public class CalculationServiceImpl implements CalculationService
 	{
 		final String cartCode = cart.getCode();
 		final List<CartEntry> entries = cartEntryDao.findEntriesByCartCode(cartCode);
-		double newCartPrice = .0;
+		double newCartPrice = 0.0;
 		for (final CartEntry cartEntry : entries)
 		{
 			final double newEntryPrice = cartEntry.getProduct().getPrice() * cartEntry.getQuantity();

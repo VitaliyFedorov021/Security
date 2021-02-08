@@ -1,11 +1,15 @@
 package ua.com.aimprosoft.shop.service.impl;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
 
+import ua.com.aimprosoft.shop.dao.AddressDao;
 import ua.com.aimprosoft.shop.dao.CartDao;
+import ua.com.aimprosoft.shop.dao.impl.AddressDaoImpl;
 import ua.com.aimprosoft.shop.dao.impl.CartDaoImpl;
 import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
+import ua.com.aimprosoft.shop.models.Address;
 import ua.com.aimprosoft.shop.models.Cart;
 import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.service.CartEntryService;
@@ -16,11 +20,13 @@ public class CartServiceImpl implements CartService
 {
 	private final CartDao cartDao;
 	private final CartEntryService cartEntryService;
+	private final AddressDao addressDao;
 
 	public CartServiceImpl()
 	{
 		this.cartDao = new CartDaoImpl();
 		this.cartEntryService = new CartEntryServiceImpl();
+		this.addressDao = new AddressDaoImpl();
 	}
 
 	@Override
@@ -65,6 +71,17 @@ public class CartServiceImpl implements CartService
 	{
 		final Cart cart = getActiveCart(customer);
 		cartEntryService.updateEntryQuantity(code, quantity, cart);
+	}
+
+	@Override
+	public Cart confirmOrder(final Customer customer, final Address address)
+	{
+		final Cart cart = getActiveCart(customer);
+		addressDao.insertAddress(address);
+		cart.setDeliveryAddress(address);
+		cart.setPlacedDate(new Date());
+		cartDao.updateCart(cart);
+		return cart;
 	}
 
 	private String generateCode()
