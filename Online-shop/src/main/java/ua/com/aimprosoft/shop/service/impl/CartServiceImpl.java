@@ -34,7 +34,6 @@ public class CartServiceImpl implements CartService
 	{
 		final Cart cart = getActiveCart(customer);
 		cartEntryService.addEntry(code, cart, quantity);
-		cartDao.updateCart(cart);
 	}
 
 	@Override
@@ -53,11 +52,11 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
-	public void deleteProductFromCart(final Customer customer, final String code) throws IncorrectOperationException
+	public void deleteProductFromCart(final Customer customer, final String productCode)
+			throws IncorrectOperationException
 	{
 		final Cart cart = getActiveCart(customer);
-		cartEntryService.deleteEntry(code, cart);
-		cartDao.updateCart(cart);
+		cartEntryService.deleteEntry(productCode, cart);
 	}
 
 	@Override
@@ -66,7 +65,6 @@ public class CartServiceImpl implements CartService
 	{
 		final Cart cart = getActiveCart(customer);
 		cartEntryService.updateEntryQuantity(code, quantity, cart);
-		cartDao.updateCart(cart);
 	}
 
 	private String generateCode()

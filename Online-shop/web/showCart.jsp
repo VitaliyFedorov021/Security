@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+<div>
+    <a href="/"><button type="button" class="btn btn-primary">HOME</button></a>
+</div>
 <c:choose>
     <c:when test="${cart.cartEntries.size() == 0}">
         <h3>Your cart is empty, add products here</h3><br>
@@ -56,6 +59,7 @@
                 <h3 class="display-3">Total price: ${cart.totalPrice}</h3>
             </div>
         </table>
+        <a href="/placeorder?command=CheckoutPage"><button class="btn btn-primary" type="button">Place order</button></a>
     </c:otherwise>
 </c:choose>
 </body>

@@ -1,5 +1,11 @@
 package ua.com.aimprosoft.shop.service.impl;
 
+import java.util.List;
+
+import ua.com.aimprosoft.shop.dao.CartDao;
+import ua.com.aimprosoft.shop.dao.CartEntryDao;
+import ua.com.aimprosoft.shop.dao.impl.CartDaoImpl;
+import ua.com.aimprosoft.shop.dao.impl.CartEntryDaoImpl;
 import ua.com.aimprosoft.shop.models.Cart;
 import ua.com.aimprosoft.shop.models.CartEntry;
 import ua.com.aimprosoft.shop.service.CalculationService;
@@ -7,12 +13,29 @@ import ua.com.aimprosoft.shop.service.CalculationService;
 
 public class CalculationServiceImpl implements CalculationService
 {
-	@Override
-	public void calculation(final Cart cart, final CartEntry cartEntry)
+	private final CartDao cartDao;
+	private final CartEntryDao cartEntryDao;
+
+	public CalculationServiceImpl()
 	{
-		final double oldPrice = cartEntry.getTotalPrice();
-		final double newPrice = cartEntry.getProduct().getPrice() * cartEntry.getQuantity();
-		cartEntry.setTotalPrice(newPrice);
-		cart.setTotalPrice(cart.getTotalPrice() - oldPrice + newPrice);
+		this.cartDao = new CartDaoImpl();
+		this.cartEntryDao = new CartEntryDaoImpl();
+	}
+
+	@Override
+	public void calculation(final Cart cart)
+	{
+		final String cartCode = cart.getCode();
+		final List<CartEntry> entries = cartEntryDao.findEntriesByCartCode(cartCode);
+		double newCartPrice = .0;
+		for (final CartEntry cartEntry : entries)
+		{
+			final double newEntryPrice = cartEntry.getProduct().getPrice() * cartEntry.getQuantity();
+			cartEntry.setTotalPrice(newEntryPrice);
+			cartEntryDao.updateEntry(cartEntry);
+			newCartPrice += newEntryPrice;
+		}
+		cart.setTotalPrice(newCartPrice);
+		cartDao.updateCart(cart);
 	}
 }

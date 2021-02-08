@@ -4,7 +4,7 @@ $(document).ready(function () {
         let quantity = $("#quantity").val();
         $.ajax({
             url : "?command=AddToCart",
-            type : "GET",
+            type : "POST",
             dataType : "TEXT",
             data : {productCode: productCode,
                     quantity: quantity},
