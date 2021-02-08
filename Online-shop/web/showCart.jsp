@@ -58,6 +58,5 @@
         </table>
     </c:otherwise>
 </c:choose>
-<h1 class="text-danger">${message}</h1>
 </body>
 </html>
