@@ -13,6 +13,7 @@ public class SignUpPageCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
+		logging(request, response);
 		forward(ApplicationConstant.SIGN_UP_PAGE);
 	}
 }

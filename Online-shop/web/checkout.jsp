@@ -43,7 +43,7 @@
         </div>
     </table>
     <h2>Enter your address to place order</h2>
-    <form action="/confirmorder?command=AddressInput" method="post">
+    <form action="/confirmorder?command=SaveDeliveryAddress" method="post">
         <div class="form-group col-md-3">
             <label for="street">Street</label>
             <input type="text" id="street" name="street" placeholder="my-street.st" required class="form-control">

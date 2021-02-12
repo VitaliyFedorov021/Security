@@ -14,6 +14,7 @@ public class LogoutCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
+		logging(request, response);
 		final HttpSession session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();

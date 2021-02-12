@@ -23,6 +23,7 @@ public class ProductCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
+		logging(request, response);
 		final String code = request.getParameter(ApplicationConstant.CODE);
 		final Product product = productService.findByCode(code);
 		request.setAttribute(ApplicationConstant.PRODUCT, product);

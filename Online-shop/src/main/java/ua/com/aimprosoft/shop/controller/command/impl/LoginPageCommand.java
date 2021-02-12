@@ -13,6 +13,7 @@ public class LoginPageCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
+		logging(request, response);
 		forward(ApplicationConstant.LOGIN_PAGE);
 	}
 }

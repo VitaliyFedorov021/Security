@@ -59,7 +59,9 @@ public class ApplicationConstant
 	public static final String HOME = "/";
 	public static final String DB_PROPERTIES = "hikariDB.properties";
 	public static final String LOGIN_PATH = "/login?command=Login";
-	public static final String CONFIRMATION_PATH = "/confirmation?command=OrderConfirmationPage";
+	public static final String CHECKOUT_COMMAND = "/placeorder?command=CheckoutPage";
+	public static final String CONFIRMATION_PATH = "/confirmation?command=OrderConfirmationPage&code=%s";
+	public static final String LOGIN_PAGE_PATH = "/login/page?command=LoginPage";
 	public static final String CATEGORIES_PAGE = "/categoriesPage.jsp";
 	public static final String PLP_PATH = "/plp.jsp";
 	public static final String PDP_PATH = "/pdp.jsp";
@@ -77,8 +79,13 @@ public class ApplicationConstant
 	public static final String CATEGORIES = "categories";
 	public static final String PRODUCTS = "products";
 	public static final String PRODUCT = "product";
+	public static final String REFERER = "referer";
 
 	public static final String SLASH = "/";
+	public static final String DELIMITER = "=====================";
+	public static final String QUESTION_MARK = "?";
+	public static final String COLON = ": ";
+
 	public static final String ALGORITHM = "MD5";
 	public static final String COMMAND_PATH = "ua.com.aimprosoft.shop.controller.command.impl.%sCommand";
 
@@ -90,4 +97,10 @@ public class ApplicationConstant
 
 	public static final String TYPE_TEXT = "text/plain";
 	public static final String SUCCESS_TEXT = "Added to cart";
+	public static final String PATH = "path";
+
+	public static final String REQUEST_HEADERS = "REQUEST_HEADERS";
+	public static final String REQUEST_PARAMS = "REQUEST_PARAMS";
+	public static final String RESPONSE_HEADERS = "RESPONSE_HEADERS";
+	public static final String END = "END";
 }

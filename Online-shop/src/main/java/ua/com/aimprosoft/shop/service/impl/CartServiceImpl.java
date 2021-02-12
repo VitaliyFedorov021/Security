@@ -30,9 +30,9 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
-	public Cart getCartByEntryId(final int entryId)
+	public Cart getCartByCode(final String cartCode)
 	{
-		return cartDao.findCartByEntryId(entryId);
+		return cartDao.findCartByCode(cartCode);
 	}
 
 	@Override
@@ -74,14 +74,12 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
-	public Cart confirmOrder(final Customer customer, final Address address)
+	public void placeOrder(final Cart cart, final Address address)
 	{
-		final Cart cart = getActiveCart(customer);
 		addressDao.insertAddress(address);
 		cart.setDeliveryAddress(address);
 		cart.setPlacedDate(new Date());
 		cartDao.updateCart(cart);
-		return cart;
 	}
 
 	private String generateCode()

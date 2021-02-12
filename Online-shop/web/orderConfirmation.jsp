@@ -15,7 +15,9 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<h1 class="display-1">Welcome to our shop!</h1>   <div><a href="/login?command=LoginPage"><button type="button" class="btn btn-primary">Sign in</button></a></div>
+<div>
+    <a href="/"><button type="button" class="btn btn-primary">HOME</button></a>
+</div>
     <h1 class="header">Your order was successful! Thank you for shopping with us.</h1>
     <h3>${cart.code}</h3>
     <h3>${cart.placedDate}</h3>

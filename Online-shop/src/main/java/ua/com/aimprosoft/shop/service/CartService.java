@@ -16,7 +16,8 @@ public interface CartService
 
 	void updateProductQuantity(Customer customer, int quantity, String code) throws IncorrectOperationException;
 
-	Cart confirmOrder(Customer customer, Address address);
+	void placeOrder(Cart cart, Address address);
 
-	Cart getCartByEntryId(int entryId);
+	Cart getCartByCode(String cartCode);
+
 }

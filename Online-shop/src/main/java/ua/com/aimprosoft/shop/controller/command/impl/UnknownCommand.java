@@ -14,6 +14,7 @@ public class UnknownCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
+		logging(request, response);
 		request.setAttribute(ApplicationConstant.MESSAGE, ErrorConstant.UNKNOWN_COMMAND);
 		forward(ApplicationConstant.ERROR_PATH);
 	}

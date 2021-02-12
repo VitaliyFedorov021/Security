@@ -7,12 +7,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import ua.com.aimprosoft.shop.dao.CartDao;
 import ua.com.aimprosoft.shop.database.DataSource;
 import ua.com.aimprosoft.shop.database.impl.HikariDataSourceImpl;
+import ua.com.aimprosoft.shop.models.Address;
 import ua.com.aimprosoft.shop.models.Cart;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
@@ -38,10 +40,11 @@ public class CartDaoImpl implements CartDao
 			"SELECT cart.id, cart.code, cart.total_price, cart.placed_date FROM cart "
 					+ "JOIN customer on customer.id = cart.customer_id "
 					+ "WHERE email = ? AND cart.placed_date IS NULL";
-	private static final String FIND_CART_BY_ENTRY_ID =
-			"SELECT cart.id, cart.code, cart.total_price, cart.placed_date FROM cart "
-					+ "JOIN cartEntry on cart.id = cartEntry.cart_id "
-					+ "WHERE cartEntry.id = ?";
+	private static final String FIND_CART_BY_CODE =
+			"SELECT cart.id, cart.code, cart.total_price, cart.placed_date, "
+					+ "country, town, street, region, postal_code, address_id FROM cart "
+					+ "LEFT JOIN address ON cart.address_id = address.id "
+					+ "WHERE cart.code = ?";
 
 	@Override
 	public boolean insertCart(final Cart cart)
@@ -118,17 +121,18 @@ public class CartDaoImpl implements CartDao
 	}
 
 	@Override
-	public Cart findCartByEntryId(final int entryId)
+	public Cart findCartByCode(final String cartCode)
 	{
 		Cart cart = null;
 		try (final Connection connection = dataSource.getConnection();
-				final PreparedStatement pStatement = connection.prepareStatement(FIND_CART_BY_ENTRY_ID))
+				final PreparedStatement pStatement = connection.prepareStatement(FIND_CART_BY_CODE))
 		{
-			pStatement.setInt(1, entryId);
+			pStatement.setString(1, cartCode);
 			final ResultSet rSet = pStatement.executeQuery();
 			if (rSet.next())
 			{
 				cart = mapCart(rSet);
+				cart.setDeliveryAddress(mapAddress(rSet));
 			}
 		}
 		catch (final SQLException e)
@@ -148,21 +152,15 @@ public class CartDaoImpl implements CartDao
 			connection = dataSource.getConnection();
 			final PreparedStatement pStatement = connection.prepareStatement(UPDATE_CART);
 			connection.setAutoCommit(false);
-			pStatement.setDouble(1, cart.getTotalPrice());
-			if (cart.getPlacedDate() != null)
+			try
 			{
-				pStatement.setDate(2, new java.sql.Date(cart.getPlacedDate().getTime()));
-			}
-			else
-			{
+				pStatement.setDouble(1, cart.getTotalPrice());
+				Address address = cart.getDeliveryAddress();
+				Date date = cart.getPlacedDate();
+				pStatement.setDate(2, new java.sql.Date(date.getTime()));
+				pStatement.setInt(3, address.getId());
+			} catch (NullPointerException e) {
 				pStatement.setNull(2, Types.DATE);
-			}
-			if (cart.getDeliveryAddress() != null)
-			{
-				pStatement.setInt(3, cart.getDeliveryAddress().getId());
-			}
-			else
-			{
 				pStatement.setNull(3, Types.INTEGER);
 			}
 			pStatement.setInt(4, cart.getId());
@@ -219,5 +217,16 @@ public class CartDaoImpl implements CartDao
 		cart.setPlacedDate(rSet.getDate(ApplicationConstant.PLACED_DATE));
 		cart.setTotalPrice(rSet.getDouble(ApplicationConstant.TOTAL_PRICE));
 		return cart;
+	}
+
+	private Address mapAddress(final ResultSet rSet) throws SQLException {
+		final Address address = new Address();
+		address.setStreet(rSet.getString(ApplicationConstant.STREET));
+		address.setTown(rSet.getString(ApplicationConstant.TOWN));
+		address.setRegion(rSet.getString(ApplicationConstant.REGION));
+		address.setPostalCode(rSet.getString(ApplicationConstant.POSTAL_CODE_DB));
+		address.setCountry(rSet.getString(ApplicationConstant.COUNTRY));
+		address.setId(rSet.getInt(ApplicationConstant.ADDRESS_ID));
+		return address;
 	}
 }

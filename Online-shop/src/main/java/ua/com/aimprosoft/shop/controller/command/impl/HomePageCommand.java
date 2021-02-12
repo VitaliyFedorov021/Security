@@ -10,10 +10,10 @@ import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 public class HomePageCommand extends AbstractCommand
 {
-
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		forward(ApplicationConstant.HOME_PAGE);
+		logging(request, response);
+		response.sendRedirect(ApplicationConstant.HOME_PAGE);
 	}
 }
