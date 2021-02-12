@@ -60,8 +60,7 @@ public class AuthenticationFilter implements Filter
 
 	private boolean isPageRequireLogin(String path)
 	{
-		boolean result = false;
-		result = loginRequiredPages.stream().anyMatch(path::equals);
+		boolean result = loginRequiredPages.stream().anyMatch(path::equals);
 		return result;
 	}
 
