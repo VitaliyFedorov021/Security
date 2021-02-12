@@ -53,10 +53,9 @@ public class LoginCommand extends AbstractCommand
 			sendWithErrorMessage(ErrorConstant.INCORRECT_PASSWORD);
 			return;
 		}
-		final HttpSession session = request.getSession();
+		HttpSession session = request.getSession(false);
 		session.setAttribute(ApplicationConstant.CUSTOMER, customer.get());
-		String path = (String) servletContext.getAttribute(ApplicationConstant.PATH);
-		servletContext.removeAttribute(ApplicationConstant.PATH);
+		String path = (String) session.getAttribute(ApplicationConstant.PATH);
 		if (path == null)
 		{
 			path = ApplicationConstant.HOME;

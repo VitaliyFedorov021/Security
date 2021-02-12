@@ -66,6 +66,13 @@
             <br>
         </div>
 
+        <div class="col-12">
+            <c:forEach var="e" items="${message}">
+                <h1 class="text-danger">${e.message}</h1>
+            </c:forEach>
+        </div>
+
+
         <div class="form-group col-md-3">
             <label for="region">Region</label>
             <input type="text" id="region" name="region" placeholder="Kharkiv" required class="form-control">

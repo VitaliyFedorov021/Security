@@ -8,6 +8,12 @@ public class ErrorConstant
 	public static final String EMPTY_NUMBER = "phone number field cannot be empty";
 	public static final String EMPTY_DATE = "date cannot be empty";
 
+	public static final String EMPTY_STREET = "street field cannot be empty";
+	public static final String EMPTY_COUNTRY = "country field cannot be empty";
+	public static final String EMPTY_POSTAL_CODE = "postal code field cannot be empty";
+	public static final String EMPTY_REGION = "region field cannot be empty";
+	public static final String EMPTY_TOWN = "town field cannot be empty";
+
 	public static final String INCORRECT_LOGIN = "login is incorrect";
 	public static final String INCORRECT_PASSWORD = "password is incorrect";
 
