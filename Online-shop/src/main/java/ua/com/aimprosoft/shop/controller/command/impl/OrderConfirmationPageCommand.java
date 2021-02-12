@@ -29,7 +29,6 @@ public class OrderConfirmationPageCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		logging(request, response);
 		String cartCode = request.getParameter(ApplicationConstant.CODE);
 		final Cart cart = cartService.getCartByCode(cartCode);
 		if (cart == null) {

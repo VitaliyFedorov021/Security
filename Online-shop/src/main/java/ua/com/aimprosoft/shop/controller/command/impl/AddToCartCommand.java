@@ -27,7 +27,6 @@ public class AddToCartCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		logging(request, response);
 		final int quantity = Integer.parseInt(request.getParameter(ApplicationConstant.QUANTITY));
 		final String code = request.getParameter(ApplicationConstant.PRODUCT_CODE);
 		final Customer customer = sessionService.getCurrentCustomer(request.getSession());

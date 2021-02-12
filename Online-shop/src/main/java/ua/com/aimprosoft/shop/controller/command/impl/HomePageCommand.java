@@ -13,7 +13,6 @@ public class HomePageCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		logging(request, response);
 		response.sendRedirect(ApplicationConstant.HOME_PAGE);
 	}
 }

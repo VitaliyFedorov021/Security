@@ -36,44 +36,4 @@ public abstract class AbstractCommand
 		final RequestDispatcher rDispatcher = servletContext.getRequestDispatcher(page);
 		rDispatcher.forward(request, response);
 	}
-
-	protected void logging(HttpServletRequest request, HttpServletResponse response)
-	{
-		Enumeration<String> requestHeaderNames = request.getHeaderNames();
-		System.out.println(ApplicationConstant.REQUEST_HEADERS);
-		System.out.println(ApplicationConstant.DELIMITER);
-		while (requestHeaderNames.hasMoreElements())
-		{
-			String name = requestHeaderNames.nextElement();
-			System.out.println(name + ApplicationConstant.COLON + request.getHeader(name));
-		}
-		System.out.println(ApplicationConstant.REQUEST_PARAMS);
-		System.out.println(ApplicationConstant.DELIMITER);
-		Map<String, String[]> parameterMap = request.getParameterMap();
-		for (Map.Entry<String, String[]> entry :
-				parameterMap.entrySet())
-		{
-			String key = entry.getKey();
-			if (key.equals(ApplicationConstant.PASSWORD)) {
-				System.out.println(key + ApplicationConstant.COLON + encodePassword(Arrays.toString(entry.getValue())));
-				continue;
-			}
-			System.out.println(key + ApplicationConstant.COLON + Arrays.toString(entry.getValue()));
-		}
-		System.out.println(ApplicationConstant.RESPONSE_HEADERS);
-		System.out.println(ApplicationConstant.DELIMITER);
-		Collection<String> responseHeaderNames = response.getHeaderNames();
-		while (requestHeaderNames.hasMoreElements())
-		{
-			String name = requestHeaderNames.nextElement();
-			System.out.println(name + ApplicationConstant.COLON + response.getHeader(name));
-		}
-		System.out.println(ApplicationConstant.END);
-	}
-
-	private String encodePassword(String password) {
-		char[] passwordCharacters = password.toCharArray();
-		Arrays.fill(passwordCharacters, '*');
-		return Arrays.toString(passwordCharacters);
-	}
 }

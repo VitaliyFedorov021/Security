@@ -30,7 +30,6 @@ public class DeleteProductCommand extends AbstractCommand
 	{
 		try
 		{
-			logging(request, response);
 			final String productCode = request.getParameter(ApplicationConstant.PRODUCT_CODE);
 			final Customer customer = sessionService.getCurrentCustomer(request.getSession());
 			cartService.deleteProductFromCart(customer, productCode);

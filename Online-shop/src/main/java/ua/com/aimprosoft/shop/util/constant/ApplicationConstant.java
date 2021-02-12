@@ -60,7 +60,8 @@ public class ApplicationConstant
 	public static final String DB_PROPERTIES = "hikariDB.properties";
 	public static final String LOGIN_PATH = "/login?command=Login";
 	public static final String CHECKOUT_COMMAND = "/placeorder?command=CheckoutPage";
-	public static final String CONFIRMATION_PATH = "/confirmation?command=OrderConfirmationPage&code=%s";
+	public static final String CONFIRMATION_PAGE_PATH = "/confirmorder?command=OrderConfirmationPage&code=%s";
+	public static final String CONFIRMATION_PATH = "/confirmorder?command=SaveDeliveryAddress";
 	public static final String LOGIN_PAGE_PATH = "/login/page?command=LoginPage";
 	public static final String CATEGORIES_PAGE = "/categoriesPage.jsp";
 	public static final String PLP_PATH = "/plp.jsp";

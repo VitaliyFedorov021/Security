@@ -24,7 +24,6 @@ public class ShowCategoriesCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		logging(request, response);
 		final List<Category> categories = categoryService.getAll();
 		request.setAttribute(ApplicationConstant.CATEGORIES, categories);
 		forward(ApplicationConstant.CATEGORIES_PAGE);
