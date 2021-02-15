@@ -68,7 +68,7 @@
 
         <div class="col-12">
             <c:forEach var="e" items="${message}">
-                <h1 class="text-danger">${e.message}</h1>
+                <h1 class="text-danger">${e}</h1>
             </c:forEach>
         </div>
 

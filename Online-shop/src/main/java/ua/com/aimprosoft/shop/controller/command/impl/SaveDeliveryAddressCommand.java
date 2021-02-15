@@ -42,13 +42,9 @@ public class SaveDeliveryAddressCommand extends AbstractCommand
 	public void process() throws ServletException, IOException
 	{
 		final Customer customer = sessionService.getCurrentCustomer(request.getSession());
-		List<Exception> exceptions = new ArrayList<>();
+		List<String> exceptions = new ArrayList<>();
 		final Cart cart = cartService.getActiveCart(customer);
 		final Address address = extractor.map(request);
-		if (address.getStreet() == null) {
-			response.sendRedirect(ApplicationConstant.CHECKOUT_COMMAND);
-			return;
-		}
 		addressValidator.validate(address, exceptions);
 		if (exceptions.size() > 0)
 		{

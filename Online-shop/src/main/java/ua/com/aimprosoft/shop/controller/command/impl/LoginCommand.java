@@ -42,7 +42,7 @@ public class LoginCommand extends AbstractCommand
 			return;
 		}
 		final Optional<Customer> customer = customerService.getCustomerByEmail(email);
-		if (!customer.isPresent())
+		if (customer.isEmpty())
 		{
 			sendWithErrorMessage(ErrorConstant.INCORRECT_LOGIN);
 			return;
@@ -54,12 +54,18 @@ public class LoginCommand extends AbstractCommand
 		}
 		HttpSession session = request.getSession(false);
 		session.setAttribute(ApplicationConstant.CUSTOMER, customer.get());
+		String path = getPath(session);
+		response.sendRedirect(path);
+	}
+
+	private String getPath(final HttpSession session)
+	{
 		String path = (String) session.getAttribute(ApplicationConstant.PATH);
 		if (path == null)
 		{
 			path = ApplicationConstant.HOME;
 		}
-		response.sendRedirect(path);
+		return path;
 	}
 
 	private void sendWithErrorMessage(final String info) throws ServletException, IOException

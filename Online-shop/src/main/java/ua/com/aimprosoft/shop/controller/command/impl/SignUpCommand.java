@@ -33,7 +33,7 @@ public class SignUpCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		final List<Exception> exceptions = new ArrayList<>();
+		final List<String> exceptions = new ArrayList<>();
 		final Customer customer = extractor.map(request);
 		validator.validate(customer, exceptions);
 		if (exceptions.size() > 0)

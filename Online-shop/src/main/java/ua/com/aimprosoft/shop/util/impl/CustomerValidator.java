@@ -28,7 +28,7 @@ public class CustomerValidator implements Validator<Customer>
 	}
 
 	@Override
-	public void validate(final Customer entity, final List<Exception> exceptions)
+	public void validate(final Customer entity,  final List<String> exceptions)
 	{
 		checkEmail(entity, exceptions);
 		checkPassword(entity, exceptions);
@@ -37,80 +37,80 @@ public class CustomerValidator implements Validator<Customer>
 		checkNumber(entity, exceptions);
 	}
 
-	public void checkEmail(final Customer customer, final List<Exception> exceptions)
+	public void checkEmail(final Customer customer, final List<String> exceptions)
 	{
 		final String email = customer.getEmail();
 		if (email == null || email.isEmpty())
 		{
-			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_EMAIL));
+			exceptions.add(ErrorConstant.EMPTY_EMAIL);
 			return;
 		}
 		final Matcher matcher = emailPattern.matcher(email);
 		if (!matcher.matches())
 		{
-			exceptions.add(new IncorrectInputException(ErrorConstant.EMAIL_NOT_MATCHES));
+			exceptions.add(ErrorConstant.EMAIL_NOT_MATCHES);
 			return;
 		}
 		final Optional<Customer> optionalCustomer = customerService.getCustomerByEmail(email);
 		if (optionalCustomer.isPresent())
 		{
-			exceptions.add(new IncorrectInputException(ErrorConstant.NOT_UNIQUE_EMAIL));
+			exceptions.add(ErrorConstant.NOT_UNIQUE_EMAIL);
 		}
 	}
 
-	public void checkPassword(final Customer customer, final List<Exception> exceptions)
+	public void checkPassword(final Customer customer, final List<String> exceptions)
 	{
 		final String password = customer.getPassword();
 		if (password == null || password.isEmpty())
 		{
-			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_PASSWORD));
+			exceptions.add(ErrorConstant.EMPTY_PASSWORD);
 			return;
 		}
 		final Matcher matcher = passwordPattern.matcher(password);
 		if (!matcher.matches())
 		{
-			exceptions.add(new IncorrectInputException(ErrorConstant.PASSWORD_NOT_MATCHES));
+			exceptions.add(ErrorConstant.PASSWORD_NOT_MATCHES);
 		}
 	}
 
-	public void checkName(final Customer customer, final List<Exception> exceptions)
+	public void checkName(final Customer customer, final List<String> exceptions)
 	{
 		final String firstName = customer.getFirstName();
 		final String lastName = customer.getLastName();
 		if (firstName == null || lastName == null)
 		{
-			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_NAME));
+			exceptions.add(ErrorConstant.EMPTY_NAME);
 			return;
 		}
 		final Matcher firstMatcher = namePattern.matcher(firstName);
 		final Matcher secondMatcher = namePattern.matcher(lastName);
 		if (!firstMatcher.matches() || !secondMatcher.matches())
 		{
-			exceptions.add(new IncorrectInputException(ErrorConstant.NAME_NOT_MATCHES));
+			exceptions.add(ErrorConstant.NAME_NOT_MATCHES);
 		}
 	}
 
-	public void checkNumber(final Customer customer, final List<Exception> exceptions)
+	public void checkNumber(final Customer customer, final List<String> exceptions)
 	{
 		final String number = customer.getPhoneNumber();
 		if (number == null)
 		{
-			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_NUMBER));
+			exceptions.add(ErrorConstant.EMPTY_NUMBER);
 			return;
 		}
 		final Matcher matcher = numberPattern.matcher(number);
 		if (!matcher.matches())
 		{
-			exceptions.add(new IncorrectInputException(ErrorConstant.NUMBER_NOT_MATCHES));
+			exceptions.add(ErrorConstant.NUMBER_NOT_MATCHES);
 		}
 	}
 
-	public void checkDate(final Customer customer, final List<Exception> exceptions)
+	public void checkDate(final Customer customer, final List<String> exceptions)
 	{
 		final Date date = customer.getBirthdayDate();
 		if (date == null)
 		{
-			exceptions.add(new IncorrectInputException(ErrorConstant.EMPTY_DATE));
+			exceptions.add(ErrorConstant.EMPTY_DATE);
 		}
 	}
 }

@@ -152,17 +152,13 @@ public class CartDaoImpl implements CartDao
 			connection = dataSource.getConnection();
 			final PreparedStatement pStatement = connection.prepareStatement(UPDATE_CART);
 			connection.setAutoCommit(false);
-			try
-			{
-				pStatement.setDouble(1, cart.getTotalPrice());
-				Address address = cart.getDeliveryAddress();
-				Date date = cart.getPlacedDate();
-				pStatement.setDate(2, new java.sql.Date(date.getTime()));
-				pStatement.setInt(3, address.getId());
-			} catch (NullPointerException e) {
-				pStatement.setNull(2, Types.DATE);
-				pStatement.setNull(3, Types.INTEGER);
-			}
+			pStatement.setDouble(1, cart.getTotalPrice());
+			Address address = cart.getDeliveryAddress();
+			Date date = cart.getPlacedDate();
+			pStatement.setObject(2, checkDate(date));
+			pStatement.setObject(3, checkAddress(address));
+//			pStatement.setNull(2, Types.DATE);
+//			pStatement.setNull(3, Types.INTEGER);
 			pStatement.setInt(4, cart.getId());
 			pStatement.executeUpdate();
 			connection.commit();
@@ -177,6 +173,20 @@ public class CartDaoImpl implements CartDao
 			close(connection);
 		}
 		return result;
+	}
+
+	private Object checkAddress(final Address address) {
+		if (address != null) {
+			return address.getId();
+		}
+		return null;
+	}
+
+	private Object checkDate(final Date date) {
+		if (date != null) {
+			return new java.sql.Date(date.getTime());
+		}
+		return null;
 	}
 
 	private void close(final Connection connection)
@@ -219,7 +229,8 @@ public class CartDaoImpl implements CartDao
 		return cart;
 	}
 
-	private Address mapAddress(final ResultSet rSet) throws SQLException {
+	private Address mapAddress(final ResultSet rSet) throws SQLException
+	{
 		final Address address = new Address();
 		address.setStreet(rSet.getString(ApplicationConstant.STREET));
 		address.setTown(rSet.getString(ApplicationConstant.TOWN));

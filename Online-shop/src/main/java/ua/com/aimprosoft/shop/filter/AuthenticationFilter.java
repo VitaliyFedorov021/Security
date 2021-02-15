@@ -47,13 +47,14 @@ public class AuthenticationFilter implements Filter
 	{
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession();
 		String path = getPath(request);
-		boolean isLoggedIn = (session != null && session.getAttribute(ApplicationConstant.CUSTOMER) != null);
+		boolean isLoggedIn = (session.getAttribute(ApplicationConstant.CUSTOMER) != null);
 		if (!isLoggedIn && isPageRequireLogin(path))
 		{
-			Objects.requireNonNull(session).setAttribute(ApplicationConstant.PATH, path);
-			request.getRequestDispatcher(ApplicationConstant.LOGIN_PAGE_PATH).forward(request, response);
+			session.setAttribute(ApplicationConstant.PATH, path);
+			response.sendRedirect(ApplicationConstant.LOGIN_PAGE_PATH);
+			return;
 		}
 		filterChain.doFilter(request, response);
 	}
