@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -155,10 +154,8 @@ public class CartDaoImpl implements CartDao
 			pStatement.setDouble(1, cart.getTotalPrice());
 			Address address = cart.getDeliveryAddress();
 			Date date = cart.getPlacedDate();
-			pStatement.setObject(2, checkDate(date));
-			pStatement.setObject(3, checkAddress(address));
-//			pStatement.setNull(2, Types.DATE);
-//			pStatement.setNull(3, Types.INTEGER);
+			pStatement.setObject(2, getDate(date));
+			pStatement.setObject(3, getAddressId(address));
 			pStatement.setInt(4, cart.getId());
 			pStatement.executeUpdate();
 			connection.commit();
@@ -175,14 +172,14 @@ public class CartDaoImpl implements CartDao
 		return result;
 	}
 
-	private Object checkAddress(final Address address) {
+	private Object getAddressId(final Address address) {
 		if (address != null) {
 			return address.getId();
 		}
 		return null;
 	}
 
-	private Object checkDate(final Date date) {
+	private Object getDate(final Date date) {
 		if (date != null) {
 			return new java.sql.Date(date.getTime());
 		}
