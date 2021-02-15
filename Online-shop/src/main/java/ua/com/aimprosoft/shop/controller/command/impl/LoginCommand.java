@@ -28,7 +28,6 @@ public class LoginCommand extends AbstractCommand
 	@Override
 	public void process() throws ServletException, IOException
 	{
-		System.out.println("PATH command: " + servletContext.getAttribute(ApplicationConstant.PATH));
 		final String email = request.getParameter(ApplicationConstant.EMAIL);
 		final String password = request.getParameter(ApplicationConstant.PASSWORD);
 		if (email == null || email.isEmpty())
