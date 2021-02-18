@@ -1,0 +1,38 @@
+<b:beans xmlns="http://www.springframework.org/schema/security"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:context="http://www.springframework.org/schema/context"
+         xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+	<http auto-config="true">
+		<csrf disabled="true"/>
+		<form-login login-page="/login"
+		            login-processing-url="/login"
+					authentication-failure-forward-url="/login-fail"
+		/>
+		<logout logout-url="/logout" logout-success-url="/"
+			invalidate-session="true"
+		        delete-cookies="JSESSIONID"
+		/>
+		<intercept-url pattern="/cart" access="isAuthenticated()"/>
+		<intercept-url pattern="/place_order" access="isAuthenticated()"/>
+	</http>
+
+
+
+	<authentication-manager>
+		<authentication-provider user-service-ref="customerDetailsServiceImpl">
+			<password-encoder ref="encoder"/>
+		</authentication-provider>
+	</authentication-manager>
+
+
+
+	<b:bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" id="encoder">
+		<b:constructor-arg value="12"/>
+	</b:bean>
+
+
+</b:beans>
