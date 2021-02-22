@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 
 import ua.com.aimprosoft.shop.dao.CartDao;
 import ua.com.aimprosoft.shop.dao.CartEntryDao;
+import ua.com.aimprosoft.shop.entities.Cart;
+import ua.com.aimprosoft.shop.entities.CartEntry;
+import ua.com.aimprosoft.shop.entities.Product;
 import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
-import ua.com.aimprosoft.shop.models.Cart;
-import ua.com.aimprosoft.shop.models.CartEntry;
-import ua.com.aimprosoft.shop.models.Product;
 import ua.com.aimprosoft.shop.service.CalculationService;
 import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.ProductService;
@@ -20,12 +20,15 @@ import ua.com.aimprosoft.shop.service.ProductService;
 @Component
 public class CartEntryServiceImpl implements CartEntryService
 {
+	@Autowired
 	private final CartDao cartDao;
+	@Autowired
 	private final CartEntryDao cartEntryDao;
+	@Autowired
 	private final ProductService productService;
+	@Autowired
 	private final CalculationService calculationService;
 
-	@Autowired
 	public CartEntryServiceImpl(final CartDao cartDao, final CartEntryDao cartEntryDao,
 			final ProductService productService, final CalculationService calculationService)
 	{
@@ -64,19 +67,20 @@ public class CartEntryServiceImpl implements CartEntryService
 	public void updateEntryQuantity(final String code, final int quantity, final Cart cart)
 			throws IncorrectOperationException
 	{
-		Optional<CartEntry> cartEntryOptional = cartEntryDao.findByProductCode(code, cart.getCode());
-		if (!cartEntryOptional.isPresent()) {
+		final Optional<CartEntry> cartEntryOptional = cartEntryDao.findByProductCode(code, cart.getCode());
+		if (!cartEntryOptional.isPresent())
+		{
 			throw new IncorrectOperationException();
 		}
-		CartEntry cartEntry = cartEntryOptional.get();
+		final CartEntry cartEntry = cartEntryOptional.get();
 		updateEntry(cart, quantity, cartEntry);
 	}
 
 	@Override
 	public void deleteEntry(final Cart cart, final String productCode) throws IncorrectOperationException
 	{
-		Optional<CartEntry> cartEntryOptional = cartEntryDao.findByProductCode(productCode, cart.getCode());
-		CartEntry cartEntry = cartEntryOptional.get();
+		final Optional<CartEntry> cartEntryOptional = cartEntryDao.findByProductCode(productCode, cart.getCode());
+		final CartEntry cartEntry = cartEntryOptional.get();
 		cartEntry.setQuantity(0);
 		cartEntryDao.updateEntry(cartEntry);
 		calculationService.calculation(cart);

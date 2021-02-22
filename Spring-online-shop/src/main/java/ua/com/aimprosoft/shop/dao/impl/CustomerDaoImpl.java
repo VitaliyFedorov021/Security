@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import ua.com.aimprosoft.shop.dao.CustomerDao;
-import ua.com.aimprosoft.shop.models.Customer;
+import ua.com.aimprosoft.shop.entities.Customer;
 import ua.com.aimprosoft.shop.mappers.CustomerMapper;
 
 
@@ -30,19 +30,19 @@ public class CustomerDaoImpl implements CustomerDao
 	@Override
 	public void insertCustomer(final Customer customer)
 	{
-		Object[] values = {customer.getEmail(), customer.getPassword(),
+		final Object[] values = {customer.getEmail(), customer.getPassword(),
 		customer.getFirstName(), customer.getLastName(), customer.getGender().name(),
 		new java.sql.Date(customer.getBirthdayDate().getTime()), customer.getPhoneNumber()};
 		jdbcTemplate.update(INSERT_CUSTOMER, values);
 	}
 
 	@Override
-	public Optional<Customer> findByEmail(String email)
+	public Optional<Customer> findByEmail(final String email)
 	{
 		try
 		{
-			return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_EMAIL, new CustomerMapper(), email));
-		} catch (EmptyResultDataAccessException e) {
+			return Optional.of(jdbcTemplate.queryForObject(FIND_BY_EMAIL, new CustomerMapper(), email));
+		} catch (final EmptyResultDataAccessException e) {
 			return Optional.empty();
 		}
 	}

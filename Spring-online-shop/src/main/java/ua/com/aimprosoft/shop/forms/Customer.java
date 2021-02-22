@@ -1,18 +1,23 @@
-package ua.com.aimprosoft.shop.models;
+package ua.com.aimprosoft.shop.forms;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
 
-public class Customer extends Entity
+import ua.com.aimprosoft.shop.entities.Gender;
+import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
+
+
+public class Customer
 {
 	private String email;
 	private String password;
 	private String firstName;
 	private String lastName;
 	private Gender gender;
+	@DateTimeFormat(pattern = ApplicationConstant.DATE_PATTERN)
 	private Date birthdayDate;
 	private String phoneNumber;
-	private Cart cart;
 
 	public Customer()
 	{
@@ -23,17 +28,7 @@ public class Customer extends Entity
 		this.email = email;
 		this.password = password;
 	}
-
-	public Cart getCart()
-	{
-		return cart;
-	}
-
-	public void setCart(final Cart cart)
-	{
-		this.cart = cart;
-	}
-
+	
 	public Customer(final String email, final String password, final String firstName, final String lastName,
 			final Gender gender, final Date birthdayDate, final String phoneNumber)
 	{

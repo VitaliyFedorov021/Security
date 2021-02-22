@@ -10,7 +10,7 @@ import ua.com.aimprosoft.shop.util.constant.ErrorConstant;
 
 
 @Controller
-public class AuthenticationController
+public class LoginController
 {
 	@GetMapping("/login")
 	public String loginPage() {

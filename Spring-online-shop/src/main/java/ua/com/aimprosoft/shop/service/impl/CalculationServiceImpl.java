@@ -7,18 +7,19 @@ import org.springframework.stereotype.Component;
 
 import ua.com.aimprosoft.shop.dao.CartDao;
 import ua.com.aimprosoft.shop.dao.CartEntryDao;
-import ua.com.aimprosoft.shop.models.Cart;
-import ua.com.aimprosoft.shop.models.CartEntry;
+import ua.com.aimprosoft.shop.entities.Cart;
+import ua.com.aimprosoft.shop.entities.CartEntry;
 import ua.com.aimprosoft.shop.service.CalculationService;
 
 
 @Component
 public class CalculationServiceImpl implements CalculationService
 {
+	@Autowired
 	private final CartDao cartDao;
+	@Autowired
 	private final CartEntryDao cartEntryDao;
 
-	@Autowired
 	public CalculationServiceImpl(final CartDao cartDao, final CartEntryDao cartEntryDao)
 	{
 		this.cartDao = cartDao;

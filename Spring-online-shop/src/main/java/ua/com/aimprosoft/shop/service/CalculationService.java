@@ -1,6 +1,6 @@
 package ua.com.aimprosoft.shop.service;
 
-import ua.com.aimprosoft.shop.models.Cart;
+import ua.com.aimprosoft.shop.entities.Cart;
 
 
 public interface CalculationService

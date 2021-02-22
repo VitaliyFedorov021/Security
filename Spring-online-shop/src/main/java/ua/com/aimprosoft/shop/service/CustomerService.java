@@ -2,7 +2,7 @@ package ua.com.aimprosoft.shop.service;
 
 import java.util.Optional;
 
-import ua.com.aimprosoft.shop.models.Customer;
+import ua.com.aimprosoft.shop.entities.Customer;
 
 
 public interface CustomerService

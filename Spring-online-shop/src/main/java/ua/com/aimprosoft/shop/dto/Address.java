@@ -1,6 +1,6 @@
-package ua.com.aimprosoft.shop.models;
+package ua.com.aimprosoft.shop.dto;
 
-public class Address extends Entity
+public class Address
 {
 	private String street;
 	private String postalCode;

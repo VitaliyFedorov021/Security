@@ -1,6 +1,7 @@
 package ua.com.aimprosoft.shop.dao.impl;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import ua.com.aimprosoft.shop.dao.AddressDao;
-import ua.com.aimprosoft.shop.models.Address;
+import ua.com.aimprosoft.shop.entities.Address;
 
 @Component
 public class AddressDaoImpl implements AddressDao
@@ -29,17 +30,21 @@ public class AddressDaoImpl implements AddressDao
 	@Override
 	public void insertAddress(final Address address)
 	{
-		PreparedStatementCreator psc = connection -> {
-			PreparedStatement pStatement = connection.prepareStatement(SAVE_ADDRESS, Statement.RETURN_GENERATED_KEYS);
-			pStatement.setString(1, address.getStreet());
-			pStatement.setString(2, address.getPostalCode());
-			pStatement.setString(3, address.getTown());
-			pStatement.setString(4, address.getRegion());
-			pStatement.setString(5, address.getCountry());
-			return pStatement;
-		};
+		final PreparedStatementCreator psc = connection -> getPreparedStatement(address, connection);
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(psc, keyHolder);
 		address.setId(keyHolder.getKey().intValue());
+	}
+
+	private PreparedStatement getPreparedStatement(final Address address, final java.sql.Connection connection)
+			throws SQLException
+	{
+		final PreparedStatement pStatement = connection.prepareStatement(SAVE_ADDRESS, Statement.RETURN_GENERATED_KEYS);
+		pStatement.setString(1, address.getStreet());
+		pStatement.setString(2, address.getPostalCode());
+		pStatement.setString(3, address.getTown());
+		pStatement.setString(4, address.getRegion());
+		pStatement.setString(5, address.getCountry());
+		return pStatement;
 	}
 }

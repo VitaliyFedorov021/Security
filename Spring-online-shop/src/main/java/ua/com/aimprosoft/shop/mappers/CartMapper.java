@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import ua.com.aimprosoft.shop.models.Cart;
+import ua.com.aimprosoft.shop.entities.Cart;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 

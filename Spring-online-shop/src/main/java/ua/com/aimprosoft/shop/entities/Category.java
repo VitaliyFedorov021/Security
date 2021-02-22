@@ -1,4 +1,4 @@
-package ua.com.aimprosoft.shop.models;
+package ua.com.aimprosoft.shop.entities;
 
 public class Category extends Entity
 {

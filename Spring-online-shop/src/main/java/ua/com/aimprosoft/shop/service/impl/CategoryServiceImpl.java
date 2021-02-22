@@ -6,15 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ua.com.aimprosoft.shop.dao.CategoryDao;
-import ua.com.aimprosoft.shop.models.Category;
+import ua.com.aimprosoft.shop.entities.Category;
 import ua.com.aimprosoft.shop.service.CategoryService;
+
 
 @Service
 public class CategoryServiceImpl implements CategoryService
 {
+	@Autowired
 	private final CategoryDao categoryDao;
 
-	@Autowired
 	public CategoryServiceImpl(final CategoryDao categoryDao)
 	{
 		this.categoryDao = categoryDao;

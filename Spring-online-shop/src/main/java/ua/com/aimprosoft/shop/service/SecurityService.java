@@ -1,8 +1,11 @@
 package ua.com.aimprosoft.shop.service;
 
+import ua.com.aimprosoft.shop.entities.Customer;
+
+
 public interface SecurityService
 {
-	String getCurrentUsername();
+	Customer getCurrentCustomer();
 
 	void autoLogin(String email, String password);
 }

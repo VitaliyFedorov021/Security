@@ -5,8 +5,8 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import ua.com.aimprosoft.shop.models.Customer;
-import ua.com.aimprosoft.shop.models.Gender;
+import ua.com.aimprosoft.shop.entities.Customer;
+import ua.com.aimprosoft.shop.entities.Gender;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 
@@ -16,7 +16,7 @@ public class CustomerMapper implements RowMapper<Customer>
 	@Override
 	public Customer mapRow(final ResultSet resultSet, final int i) throws SQLException
 	{
-		Customer customer = new Customer();
+		final Customer customer = new Customer();
 		customer.setId(resultSet.getInt(ApplicationConstant.ID));
 		customer.setBirthdayDate(resultSet.getDate(ApplicationConstant.BIRTHDAY_DATE_DB));
 		customer.setPhoneNumber(resultSet.getString(ApplicationConstant.PHONE_NUMBER_DB));

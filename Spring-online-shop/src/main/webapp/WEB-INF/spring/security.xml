@@ -22,7 +22,7 @@
 
 
 
-	<authentication-manager>
+	<authentication-manager alias="authenticationManager">
 		<authentication-provider user-service-ref="customerDetailsServiceImpl">
 			<password-encoder ref="encoder"/>
 		</authentication-provider>

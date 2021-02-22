@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: vitalij
@@ -17,53 +19,65 @@
 <div>
     <a href="/"><button type="button" class="btn btn-primary">HOME</button></a>
 </div>
-<form action="/sign_up" method="POST" name="customer" class="needs-validation" novalidate>
+<form:form action="/sign_up" method="POST" class="needs-validation" modelAttribute="customer">
+    <spring:bind path="email">
     <div class="form-group col-md-3">
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="email@example.com" required class="form-control">
+        <form:input type="text" id="email" path="email" placeholder="email@example.com" class="form-control"></form:input>
+        <form:errors path="email"></form:errors>
         <br>
     </div>
-
+    </spring:bind>
+    <spring:bind path="firstName">
     <div class="form-group col-md-3">
         <label for="firstName">First name</label>
-        <input type="text" id="firstName" name="firstName" placeholder="First name" required class="form-control">
+        <form:input type="text" id="firstName" path="firstName" placeholder="First name" class="form-control"></form:input>
+        <form:errors path="firstName"></form:errors>
         <br>
     </div>
+    </spring:bind>
+    <spring:bind path="lastName">
     <div class="form-group col-md-3">
         <label for="lastName">Last name</label>
-        <input type="text" id="lastName" name="lastName" placeholder="Last name" required class="form-control">
+        <form:input type="text" id="lastName" path="lastName" placeholder="Last name" class="form-control"></form:input>
+        <form:errors path="lastName"></form:errors>
     </div>
-    <div class="col-12 col-md-4">
-        <label for="gender" class="form-label">Gender</label>
-        <select class="form-select" id="gender" name="gender" required>
-            <option>Male</option>
-            <option>Female</option>
-            <option>Other</option>
-        </select>
-    </div>
+    </spring:bind>
+    <spring:bind path="birthdayDate">
     <div class="form-group col-md-2">
-        <label for="birthdayDate">Birthday</label>
-        <input type="date" id="birthdayDate" name="birthdayDate" required class="form-control" max="2009-01-01">
-    </div>
-    <div class="form-group col-md-3">
+    <label for="birthdayDate">Birthday</label>
+            <form:input type="date" id="birthdayDate" path="birthdayDate" class="form-control" max="2009-01-01"></form:input>
+            <form:errors path="birthdayDate"></form:errors>
+        </div>
+    </spring:bind>
+        <spring:bind path="phoneNumber">
+        <div class="form-group col-md-3">
         <label for="phoneNumber">Phone number:</label>
-        <input type="number" id="phoneNumber" name="phoneNumber" placeholder="099 123 45 67" required class="form-control" maxlength="10">
-    </div>
-    <br>
+            <form:input type="number" id="phoneNumber" path="phoneNumber" placeholder="099 123 45 67" class="form-control" maxlength="10"></form:input>
+        <form:errors path="phoneNumber"></form:errors>
+        </div>
+        </spring:bind>
+    <div class="col-12 col-md-4">
+    <label for="gender" class="form-label">Gender</label>
+    <select class="form-select" id="gender" name="gender" required>
+        <option>MALE</option>
+        <option>FEMALE</option>
+        <option>OTHER</option>
+    </select>
+</div>
+<br>
+    <spring:bind path="password">
     <div class="col-12 col-md-2">
         <label for="password">Password</label>
-        <input type="password" class="form-control" name="password" placeholder="Enter your password" required id="password"> <br>
+        <form:input path="password" type="password" class="form-control" placeholder="Enter your password" id="password"></form:input> <br>
         <p class="lead">Password must have at least 1 capital latin letter, 1 number and consists of greater than 6 symbols</p>
+    <form:errors path="password"></form:errors>
     </div>
-    <div class="col-12">
-        <c:forEach var="e" items="${message}">
-            <h1 class="text-danger">${e}</h1>
-        </c:forEach>
-    </div>
+    </spring:bind>
     <div class="col-12">
         <button class="btn btn-primary" type="submit">Sign up</button>
     </div>
-</form>
+</form:form>
 
 </body>
 </html>

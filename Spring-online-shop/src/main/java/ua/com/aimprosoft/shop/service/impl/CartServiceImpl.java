@@ -9,21 +9,24 @@ import org.springframework.stereotype.Service;
 
 import ua.com.aimprosoft.shop.dao.AddressDao;
 import ua.com.aimprosoft.shop.dao.CartDao;
+import ua.com.aimprosoft.shop.entities.Address;
+import ua.com.aimprosoft.shop.entities.Cart;
+import ua.com.aimprosoft.shop.entities.Customer;
 import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
-import ua.com.aimprosoft.shop.models.Address;
-import ua.com.aimprosoft.shop.models.Cart;
-import ua.com.aimprosoft.shop.models.Customer;
 import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.CartService;
+
 
 @Service
 public class CartServiceImpl implements CartService
 {
+	@Autowired
 	private final CartDao cartDao;
+	@Autowired
 	private final CartEntryService cartEntryService;
+	@Autowired
 	private final AddressDao addressDao;
 
-	@Autowired
 	public CartServiceImpl(final CartDao cartDao, final CartEntryService cartEntryService,
 			final AddressDao addressDao)
 	{
@@ -35,7 +38,7 @@ public class CartServiceImpl implements CartService
 	@Override
 	public void addProductToCart(final Customer customer, final String productCode, final int quantity)
 	{
-		Cart cart = getActiveCart(customer);
+		final Cart cart = getActiveCart(customer);
 		cartEntryService.addEntry(productCode, cart, quantity);
 	}
 
@@ -58,7 +61,7 @@ public class CartServiceImpl implements CartService
 	public void deleteProductFromCart(final Customer customer, final String productCode)
 			throws IncorrectOperationException
 	{
-		Cart cart = getActiveCart(customer);
+		final Cart cart = getActiveCart(customer);
 		cartEntryService.deleteEntry(cart, productCode);
 	}
 
@@ -66,7 +69,7 @@ public class CartServiceImpl implements CartService
 	public void updateProductQuantity(final Customer customer, final int quantity, final String code)
 			throws IncorrectOperationException
 	{
-		Cart cart = getActiveCart(customer);
+		final Cart cart = getActiveCart(customer);
 		cartEntryService.updateEntryQuantity(code, quantity, cart);
 	}
 

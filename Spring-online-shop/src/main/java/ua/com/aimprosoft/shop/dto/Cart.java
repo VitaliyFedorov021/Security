@@ -1,20 +1,32 @@
-package ua.com.aimprosoft.shop.models;
+package ua.com.aimprosoft.shop.dto;
 
 import java.util.Date;
 import java.util.List;
 
+import ua.com.aimprosoft.shop.entities.Address;
+import ua.com.aimprosoft.shop.entities.CartEntry;
 
-public class Cart extends Entity
+
+public class Cart
 {
 	private String code;
 	private double totalPrice;
-	private Date placedDate;
 	private List<CartEntry> cartEntries;
-	private Customer customer;
+	private Date placedDate;
 	private Address deliveryAddress;
 
 	public Cart()
 	{
+	}
+
+	public Date getPlacedDate()
+	{
+		return placedDate;
+	}
+
+	public void setPlacedDate(final Date placedDate)
+	{
+		this.placedDate = placedDate;
 	}
 
 	public Address getDeliveryAddress()
@@ -27,15 +39,6 @@ public class Cart extends Entity
 		this.deliveryAddress = deliveryAddress;
 	}
 
-	public Customer getCustomer()
-	{
-		return customer;
-	}
-
-	public void setCustomer(final Customer customer)
-	{
-		this.customer = customer;
-	}
 
 	public String getCode()
 	{
@@ -55,16 +58,6 @@ public class Cart extends Entity
 	public void setTotalPrice(final double totalPrice)
 	{
 		this.totalPrice = totalPrice;
-	}
-
-	public Date getPlacedDate()
-	{
-		return placedDate;
-	}
-
-	public void setPlacedDate(final Date placedDate)
-	{
-		this.placedDate = placedDate;
 	}
 
 	public List<CartEntry> getCartEntries()

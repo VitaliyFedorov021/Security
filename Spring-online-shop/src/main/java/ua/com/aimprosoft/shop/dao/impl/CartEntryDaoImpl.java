@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import ua.com.aimprosoft.shop.dao.CartEntryDao;
-import ua.com.aimprosoft.shop.models.CartEntry;
+import ua.com.aimprosoft.shop.entities.CartEntry;
 import ua.com.aimprosoft.shop.mappers.CartEntryMapper;
 import ua.com.aimprosoft.shop.mappers.IntegerMapper;
 
@@ -49,7 +49,7 @@ public class CartEntryDaoImpl implements CartEntryDao
 	@Override
 	public void insertEntry(final CartEntry cartEntry)
 	{
-		Object[] values = {cartEntry.getEntryNumber(),
+		final Object[] values = {cartEntry.getEntryNumber(),
 				cartEntry.getQuantity(),
 				cartEntry.getTotalPrice(),
 				cartEntry.getCart().getId(), cartEntry.getProduct().getId()};
@@ -59,7 +59,7 @@ public class CartEntryDaoImpl implements CartEntryDao
 	@Override
 	public void updateEntry(final CartEntry cartEntry)
 	{
-		Object[] values = {cartEntry.getQuantity(),
+		final Object[] values = {cartEntry.getQuantity(),
 				cartEntry.getTotalPrice(), cartEntry.getId()};
 		jdbcTemplate.update(UPDATE_ENTRY, values);
 	}
@@ -75,10 +75,10 @@ public class CartEntryDaoImpl implements CartEntryDao
 	{
 		try
 		{
-			Object[] values = {productCode, cartCode};
-			return Optional.ofNullable(jdbcTemplate.queryForObject(GET_ENTRY_BY_PRODUCT_CODE, values, new CartEntryMapper()));
+			final Object[] values = { productCode, cartCode };
+			return Optional.of(jdbcTemplate.queryForObject(GET_ENTRY_BY_PRODUCT_CODE, values, new CartEntryMapper()));
 		}
-		catch (EmptyResultDataAccessException e)
+		catch (final EmptyResultDataAccessException e)
 		{
 			return Optional.empty();
 		}

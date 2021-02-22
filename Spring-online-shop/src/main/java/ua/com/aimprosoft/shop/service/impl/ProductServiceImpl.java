@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ua.com.aimprosoft.shop.dao.ProductDao;
-import ua.com.aimprosoft.shop.models.Product;
+import ua.com.aimprosoft.shop.entities.Product;
 import ua.com.aimprosoft.shop.service.ProductService;
+
 
 @Service
 public class ProductServiceImpl implements ProductService
 {
+	@Autowired
 	private final ProductDao productDao;
 
 	@Autowired
@@ -21,7 +23,7 @@ public class ProductServiceImpl implements ProductService
 	}
 
 	@Override
-	public List<Product> getAllByCategoryCode(String categoryCode)
+	public List<Product> getAllByCategoryCode(final String categoryCode)
 	{
 		return productDao.findAllByCategoryCode(categoryCode);
 	}

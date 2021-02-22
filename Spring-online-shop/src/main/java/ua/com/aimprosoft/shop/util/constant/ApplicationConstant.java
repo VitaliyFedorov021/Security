@@ -30,6 +30,13 @@ public class ApplicationConstant
 	public static final String PRODUCT_NAME_DB = "product_name";
 	public static final String QUANTITY = "quantity";
 
+	public static final String ADDRESS = "address";
+	public static final String STREET = "street";
+	public static final String COUNTRY = "country";
+	public static final String POSTAL_CODE = "postalCode";
+	public static final String REGION = "region";
+	public static final String TOWN = "town";
+
 	public static final String CART = "cart";
 	public static final String CUSTOMER = "customer";
 

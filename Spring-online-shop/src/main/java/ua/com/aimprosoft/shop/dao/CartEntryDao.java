@@ -3,7 +3,7 @@ package ua.com.aimprosoft.shop.dao;
 import java.util.List;
 import java.util.Optional;
 
-import ua.com.aimprosoft.shop.models.CartEntry;
+import ua.com.aimprosoft.shop.entities.CartEntry;
 
 
 public interface CartEntryDao

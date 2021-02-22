@@ -1,68 +1,56 @@
 package ua.com.aimprosoft.shop.util.impl;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 
-import ua.com.aimprosoft.shop.models.Address;
-import ua.com.aimprosoft.shop.util.Validator;
-import ua.com.aimprosoft.shop.util.constant.ErrorConstant;
+import ua.com.aimprosoft.shop.entities.Address;
+import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
+
 
 @Component
-public class AddressValidator implements Validator<Address>
+public class AddressValidator implements Validator
 {
 	@Override
-	public void validate(final Address entity, final List<String> exceptions)
+	public void validate(final Object o, final Errors errors)
 	{
-		checkStreet(entity, exceptions);
-		checkCountry(entity, exceptions);
-		checkPostalCode(entity, exceptions);
-		checkRegion(entity, exceptions);
-		checkTown(entity, exceptions);
+		final Address address = (Address) o;
+		checkStreet(address, errors);
+		checkCountry(address, errors);
+		checkPostalCode(address, errors);
+		checkRegion(address, errors);
+		checkTown(address, errors);
 	}
 
-	public void checkStreet(Address address, final List<String> exceptions)
+	public void checkStreet(final Address address, final Errors errors)
 	{
-		String street = address.getStreet();
-		if (street == null || street.isEmpty())
-		{
-			exceptions.add(ErrorConstant.EMPTY_STREET);
-		}
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, ApplicationConstant.STREET, "msg.empty_street");
 	}
 
-	public void checkCountry(Address address, final List<String> exceptions)
+	public void checkCountry(final Address address, final Errors errors)
 	{
-		String country = address.getCountry();
-		if (country == null || country.isEmpty())
-		{
-			exceptions.add(ErrorConstant.EMPTY_COUNTRY);
-		}
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, ApplicationConstant.COUNTRY, "msg.empty_country");
 	}
 
-	public void checkPostalCode(Address address, final List<String> exceptions)
+	public void checkPostalCode(final Address address, final Errors errors)
 	{
-		String postalCode = address.getPostalCode();
-		if (postalCode == null || postalCode.isEmpty())
-		{
-			exceptions.add(ErrorConstant.EMPTY_POSTAL_CODE);
-		}
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, ApplicationConstant.POSTAL_CODE, "msg.empty_postal_code");
 	}
 
-	public void checkRegion(Address address, final List<String> exceptions)
+	public void checkRegion(final Address address, final Errors errors)
 	{
-		String region = address.getRegion();
-		if (region == null || region.isEmpty())
-		{
-			exceptions.add(ErrorConstant.EMPTY_REGION);
-		}
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, ApplicationConstant.REGION, "msg.empty_region");
 	}
 
-	public void checkTown(Address address, final List<String> exceptions)
+	public void checkTown(final Address address, final Errors errors)
 	{
-		String town = address.getTown();
-		if (town == null || town.isEmpty())
-		{
-			exceptions.add(ErrorConstant.EMPTY_TOWN);
-		}
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, ApplicationConstant.TOWN, "msg.empty_town");
+	}
+
+	@Override
+	public boolean supports(final Class<?> aClass)
+	{
+		return Address.class.equals(aClass);
 	}
 }

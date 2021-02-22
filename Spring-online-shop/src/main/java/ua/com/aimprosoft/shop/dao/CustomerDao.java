@@ -1,9 +1,8 @@
 package ua.com.aimprosoft.shop.dao;
 
-import java.util.List;
 import java.util.Optional;
 
-import ua.com.aimprosoft.shop.models.Customer;
+import ua.com.aimprosoft.shop.entities.Customer;
 
 
 public interface CustomerDao

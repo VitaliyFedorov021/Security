@@ -29,4 +29,13 @@
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 
+	<bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource" id="messageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:messages</value>
+			</list>
+		</property>
+	</bean>
+
+
 </beans>

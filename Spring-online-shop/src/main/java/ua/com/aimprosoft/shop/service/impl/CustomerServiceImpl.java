@@ -7,16 +7,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ua.com.aimprosoft.shop.dao.CustomerDao;
-import ua.com.aimprosoft.shop.models.Customer;
+import ua.com.aimprosoft.shop.entities.Customer;
 import ua.com.aimprosoft.shop.service.CustomerService;
+
 
 @Service
 public class CustomerServiceImpl implements CustomerService
 {
+	@Autowired
 	private final BCryptPasswordEncoder encoder;
+	@Autowired
 	private final CustomerDao customerDao;
 
-	@Autowired
 	public CustomerServiceImpl(final BCryptPasswordEncoder encoder, final CustomerDao customerDao)
 	{
 		this.encoder = encoder;
@@ -26,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService
 	@Override
 	public void registerCustomer(final Customer customer)
 	{
-		String password = customer.getPassword();
+		final String password = customer.getPassword();
 		customer.setPassword(encoder.encode(password));
 		customerDao.insertCustomer(customer);
 	}

@@ -2,10 +2,10 @@ package ua.com.aimprosoft.shop.service;
 
 import java.util.Optional;
 
+import ua.com.aimprosoft.shop.entities.Address;
+import ua.com.aimprosoft.shop.entities.Cart;
+import ua.com.aimprosoft.shop.entities.Customer;
 import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
-import ua.com.aimprosoft.shop.models.Address;
-import ua.com.aimprosoft.shop.models.Cart;
-import ua.com.aimprosoft.shop.models.Customer;
 
 
 public interface CartService

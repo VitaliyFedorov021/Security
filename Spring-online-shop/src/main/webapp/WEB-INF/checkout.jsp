@@ -6,7 +6,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>Confirm order</title>
@@ -42,44 +44,48 @@
         </div>
     </table>
     <h2>Enter your address to place order</h2>
-    <form action="/confirm_order" method="post">
+    <form:form action="/confirm_order" method="post" class="needs-validation" modelAttribute="address">
+        <spring:bind path="street">
         <div class="form-group col-md-3">
             <label for="street">Street</label>
-            <input type="text" id="street" name="street" placeholder="my-street.st" required class="form-control">
+            <form:input type="text" id="street" path="street" placeholder="my-street.st" class="form-control"></form:input>
+            <form:errors path="street"></form:errors>
             <br>
         </div>
-
+        </spring:bind>
+        <spring:bind path="postalCode">
         <div class="form-group col-md-2">
             <label for="postalCode">Postal code</label>
-            <input type="text" id="postalCode" name="postalCode" placeholder="12345" maxlength="5" required class="form-control">
+            <form:input type="text" id="postalCode" path="postalCode" placeholder="12345" maxlength="5" class="form-control"></form:input>
+            <form:errors path="postalCode"></form:errors>
             <br>
         </div>
-
+        </spring:bind>
+        <spring:bind path="country">
         <div class="form-group col-md-3">
             <label for="country">Country</label>
-            <input type="text" id="country" name="country" required class="form-control">
+            <form:input type="text" id="country" path="country" class="form-control"></form:input>
+            <form:errors path="country"></form:errors>
         </div>
-
+        </spring:bind>
+        <spring:bind path="town">
         <div class="form-group col-md-3">
             <label for="town">Town</label>
-            <input type="text" id="town" name="town" placeholder="Kharkiv" required class="form-control">
+            <form:input type="text" id="town" path="town" placeholder="Kharkiv" class="form-control"></form:input>
+            <form:errors path="town"></form:errors>
             <br>
         </div>
-
-        <div class="col-12">
-            <c:forEach var="e" items="${message}">
-                <h1 class="text-danger">${e}</h1>
-            </c:forEach>
-        </div>
-
-
+        </spring:bind>
+        <spring:bind path="region">
         <div class="form-group col-md-3">
             <label for="region">Region</label>
-            <input type="text" id="region" name="region" placeholder="Kharkiv" required class="form-control">
+            <form:input type="text" id="region" path="region" placeholder="Kharkiv" class="form-control"></form:input>
+            <form:errors path="region"></form:errors>
             <br>
         </div>
+        </spring:bind>
         <input type="submit" class="btn btn-primary" value="Submit">
-    </form>
+    </form:form>
 
 </body>
 </html>

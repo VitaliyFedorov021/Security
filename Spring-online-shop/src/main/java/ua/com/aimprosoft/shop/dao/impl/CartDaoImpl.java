@@ -1,6 +1,7 @@
 package ua.com.aimprosoft.shop.dao.impl;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.Optional;
@@ -13,8 +14,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import ua.com.aimprosoft.shop.dao.CartDao;
-import ua.com.aimprosoft.shop.models.Address;
-import ua.com.aimprosoft.shop.models.Cart;
+import ua.com.aimprosoft.shop.entities.Address;
+import ua.com.aimprosoft.shop.entities.Cart;
 import ua.com.aimprosoft.shop.mappers.CartMapper;
 
 
@@ -43,17 +44,21 @@ public class CartDaoImpl implements CartDao
 	@Override
 	public void insertCart(final Cart cart)
 	{
-		PreparedStatementCreator psc = connection -> {
-			PreparedStatement pStatement = connection.prepareStatement(ADD_TO_CART, Statement.RETURN_GENERATED_KEYS);
-			pStatement.setString(1, cart.getCode());
-			pStatement.setDouble(2, cart.getTotalPrice());
-			pStatement.setInt(3, cart.getCustomer().getId());
-			return pStatement;
-		};
+		final PreparedStatementCreator psc = connection -> getPreparedStatement(cart, connection);
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(psc, keyHolder);
-		int id = keyHolder.getKey().intValue();
+		final int id = keyHolder.getKey().intValue();
 		cart.setId(id);
+	}
+
+	private PreparedStatement getPreparedStatement(final Cart cart, final java.sql.Connection connection)
+			throws SQLException
+	{
+		final PreparedStatement pStatement = connection.prepareStatement(ADD_TO_CART, Statement.RETURN_GENERATED_KEYS);
+		pStatement.setString(1, cart.getCode());
+		pStatement.setDouble(2, cart.getTotalPrice());
+		pStatement.setInt(3, cart.getCustomer().getId());
+		return pStatement;
 	}
 
 	@Override
@@ -61,9 +66,9 @@ public class CartDaoImpl implements CartDao
 	{
 		try
 		{
-			return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_ACTIVE_CART, new CartMapper(), customerEmail));
+			return Optional.of(jdbcTemplate.queryForObject(FIND_ACTIVE_CART, new CartMapper(), customerEmail));
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			return Optional.empty();
 		}
@@ -72,7 +77,7 @@ public class CartDaoImpl implements CartDao
 	@Override
 	public void updateCart(final Cart cart)
 	{
-		Object[] values = {cart.getTotalPrice(),
+		final Object[] values = {cart.getTotalPrice(),
 				getDate(cart.getPlacedDate()),
 				getAddressId(cart.getDeliveryAddress()),
 				cart.getId()};
@@ -82,10 +87,11 @@ public class CartDaoImpl implements CartDao
 	@Override
 	public Optional<Cart> findCartByCode(final String cartCode)
 	{
-		try {
-			return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_CART_BY_CODE, new CartMapper(), cartCode));
+		try
+		{
+			return Optional.of(jdbcTemplate.queryForObject(FIND_CART_BY_CODE, new CartMapper(), cartCode));
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			return Optional.empty();
 		}

@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import ua.com.aimprosoft.shop.dao.ProductDao;
-import ua.com.aimprosoft.shop.models.Product;
+import ua.com.aimprosoft.shop.entities.Product;
 import ua.com.aimprosoft.shop.mappers.ProductMapper;
 
 
