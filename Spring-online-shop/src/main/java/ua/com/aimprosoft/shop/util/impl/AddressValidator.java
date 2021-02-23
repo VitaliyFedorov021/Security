@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import ua.com.aimprosoft.shop.entities.Address;
+import ua.com.aimprosoft.shop.forms.Address;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 

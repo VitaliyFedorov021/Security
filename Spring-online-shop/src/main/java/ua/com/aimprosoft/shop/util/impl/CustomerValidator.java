@@ -10,7 +10,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import ua.com.aimprosoft.shop.entities.Customer;
+import ua.com.aimprosoft.shop.forms.Customer;
 import ua.com.aimprosoft.shop.service.CustomerService;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 

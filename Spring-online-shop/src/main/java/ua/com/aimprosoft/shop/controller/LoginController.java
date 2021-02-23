@@ -18,7 +18,7 @@ public class LoginController
 	}
 
 	@PostMapping("/login-fail")
-	public String failLogin(Model model) {
+	public String failLogin(final Model model) {
 		model.addAttribute(ApplicationConstant.MESSAGE, ErrorConstant.INCORRECT_LOGIN_DATA);
 		return "loginPage";
 	}
