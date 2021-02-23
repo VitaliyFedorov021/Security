@@ -1,11 +1,13 @@
 package ua.com.aimprosoft.shop.util.converters;
 
+import ua.com.aimprosoft.shop.dto.CustomerDto;
 import ua.com.aimprosoft.shop.entities.Customer;
+import ua.com.aimprosoft.shop.forms.CustomerForm;
 
 
 public class CustomerConverter
 {
-	public static Customer formToEntity(final ua.com.aimprosoft.shop.forms.Customer customer)
+	public static Customer formToEntity(final CustomerForm customer)
 	{
 		final Customer entity = new Customer();
 		entity.setEmail(customer.getEmail());
@@ -18,12 +20,23 @@ public class CustomerConverter
 		return entity;
 	}
 
-	public static ua.com.aimprosoft.shop.dto.Customer entityToDto(final Customer customer)
+	public static CustomerDto entityToDto(final Customer customer)
 	{
-		final ua.com.aimprosoft.shop.dto.Customer dto = new ua.com.aimprosoft.shop.dto.Customer();
+		final CustomerDto dto = new CustomerDto();
+		dto.setId(customer.getId());
+		dto.setEmail(customer.getEmail());
+		dto.setPassword(customer.getPassword());
 		dto.setFirstName(customer.getFirstName());
 		dto.setLastName(customer.getLastName());
 		dto.setPhoneNumber(customer.getPhoneNumber());
 		return dto;
+	}
+
+	public static Customer dtoToEntity(final CustomerDto customerDto)
+	{
+		final Customer customer = new Customer();
+		customer.setId(customerDto.getId());
+		customer.setEmail(customerDto.getEmail());
+		return customer;
 	}
 }

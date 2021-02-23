@@ -2,13 +2,13 @@ package ua.com.aimprosoft.shop.dto;
 
 import ua.com.aimprosoft.shop.entities.Product;
 
-public class CartEntry
+public class CartEntryDto
 {
 	private int quantity;
 	private double totalPrice;
 	private Product product;
 
-	public CartEntry()
+	public CartEntryDto()
 	{
 	}
 

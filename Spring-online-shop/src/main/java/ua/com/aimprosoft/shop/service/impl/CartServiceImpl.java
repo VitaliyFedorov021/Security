@@ -9,12 +9,15 @@ import org.springframework.stereotype.Service;
 
 import ua.com.aimprosoft.shop.dao.AddressDao;
 import ua.com.aimprosoft.shop.dao.CartDao;
+import ua.com.aimprosoft.shop.dto.CartDto;
+import ua.com.aimprosoft.shop.dto.CustomerDto;
 import ua.com.aimprosoft.shop.entities.Address;
 import ua.com.aimprosoft.shop.entities.Cart;
-import ua.com.aimprosoft.shop.entities.Customer;
 import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.CartService;
+import ua.com.aimprosoft.shop.util.converters.CartConverter;
+import ua.com.aimprosoft.shop.util.converters.CustomerConverter;
 
 
 @Service
@@ -36,46 +39,47 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
-	public void addProductToCart(final Customer customer, final String productCode, final int quantity)
+	public void addProductToCart(final CustomerDto customerDto, final String productCode, final int quantity)
 	{
-		final Cart cart = getActiveCart(customer);
-		cartEntryService.addEntry(productCode, cart, quantity);
+		final CartDto cartDto = getActiveCart(customerDto);
+		cartEntryService.addEntry(productCode, cartDto, quantity);
 	}
 
 	@Override
-	public Cart getActiveCart(final Customer customer)
+	public CartDto getActiveCart(final CustomerDto customerDto)
 	{
-		final Optional<Cart> cartOptional = cartDao.findActiveCart(customer.getEmail());
+		final Optional<Cart> cartOptional = cartDao.findActiveCart(customerDto.getEmail());
 		if (!cartOptional.isPresent())
 		{
 			final Cart cart = new Cart();
 			cart.setCode(generateCode());
-			cart.setCustomer(customer);
+			cart.setCustomer(CustomerConverter.dtoToEntity(customerDto));
 			cartDao.insertCart(cart);
-			return cart;
+			return CartConverter.entityToDto(cart);
 		}
-		return cartOptional.get();
+		return CartConverter.entityToDto(cartOptional.get());
 	}
 
 	@Override
-	public void deleteProductFromCart(final Customer customer, final String productCode)
+	public void deleteProductFromCart(final CustomerDto customerDto, final String productCode)
 			throws IncorrectOperationException
 	{
-		final Cart cart = getActiveCart(customer);
-		cartEntryService.deleteEntry(cart, productCode);
+		final CartDto cartDto = getActiveCart(customerDto);
+		cartEntryService.deleteEntry(cartDto, productCode);
 	}
 
 	@Override
-	public void updateProductQuantity(final Customer customer, final int quantity, final String code)
+	public void updateProductQuantity(final CustomerDto customerDto, final int quantity, final String code)
 			throws IncorrectOperationException
 	{
-		final Cart cart = getActiveCart(customer);
-		cartEntryService.updateEntryQuantity(code, quantity, cart);
+		final CartDto cartDto = getActiveCart(customerDto);
+		cartEntryService.updateEntryQuantity(code, quantity, cartDto);
 	}
 
 	@Override
-	public void placeOrder(final Cart cart, final Address address)
+	public void placeOrder(final CartDto cartDto, final Address address)
 	{
+		final Cart cart = CartConverter.dtoToEntity(cartDto);
 		addressDao.insertAddress(address);
 		cart.setDeliveryAddress(address);
 		cart.setPlacedDate(new Date());
@@ -83,9 +87,10 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
-	public Optional<Cart> getCartByCode(final String cartCode)
+	public Optional<CartDto> getCartByCode(final String cartCode)
 	{
-		return cartDao.findCartByCode(cartCode);
+		final Optional<Cart> cartOptional = cartDao.findCartByCode(cartCode);
+		return cartOptional.map(CartConverter::entityToDto);
 	}
 
 	private String generateCode()

@@ -8,7 +8,7 @@ import ua.com.aimprosoft.shop.entities.Gender;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
 
-public class Customer
+public class CustomerForm
 {
 	private String email;
 	private String password;
@@ -19,17 +19,17 @@ public class Customer
 	private Date birthdayDate;
 	private String phoneNumber;
 
-	public Customer()
+	public CustomerForm()
 	{
 	}
 
-	public Customer(final String email, final String password)
+	public CustomerForm(final String email, final String password)
 	{
 		this.email = email;
 		this.password = password;
 	}
-	
-	public Customer(final String email, final String password, final String firstName, final String lastName,
+
+	public CustomerForm(final String email, final String password, final String firstName, final String lastName,
 			final Gender gender, final Date birthdayDate, final String phoneNumber)
 	{
 		this.email = email;

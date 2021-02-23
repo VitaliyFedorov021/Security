@@ -4,26 +4,21 @@ import java.util.HashSet;
 
 import org.springframework.security.core.userdetails.User;
 
-import ua.com.aimprosoft.shop.entities.Customer;
+import ua.com.aimprosoft.shop.dto.CustomerDto;
 
 
 public class SecurityCustomer extends User
 {
-	private Customer customer;
+	private final CustomerDto customerDto;
 
-	public SecurityCustomer(final Customer customer)
+	public SecurityCustomer(final CustomerDto customerDto)
 	{
-		super(customer.getEmail(), customer.getPassword(), new HashSet<>());
-		setCustomer(customer);
+		super(customerDto.getEmail(), customerDto.getPassword(), new HashSet<>());
+		this.customerDto = customerDto;
 	}
 
-	public void setCustomer(final Customer customer)
+	public CustomerDto getCustomer()
 	{
-		this.customer = customer;
-	}
-
-	public Customer getCustomer()
-	{
-		return customer;
+		return customerDto;
 	}
 }

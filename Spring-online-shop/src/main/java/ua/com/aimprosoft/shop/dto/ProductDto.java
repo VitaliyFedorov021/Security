@@ -2,7 +2,7 @@ package ua.com.aimprosoft.shop.dto;
 
 import ua.com.aimprosoft.shop.entities.Category;
 
-public class Product
+public class ProductDto
 {
 	private String code;
 	private String name;
@@ -10,7 +10,7 @@ public class Product
 	private double price;
 	private Category category;
 
-	public Product()
+	public ProductDto()
 	{
 	}
 

@@ -10,7 +10,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import ua.com.aimprosoft.shop.forms.Customer;
+import ua.com.aimprosoft.shop.forms.CustomerForm;
 import ua.com.aimprosoft.shop.service.CustomerService;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 
@@ -33,13 +33,13 @@ public class CustomerValidator implements Validator
 	@Override
 	public boolean supports(final Class<?> aClass)
 	{
-		return Customer.class.equals(aClass);
+		return CustomerForm.class.equals(aClass);
 	}
 
 	@Override
 	public void validate(final Object o, final Errors errors)
 	{
-		final Customer customer = (Customer) o;
+		final CustomerForm customer = (CustomerForm) o;
 		checkEmail(customer, errors);
 		checkPassword(customer, errors);
 		checkName(customer, errors);
@@ -47,7 +47,7 @@ public class CustomerValidator implements Validator
 		checkNumber(customer, errors);
 	}
 
-	private void checkEmail(final Customer customer, final Errors errors)
+	private void checkEmail(final CustomerForm customer, final Errors errors)
 	{
 		final String email = customer.getEmail();
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, ApplicationConstant.EMAIL, "msg.empty_email");
@@ -63,7 +63,7 @@ public class CustomerValidator implements Validator
 		}
 	}
 
-	private void checkPassword(final Customer customer, final Errors errors)
+	private void checkPassword(final CustomerForm customer, final Errors errors)
 	{
 		final String password = customer.getPassword();
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, ApplicationConstant.PASSWORD, "msg.empty_password");
@@ -79,7 +79,7 @@ public class CustomerValidator implements Validator
 		}
 	}
 
-	public void checkName(final Customer customer, final Errors errors)
+	public void checkName(final CustomerForm customer, final Errors errors)
 	{
 		final String firstName = customer.getFirstName();
 		final String lastName = customer.getLastName();
@@ -93,7 +93,7 @@ public class CustomerValidator implements Validator
 		}
 	}
 
-	public void checkNumber(final Customer customer, final Errors errors)
+	public void checkNumber(final CustomerForm customer, final Errors errors)
 	{
 		final String number = customer.getPhoneNumber();
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, ApplicationConstant.PHONE_NUMBER, "msg.empty_number");
@@ -104,7 +104,7 @@ public class CustomerValidator implements Validator
 		}
 	}
 
-	public void checkDate(final Customer customer, final Errors errors)
+	public void checkDate(final CustomerForm customer, final Errors errors)
 	{
 		final Date date = customer.getBirthdayDate();
 		if (date == null)

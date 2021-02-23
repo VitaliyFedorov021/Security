@@ -4,18 +4,18 @@ import java.util.Date;
 import java.util.List;
 
 import ua.com.aimprosoft.shop.entities.Address;
-import ua.com.aimprosoft.shop.entities.CartEntry;
 
 
-public class Cart
+public class CartDto
 {
+	private int id;
 	private String code;
 	private double totalPrice;
-	private List<CartEntry> cartEntries;
+	private List<CartEntryDto> cartEntries;
 	private Date placedDate;
 	private Address deliveryAddress;
 
-	public Cart()
+	public CartDto()
 	{
 	}
 
@@ -39,6 +39,15 @@ public class Cart
 		this.deliveryAddress = deliveryAddress;
 	}
 
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(final int id)
+	{
+		this.id = id;
+	}
 
 	public String getCode()
 	{
@@ -60,12 +69,12 @@ public class Cart
 		this.totalPrice = totalPrice;
 	}
 
-	public List<CartEntry> getCartEntries()
+	public List<CartEntryDto> getCartEntries()
 	{
 		return cartEntries;
 	}
 
-	public void setCartEntries(final List<CartEntry> cartEntries)
+	public void setCartEntries(final List<CartEntryDto> cartEntries)
 	{
 		this.cartEntries = cartEntries;
 	}

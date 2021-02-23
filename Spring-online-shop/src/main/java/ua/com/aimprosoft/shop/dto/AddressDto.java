@@ -1,6 +1,6 @@
-package ua.com.aimprosoft.shop.forms;
+package ua.com.aimprosoft.shop.dto;
 
-public class Address
+public class AddressDto
 {
 	private String street;
 	private String postalCode;
@@ -8,7 +8,7 @@ public class Address
 	private String region;
 	private String country;
 
-	public Address()
+	public AddressDto()
 	{
 	}
 

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import ua.com.aimprosoft.shop.dao.CartDao;
 import ua.com.aimprosoft.shop.dao.CartEntryDao;
+import ua.com.aimprosoft.shop.dto.CartDto;
+import ua.com.aimprosoft.shop.dto.CartEntryDto;
 import ua.com.aimprosoft.shop.entities.Cart;
 import ua.com.aimprosoft.shop.entities.CartEntry;
 import ua.com.aimprosoft.shop.entities.Product;
@@ -15,6 +17,8 @@ import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 import ua.com.aimprosoft.shop.service.CalculationService;
 import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.ProductService;
+import ua.com.aimprosoft.shop.util.converters.CartConverter;
+import ua.com.aimprosoft.shop.util.converters.CartEntryConverter;
 
 
 @Component
@@ -39,8 +43,9 @@ public class CartEntryServiceImpl implements CartEntryService
 	}
 
 	@Override
-	public void addEntry(final String code, final Cart cart, final int quantity)
+	public void addEntry(final String code, final CartDto cartDto, final int quantity)
 	{
+		final Cart cart = CartConverter.dtoToEntity(cartDto);
 		final Optional<CartEntry> entryOptional = cartEntryDao.findByProductCode(code, cart.getCode());
 		CartEntry cartEntry = null;
 		Product product = null;
@@ -58,15 +63,16 @@ public class CartEntryServiceImpl implements CartEntryService
 	}
 
 	@Override
-	public List<CartEntry> getEntriesByCartCode(final String cartCode)
+	public List<CartEntryDto> getEntriesByCartCode(final String cartCode)
 	{
-		return cartEntryDao.findEntriesByCartCode(cartCode);
+		return CartEntryConverter.castToDto(cartEntryDao.findEntriesByCartCode(cartCode));
 	}
 
 	@Override
-	public void updateEntryQuantity(final String code, final int quantity, final Cart cart)
+	public void updateEntryQuantity(final String code, final int quantity, final CartDto cartDto)
 			throws IncorrectOperationException
 	{
+		final Cart cart = CartConverter.dtoToEntity(cartDto);
 		final Optional<CartEntry> cartEntryOptional = cartEntryDao.findByProductCode(code, cart.getCode());
 		if (!cartEntryOptional.isPresent())
 		{
@@ -77,9 +83,14 @@ public class CartEntryServiceImpl implements CartEntryService
 	}
 
 	@Override
-	public void deleteEntry(final Cart cart, final String productCode) throws IncorrectOperationException
+	public void deleteEntry(final CartDto cartDto, final String productCode) throws IncorrectOperationException
 	{
+		final Cart cart = CartConverter.dtoToEntity(cartDto);
 		final Optional<CartEntry> cartEntryOptional = cartEntryDao.findByProductCode(productCode, cart.getCode());
+		if (!cartEntryOptional.isPresent())
+		{
+			throw new IncorrectOperationException("No entry");
+		}
 		final CartEntry cartEntry = cartEntryOptional.get();
 		cartEntry.setQuantity(0);
 		cartEntryDao.updateEntry(cartEntry);

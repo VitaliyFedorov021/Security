@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import ua.com.aimprosoft.shop.forms.Customer;
+import ua.com.aimprosoft.shop.entities.Customer;
+import ua.com.aimprosoft.shop.forms.CustomerForm;
 import ua.com.aimprosoft.shop.service.CustomerService;
 import ua.com.aimprosoft.shop.service.SecurityService;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
@@ -37,12 +38,12 @@ public class RegistrationController
 	@GetMapping("/sign_up")
 	public String signUpPage(final Model model)
 	{
-		model.addAttribute(ApplicationConstant.CUSTOMER, new Customer());
+		model.addAttribute(ApplicationConstant.CUSTOMER, new CustomerForm());
 		return "signUpPage";
 	}
 
 	@PostMapping("/sign_up")
-	public String signUp(@ModelAttribute("customer") final Customer customer,
+	public String signUp(@ModelAttribute("customer") final CustomerForm customer,
 			final BindingResult bindingResult)
 	{
 		validator.validate(customer, bindingResult);
@@ -50,7 +51,7 @@ public class RegistrationController
 		{
 			return "signUpPage";
 		}
-		final ua.com.aimprosoft.shop.entities.Customer customerEntity = CustomerConverter.formToEntity(customer);
+		final Customer customerEntity = CustomerConverter.formToEntity(customer);
 		customerService.registerCustomer(customerEntity);
 		securityService.autoLogin(customerEntity.getEmail(), customerEntity.getPassword());
 		return "redirect:/";

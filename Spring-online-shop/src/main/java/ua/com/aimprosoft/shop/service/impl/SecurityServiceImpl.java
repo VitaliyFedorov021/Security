@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import ua.com.aimprosoft.shop.entities.Customer;
+import ua.com.aimprosoft.shop.dto.CustomerDto;
 import ua.com.aimprosoft.shop.security.SecurityCustomer;
 import ua.com.aimprosoft.shop.service.SecurityService;
 
@@ -26,7 +26,7 @@ public class SecurityServiceImpl implements SecurityService
 	}
 
 	@Override
-	public Customer getCurrentCustomer()
+	public CustomerDto getCurrentCustomer()
 	{
 		final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		final SecurityCustomer securityCustomer = (SecurityCustomer) principal;

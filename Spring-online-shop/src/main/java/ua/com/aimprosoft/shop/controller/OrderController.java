@@ -14,17 +14,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import ua.com.aimprosoft.shop.entities.Cart;
-import ua.com.aimprosoft.shop.entities.CartEntry;
-import ua.com.aimprosoft.shop.entities.Customer;
-import ua.com.aimprosoft.shop.forms.Address;
+import ua.com.aimprosoft.shop.dto.CartDto;
+import ua.com.aimprosoft.shop.dto.CartEntryDto;
+import ua.com.aimprosoft.shop.dto.CustomerDto;
+import ua.com.aimprosoft.shop.entities.Address;
+import ua.com.aimprosoft.shop.forms.AddressForm;
 import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.CartService;
 import ua.com.aimprosoft.shop.service.SecurityService;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 import ua.com.aimprosoft.shop.util.converters.AddressConverter;
-import ua.com.aimprosoft.shop.util.converters.CartConverter;
-import ua.com.aimprosoft.shop.util.converters.CustomerConverter;
 
 
 @Controller
@@ -53,54 +52,51 @@ public class OrderController
 	@GetMapping("/place_order")
 	public String placeOrderPage(final Model model)
 	{
-		final Customer customer = securityService.getCurrentCustomer();
-		final Cart cartEntity = cartService.getActiveCart(customer);
-		final List<CartEntry> cartEntries = cartEntryService.getEntriesByCartCode(cartEntity.getCode());
-		if (cartEntries.size() == 0)
+		final CustomerDto customerDto = securityService.getCurrentCustomer();
+		final CartDto cartDto = cartService.getActiveCart(customerDto);
+		final List<CartEntryDto> cartEntriesDto = cartEntryService.getEntriesByCartCode(cartDto.getCode());
+		if (cartEntriesDto.size() == 0)
 		{
 			return "redirect:/cart";
 		}
-		cartEntity.setCartEntries(cartEntries);
-		final ua.com.aimprosoft.shop.dto.Cart cartDto = CartConverter.entityToDto(cartEntity);
-		final ua.com.aimprosoft.shop.dto.Customer customerDto = CustomerConverter.entityToDto(customer);
+		cartDto.setCartEntries(cartEntriesDto);
 		model.addAttribute(ApplicationConstant.CART, cartDto);
 		model.addAttribute(ApplicationConstant.CUSTOMER, customerDto);
-		model.addAttribute(ApplicationConstant.ADDRESS, new Address());
+		model.addAttribute(ApplicationConstant.ADDRESS, new AddressForm());
 		return "checkout";
 	}
 
 	@PostMapping("/confirm_order")
-	public String saveDeliveryAddress(@ModelAttribute("address") final Address address,
+	public String saveDeliveryAddress(@ModelAttribute("address") final AddressForm addressForm,
 			final BindingResult bindingResult)
 	{
-		final Customer customer = securityService.getCurrentCustomer();
-		final ua.com.aimprosoft.shop.entities.Address addressEntity = AddressConverter.formToEntity(address);
-		validator.validate(addressEntity, bindingResult);
+		final CustomerDto customerDto = securityService.getCurrentCustomer();
+		validator.validate(addressForm, bindingResult);
 		if (bindingResult.hasErrors())
 		{
 			return "checkout";
 		}
-		final Cart cart = cartService.getActiveCart(customer);
-		cartService.placeOrder(cart, addressEntity);
-		return "redirect:/confirm_order/" + cart.getCode();
+		final Address addressEntity = AddressConverter.formToEntity(addressForm);
+		final CartDto cartDto = cartService.getActiveCart(customerDto);
+		cartService.placeOrder(cartDto, addressEntity);
+		return "redirect:/confirm_order/" + cartDto.getCode();
 	}
 
 	@GetMapping("/confirm_order/{cartCode}")
 	public String confirmationPage(@PathVariable final String cartCode, final Model model)
 	{
-		final Optional<Cart> cartOptional = cartService.getCartByCode(cartCode);
-		if (!cartOptional.isPresent())
+		final Optional<CartDto> cartDtoOptional = cartService.getCartByCode(cartCode);
+		if (!cartDtoOptional.isPresent())
 		{
 			return "redirect:/";
 		}
-		final Cart cartEntity = cartOptional.get();
-		final List<CartEntry> entries = cartEntryService.getEntriesByCartCode(cartCode);
+		final CartDto cartDto = cartDtoOptional.get();
+		final List<CartEntryDto> entries = cartEntryService.getEntriesByCartCode(cartCode);
 		if (entries.size() == 0)
 		{
 			return "redirect:/cart";
 		}
-		cartEntity.setCartEntries(entries);
-		final ua.com.aimprosoft.shop.dto.Cart cartDto = CartConverter.entityToDto(cartEntity);
+		cartDto.setCartEntries(entries);
 		model.addAttribute(ApplicationConstant.CART, cartDto);
 		return "confirmationPage";
 	}

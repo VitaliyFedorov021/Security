@@ -1,6 +1,5 @@
 package ua.com.aimprosoft.shop.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ua.com.aimprosoft.shop.entities.Cart;
-import ua.com.aimprosoft.shop.entities.CartEntry;
-import ua.com.aimprosoft.shop.entities.Customer;
+import ua.com.aimprosoft.shop.dto.CartDto;
+import ua.com.aimprosoft.shop.dto.CartEntryDto;
+import ua.com.aimprosoft.shop.dto.CustomerDto;
 import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.CartService;
 import ua.com.aimprosoft.shop.service.SecurityService;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
-import ua.com.aimprosoft.shop.util.converters.CartConverter;
-import ua.com.aimprosoft.shop.util.converters.CartEntryConverter;
 
 
 @Controller
@@ -46,19 +43,18 @@ public class CartController
 	String addToCart(@RequestParam("productCode") final String productCode,
 			@RequestParam("quantity") final int quantity)
 	{
-		final Customer customer = securityService.getCurrentCustomer();
-		cartService.addProductToCart(customer, productCode, quantity);
+		final CustomerDto customerDto = securityService.getCurrentCustomer();
+		cartService.addProductToCart(customerDto, productCode, quantity);
 		return ApplicationConstant.SUCCESS_TEXT;
 	}
 
 	@GetMapping("/cart")
 	public String showCart(final Model model)
 	{
-		final Customer customer = securityService.getCurrentCustomer();
-		final Cart cart = cartService.getActiveCart(customer);
-		final List<CartEntry> entries = cartEntryService.getEntriesByCartCode(cart.getCode());
-		cart.setCartEntries(entries);
-		final ua.com.aimprosoft.shop.dto.Cart cartDto = CartConverter.entityToDto(cart);
+		final CustomerDto customerDto = securityService.getCurrentCustomer();
+		final CartDto cartDto = cartService.getActiveCart(customerDto);
+		final List<CartEntryDto> entries = cartEntryService.getEntriesByCartCode(cartDto.getCode());
+		cartDto.setCartEntries(entries);
 		model.addAttribute(ApplicationConstant.CART, cartDto);
 		return "showCart";
 	}
@@ -68,8 +64,8 @@ public class CartController
 	{
 		try
 		{
-			final Customer customer = securityService.getCurrentCustomer();
-			cartService.deleteProductFromCart(customer, productCode);
+			final CustomerDto customerDto = securityService.getCurrentCustomer();
+			cartService.deleteProductFromCart(customerDto, productCode);
 			return "redirect:/cart";
 		}
 		catch (final IncorrectOperationException e)
@@ -84,23 +80,13 @@ public class CartController
 	{
 		try
 		{
-			final Customer customer = securityService.getCurrentCustomer();
-			cartService.updateProductQuantity(customer, quantity, productCode);
+			final CustomerDto customerDto = securityService.getCurrentCustomer();
+			cartService.updateProductQuantity(customerDto, quantity, productCode);
 			return "redirect:/cart";
 		}
 		catch (final IncorrectOperationException e)
 		{
 			return "redirect:/cart";
 		}
-	}
-
-	private List<ua.com.aimprosoft.shop.dto.CartEntry> castToDto(final List<CartEntry> entries)
-	{
-		final List<ua.com.aimprosoft.shop.dto.CartEntry> entriesDto = new ArrayList<>();
-		for (final CartEntry entry : entries)
-		{
-			entriesDto.add(CartEntryConverter.entityToDto(entry));
-		}
-		return entriesDto;
 	}
 }

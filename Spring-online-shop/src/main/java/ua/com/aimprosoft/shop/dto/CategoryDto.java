@@ -1,12 +1,12 @@
 package ua.com.aimprosoft.shop.dto;
 
-public class Category
+public class CategoryDto
 {
 	private String code;
 	private String name;
 	private int quantityOfProducts;
 
-	public Category()
+	public CategoryDto()
 	{
 	}
 
@@ -20,7 +20,7 @@ public class Category
 		this.quantityOfProducts = quantityOfProducts;
 	}
 
-	public Category(final String code, final String name)
+	public CategoryDto(final String code, final String name)
 	{
 		this.code = code;
 		this.name = name;
