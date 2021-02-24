@@ -87,10 +87,10 @@ public class CartServiceImpl implements CartService
 	public void placeOrder(final CartDto cartDto, final AddressDto addressDto)
 	{
 		final Address address = AddressConverter.dtoToEntity(addressDto);
+		cartDto.setPlacedDate(new Date());
 		final Cart cart = CartConverter.dtoToEntity(cartDto);
 		addressDao.insertAddress(address);
 		cart.setDeliveryAddress(address);
-		cart.setPlacedDate(new Date());
 		cartDao.updateCart(cart);
 	}
 
