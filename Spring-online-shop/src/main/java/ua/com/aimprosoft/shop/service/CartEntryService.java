@@ -3,7 +3,7 @@ package ua.com.aimprosoft.shop.service;
 import java.util.List;
 
 import ua.com.aimprosoft.shop.dto.CartDto;
-import ua.com.aimprosoft.shop.dto.CartEntryDto;
+import ua.com.aimprosoft.shop.entities.CartEntry;
 import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 
 
@@ -11,7 +11,7 @@ public interface CartEntryService
 {
 	void addEntry(final String code, final CartDto cartDto, final int quantity);
 
-	List<CartEntryDto> getEntriesByCartCode(String cartCode);
+	List<CartEntry> getEntriesByCartCode(String cartCode);
 
 	void updateEntryQuantity(String code, int quantity, CartDto cartDto) throws IncorrectOperationException;
 

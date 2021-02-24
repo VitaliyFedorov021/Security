@@ -2,9 +2,9 @@ package ua.com.aimprosoft.shop.service;
 
 import java.util.Optional;
 
+import ua.com.aimprosoft.shop.dto.AddressDto;
 import ua.com.aimprosoft.shop.dto.CartDto;
 import ua.com.aimprosoft.shop.dto.CustomerDto;
-import ua.com.aimprosoft.shop.entities.Address;
 import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 
 
@@ -18,7 +18,7 @@ public interface CartService
 
 	void updateProductQuantity(CustomerDto customerDto, int quantity, String code) throws IncorrectOperationException;
 
-	void placeOrder(CartDto cartDto, Address address);
+	void placeOrder(CartDto cartDto, AddressDto addressDto);
 
 	Optional<CartDto> getCartByCode(String cartCode);
 }

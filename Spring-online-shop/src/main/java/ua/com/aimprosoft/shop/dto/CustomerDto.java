@@ -1,5 +1,10 @@
 package ua.com.aimprosoft.shop.dto;
 
+import java.util.Date;
+
+import ua.com.aimprosoft.shop.entities.Gender;
+
+
 public class CustomerDto
 {
 	private int id;
@@ -7,6 +12,8 @@ public class CustomerDto
 	private String password;
 	private String firstName;
 	private String lastName;
+	private Gender gender;
+	private Date birthdayDate;
 	private String phoneNumber;
 
 	public String getFirstName()
@@ -42,6 +49,26 @@ public class CustomerDto
 	public void setPassword(final String password)
 	{
 		this.password = password;
+	}
+
+	public Gender getGender()
+	{
+		return gender;
+	}
+
+	public void setGender(final Gender gender)
+	{
+		this.gender = gender;
+	}
+
+	public Date getBirthdayDate()
+	{
+		return birthdayDate;
+	}
+
+	public void setBirthdayDate(final Date birthdayDate)
+	{
+		this.birthdayDate = birthdayDate;
 	}
 
 	public int getId()

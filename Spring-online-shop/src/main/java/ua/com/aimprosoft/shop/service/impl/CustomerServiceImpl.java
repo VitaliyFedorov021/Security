@@ -7,8 +7,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ua.com.aimprosoft.shop.dao.CustomerDao;
+import ua.com.aimprosoft.shop.dto.CustomerDto;
 import ua.com.aimprosoft.shop.entities.Customer;
 import ua.com.aimprosoft.shop.service.CustomerService;
+import ua.com.aimprosoft.shop.util.converters.CustomerConverter;
 
 
 @Service
@@ -26,8 +28,9 @@ public class CustomerServiceImpl implements CustomerService
 	}
 
 	@Override
-	public void registerCustomer(final Customer customer)
+	public void registerCustomer(final CustomerDto customerDto)
 	{
+		final Customer customer = CustomerConverter.dtoToEntity(customerDto);
 		final String password = customer.getPassword();
 		customer.setPassword(encoder.encode(password));
 		customerDao.insertCustomer(customer);

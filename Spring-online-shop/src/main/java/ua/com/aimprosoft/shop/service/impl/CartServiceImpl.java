@@ -1,6 +1,7 @@
 package ua.com.aimprosoft.shop.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -9,13 +10,16 @@ import org.springframework.stereotype.Service;
 
 import ua.com.aimprosoft.shop.dao.AddressDao;
 import ua.com.aimprosoft.shop.dao.CartDao;
+import ua.com.aimprosoft.shop.dto.AddressDto;
 import ua.com.aimprosoft.shop.dto.CartDto;
 import ua.com.aimprosoft.shop.dto.CustomerDto;
 import ua.com.aimprosoft.shop.entities.Address;
 import ua.com.aimprosoft.shop.entities.Cart;
+import ua.com.aimprosoft.shop.entities.CartEntry;
 import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.CartService;
+import ua.com.aimprosoft.shop.util.converters.AddressConverter;
 import ua.com.aimprosoft.shop.util.converters.CartConverter;
 import ua.com.aimprosoft.shop.util.converters.CustomerConverter;
 
@@ -57,6 +61,9 @@ public class CartServiceImpl implements CartService
 			cartDao.insertCart(cart);
 			return CartConverter.entityToDto(cart);
 		}
+		final Cart cart = cartOptional.get();
+		final List<CartEntry> entries = cartEntryService.getEntriesByCartCode(cart.getCode());
+		cart.setCartEntries(entries);
 		return CartConverter.entityToDto(cartOptional.get());
 	}
 
@@ -77,8 +84,9 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
-	public void placeOrder(final CartDto cartDto, final Address address)
+	public void placeOrder(final CartDto cartDto, final AddressDto addressDto)
 	{
+		final Address address = AddressConverter.dtoToEntity(addressDto);
 		final Cart cart = CartConverter.dtoToEntity(cartDto);
 		addressDao.insertAddress(address);
 		cart.setDeliveryAddress(address);
@@ -90,6 +98,12 @@ public class CartServiceImpl implements CartService
 	public Optional<CartDto> getCartByCode(final String cartCode)
 	{
 		final Optional<Cart> cartOptional = cartDao.findCartByCode(cartCode);
+		if (cartOptional.isPresent())
+		{
+			final Cart cart = cartOptional.get();
+			final List<CartEntry> entries = cartEntryService.getEntriesByCartCode(cart.getCode());
+			cart.setCartEntries(entries);
+		}
 		return cartOptional.map(CartConverter::entityToDto);
 	}
 

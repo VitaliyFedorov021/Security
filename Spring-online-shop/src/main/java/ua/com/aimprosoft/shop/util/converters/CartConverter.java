@@ -1,5 +1,6 @@
 package ua.com.aimprosoft.shop.util.converters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ua.com.aimprosoft.shop.dto.CartDto;
@@ -21,7 +22,7 @@ public class CartConverter
 		final List<CartEntry> entries = cart.getCartEntries();
 		if (entries == null)
 		{
-			dto.setCartEntries(null);
+			dto.setCartEntries(new ArrayList<>());
 			return dto;
 		}
 		dto.setCartEntries(CartEntryConverter.castToDto(entries));

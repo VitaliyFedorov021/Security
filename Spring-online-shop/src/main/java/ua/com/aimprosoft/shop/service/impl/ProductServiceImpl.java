@@ -1,6 +1,5 @@
 package ua.com.aimprosoft.shop.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,22 +27,12 @@ public class ProductServiceImpl implements ProductService
 	@Override
 	public List<ProductDto> getAllByCategoryCode(final String categoryCode)
 	{
-		return castToDto(productDao.findAllByCategoryCode(categoryCode));
+		return ProductConverter.castToDto(productDao.findAllByCategoryCode(categoryCode));
 	}
 
 	@Override
 	public Product getByProductCode(final String productCode)
 	{
 		return productDao.findByProductCode(productCode);
-	}
-
-	private List<ProductDto> castToDto(final List<Product> products)
-	{
-		final List<ProductDto> productsDto = new ArrayList<>();
-		for (final Product p : products)
-		{
-			productsDto.add(ProductConverter.entityToDto(p));
-		}
-		return productsDto;
 	}
 }

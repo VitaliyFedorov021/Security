@@ -1,6 +1,5 @@
 package ua.com.aimprosoft.shop.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +13,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import ua.com.aimprosoft.shop.dto.AddressDto;
 import ua.com.aimprosoft.shop.dto.CartDto;
-import ua.com.aimprosoft.shop.dto.CartEntryDto;
 import ua.com.aimprosoft.shop.dto.CustomerDto;
-import ua.com.aimprosoft.shop.entities.Address;
 import ua.com.aimprosoft.shop.forms.AddressForm;
 import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.CartService;
 import ua.com.aimprosoft.shop.service.SecurityService;
+import ua.com.aimprosoft.shop.util.MailSender;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 import ua.com.aimprosoft.shop.util.converters.AddressConverter;
 
@@ -38,15 +37,19 @@ public class OrderController
 	@Autowired
 	@Qualifier("addressValidator")
 	private final Validator validator;
+	@Autowired
+	private final MailSender mailSender;
 
 	public OrderController(final CartService cartService, final SecurityService securityService,
 			final CartEntryService cartEntryService,
-			@Qualifier("addressValidator") final Validator validator)
+			@Qualifier("addressValidator") final Validator validator,
+			final MailSender mailSender)
 	{
 		this.cartService = cartService;
 		this.securityService = securityService;
 		this.cartEntryService = cartEntryService;
 		this.validator = validator;
+		this.mailSender = mailSender;
 	}
 
 	@GetMapping("/place_order")
@@ -54,12 +57,10 @@ public class OrderController
 	{
 		final CustomerDto customerDto = securityService.getCurrentCustomer();
 		final CartDto cartDto = cartService.getActiveCart(customerDto);
-		final List<CartEntryDto> cartEntriesDto = cartEntryService.getEntriesByCartCode(cartDto.getCode());
-		if (cartEntriesDto.size() == 0)
+		if (cartDto.getCartEntries().size() == 0)
 		{
 			return "redirect:/cart";
 		}
-		cartDto.setCartEntries(cartEntriesDto);
 		model.addAttribute(ApplicationConstant.CART, cartDto);
 		model.addAttribute(ApplicationConstant.CUSTOMER, customerDto);
 		model.addAttribute(ApplicationConstant.ADDRESS, new AddressForm());
@@ -76,9 +77,10 @@ public class OrderController
 		{
 			return "checkout";
 		}
-		final Address addressEntity = AddressConverter.formToEntity(addressForm);
+		final AddressDto addressDto = AddressConverter.formToDto(addressForm);
 		final CartDto cartDto = cartService.getActiveCart(customerDto);
-		cartService.placeOrder(cartDto, addressEntity);
+		cartService.placeOrder(cartDto, addressDto);
+		mailSender.sendOrderConfirmationEmail(customerDto.getEmail(), cartDto, addressDto);
 		return "redirect:/confirm_order/" + cartDto.getCode();
 	}
 
@@ -91,12 +93,10 @@ public class OrderController
 			return "redirect:/";
 		}
 		final CartDto cartDto = cartDtoOptional.get();
-		final List<CartEntryDto> entries = cartEntryService.getEntriesByCartCode(cartCode);
-		if (entries.size() == 0)
+		if (cartDto.getCartEntries().size() == 0)
 		{
 			return "redirect:/cart";
 		}
-		cartDto.setCartEntries(entries);
 		model.addAttribute(ApplicationConstant.CART, cartDto);
 		return "confirmationPage";
 	}

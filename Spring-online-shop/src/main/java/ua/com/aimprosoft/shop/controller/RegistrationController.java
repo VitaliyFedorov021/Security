@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import ua.com.aimprosoft.shop.entities.Customer;
+import ua.com.aimprosoft.shop.dto.CustomerDto;
 import ua.com.aimprosoft.shop.forms.CustomerForm;
 import ua.com.aimprosoft.shop.service.CustomerService;
 import ua.com.aimprosoft.shop.service.SecurityService;
@@ -51,9 +51,9 @@ public class RegistrationController
 		{
 			return "signUpPage";
 		}
-		final Customer customerEntity = CustomerConverter.formToEntity(customer);
-		customerService.registerCustomer(customerEntity);
-		securityService.autoLogin(customerEntity.getEmail(), customerEntity.getPassword());
+		final CustomerDto customerDto = CustomerConverter.formToDto(customer);
+		customerService.registerCustomer(customerDto);
+		securityService.autoLogin(customerDto.getEmail(), customerDto.getPassword());
 		return "redirect:/";
 	}
 }

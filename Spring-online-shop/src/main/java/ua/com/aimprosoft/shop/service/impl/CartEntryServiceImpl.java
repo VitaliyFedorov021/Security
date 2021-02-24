@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import ua.com.aimprosoft.shop.dao.CartDao;
 import ua.com.aimprosoft.shop.dao.CartEntryDao;
 import ua.com.aimprosoft.shop.dto.CartDto;
-import ua.com.aimprosoft.shop.dto.CartEntryDto;
 import ua.com.aimprosoft.shop.entities.Cart;
 import ua.com.aimprosoft.shop.entities.CartEntry;
 import ua.com.aimprosoft.shop.entities.Product;
@@ -18,7 +17,6 @@ import ua.com.aimprosoft.shop.service.CalculationService;
 import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.ProductService;
 import ua.com.aimprosoft.shop.util.converters.CartConverter;
-import ua.com.aimprosoft.shop.util.converters.CartEntryConverter;
 
 
 @Component
@@ -63,9 +61,9 @@ public class CartEntryServiceImpl implements CartEntryService
 	}
 
 	@Override
-	public List<CartEntryDto> getEntriesByCartCode(final String cartCode)
+	public List<CartEntry> getEntriesByCartCode(final String cartCode)
 	{
-		return CartEntryConverter.castToDto(cartEntryDao.findEntriesByCartCode(cartCode));
+		return cartEntryDao.findEntriesByCartCode(cartCode);
 	}
 
 	@Override

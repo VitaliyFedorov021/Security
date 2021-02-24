@@ -56,4 +56,8 @@ public class ApplicationConstant
 
 	public static final String TYPE_TEXT = "text/plain";
 	public static final String SUCCESS_TEXT = "Added to cart";
+
+	public static final String SHOP_MAIL = "shop@gmail.com";
+	public static final String MAIL_SUBJECT = "Your order in our shop";
+	public static final String MAIL_TEXT = "Your order was successful! Thank you for shopping with us.";
 }

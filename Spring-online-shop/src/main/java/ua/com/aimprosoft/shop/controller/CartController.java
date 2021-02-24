@@ -1,7 +1,5 @@
 package ua.com.aimprosoft.shop.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ua.com.aimprosoft.shop.dto.CartDto;
-import ua.com.aimprosoft.shop.dto.CartEntryDto;
 import ua.com.aimprosoft.shop.dto.CustomerDto;
 import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
-import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.CartService;
 import ua.com.aimprosoft.shop.service.SecurityService;
 import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
@@ -27,15 +23,12 @@ public class CartController
 	private final SecurityService securityService;
 	@Autowired
 	private final CartService cartService;
-	@Autowired
-	private final CartEntryService cartEntryService;
 
 	public CartController(final SecurityService securityService,
-			final CartService cartService, final CartEntryService cartEntryService)
+			final CartService cartService)
 	{
 		this.securityService = securityService;
 		this.cartService = cartService;
-		this.cartEntryService = cartEntryService;
 	}
 
 	@PostMapping("/add_product")
@@ -53,8 +46,6 @@ public class CartController
 	{
 		final CustomerDto customerDto = securityService.getCurrentCustomer();
 		final CartDto cartDto = cartService.getActiveCart(customerDto);
-		final List<CartEntryDto> entries = cartEntryService.getEntriesByCartCode(cartDto.getCode());
-		cartDto.setCartEntries(entries);
 		model.addAttribute(ApplicationConstant.CART, cartDto);
 		return "showCart";
 	}
