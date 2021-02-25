@@ -8,6 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="custom" tagdir="/WEB-INF/tags" %>
+
 <html>
 <head>
     <title>Welcome!</title>
@@ -20,7 +22,7 @@
 </sec:authorize>
 
 <sec:authorize access="isAuthenticated()">
-    <h1 class="display-1">Welcome to our shop, <sec:authentication property="principal.username"/>!</h1>
+    <h1 class="display-1">Welcome to our shop, ${firstName} ${lastName}!</h1>
     <div><a href="/cart"><button type="button" class="btn btn-primary">Show cart</button></a></div>
     <div>
         <a href="/logout"><button type="button" class="btn btn-primary">Logout</button></a>
