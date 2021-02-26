@@ -17,7 +17,6 @@ import ua.com.aimprosoft.shop.dto.AddressDto;
 import ua.com.aimprosoft.shop.dto.CartDto;
 import ua.com.aimprosoft.shop.dto.CustomerDto;
 import ua.com.aimprosoft.shop.forms.AddressForm;
-import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.CartService;
 import ua.com.aimprosoft.shop.service.SecurityService;
 import ua.com.aimprosoft.shop.util.MailSender;
@@ -33,21 +32,17 @@ public class OrderController
 	@Autowired
 	private final SecurityService securityService;
 	@Autowired
-	private final CartEntryService cartEntryService;
-	@Autowired
 	@Qualifier("addressValidator")
 	private final Validator validator;
 	@Autowired
 	private final MailSender mailSender;
 
 	public OrderController(final CartService cartService, final SecurityService securityService,
-			final CartEntryService cartEntryService,
 			@Qualifier("addressValidator") final Validator validator,
 			final MailSender mailSender)
 	{
 		this.cartService = cartService;
 		this.securityService = securityService;
-		this.cartEntryService = cartEntryService;
 		this.validator = validator;
 		this.mailSender = mailSender;
 	}
@@ -64,7 +59,7 @@ public class OrderController
 		model.addAttribute(ApplicationConstant.CART, cartDto);
 		model.addAttribute(ApplicationConstant.CUSTOMER, customerDto);
 		model.addAttribute(ApplicationConstant.ADDRESS, new AddressForm());
-		return "checkout";
+		return "placeOrder";
 	}
 
 	@PostMapping("/confirm_order")
@@ -75,7 +70,7 @@ public class OrderController
 		validator.validate(addressForm, bindingResult);
 		if (bindingResult.hasErrors())
 		{
-			return "checkout";
+			return "placeOrder";
 		}
 		final AddressDto addressDto = AddressConverter.formToDto(addressForm);
 		final CartDto cartDto = cartService.getActiveCart(customerDto);
@@ -98,6 +93,6 @@ public class OrderController
 			return "redirect:/cart";
 		}
 		model.addAttribute(ApplicationConstant.CART, cartDto);
-		return "confirmationPage";
+		return "confirmation";
 	}
 }

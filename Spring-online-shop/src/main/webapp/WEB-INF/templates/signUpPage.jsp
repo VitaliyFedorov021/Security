@@ -16,9 +16,6 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<div>
-    <a href="/"><button type="button" class="btn btn-primary">HOME</button></a>
-</div>
 <form:form action="/sign_up" method="POST" class="needs-validation" modelAttribute="customer">
     <spring:bind path="email">
     <div class="form-group col-md-3">

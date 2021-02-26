@@ -16,15 +16,10 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script>
-        <%@include file="addToCart.js"%>
+        <%@include file="../addToCart.js"%>
     </script>
 </head>
 <body>
-<div>
-    <a href="/">
-        <button type="button" class="btn btn-primary">HOME</button>
-    </a>
-</div>
 <table class="table table-bordered">
     <tr>
         <td>Code</td>

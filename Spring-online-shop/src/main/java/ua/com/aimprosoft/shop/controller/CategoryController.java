@@ -28,6 +28,6 @@ public class CategoryController
 	{
 		final List<CategoryDto> categoriesDto = categoryService.getAll();
 		model.addAttribute(ApplicationConstant.CATEGORIES, categoriesDto);
-		return "categoriesPage";
+		return "categories";
 	}
 }

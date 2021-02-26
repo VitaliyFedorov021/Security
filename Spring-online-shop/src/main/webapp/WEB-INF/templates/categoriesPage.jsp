@@ -14,11 +14,6 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<div>
-    <a href="/">
-        <button type="button" class="btn btn-primary">HOME</button>
-    </a>
-</div>
     <table class="table table-bordered">
         <tr>
             <td>Name</td>

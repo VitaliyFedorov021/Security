@@ -18,18 +18,13 @@
 </head>
 <body>
 <sec:authorize access="!isAuthenticated()">
-    <h1 class="display-1">Welcome to our shop!</h1>   <div><a href="/login"><button class="btn btn-primary">Sign in</button></a></div>
+    <h1 class="display-1">Welcome to our shop!</h1>
 </sec:authorize>
 
 <sec:authorize access="isAuthenticated()">
-    <h1 class="display-1">Welcome to our shop, ${firstName} ${lastName}!</h1>
-    <div><a href="/cart"><button type="button" class="btn btn-primary">Show cart</button></a></div>
-    <div>
-        <a href="/logout"><button type="button" class="btn btn-primary">Logout</button></a>
-    </div>
+    <h1 class="display-1">Welcome to our shop, <sec:authentication property="principal.customer.firstName"/>
+        <sec:authentication property="principal.customer.lastName"/>!
+    </h1>
 </sec:authorize>
-<div>
-    <a href="/categories"><button type="button" class="btn btn-primary">Show categories</button></a>
-</div>
 </body>
 </html>

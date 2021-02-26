@@ -14,12 +14,13 @@ public class LoginController
 {
 	@GetMapping("/login")
 	public String loginPage() {
-		return "loginPage";
+		return "login";
 	}
 
 	@PostMapping("/login-fail")
-	public String failLogin(final Model model) {
+	public String failLogin(final Model model)
+	{
 		model.addAttribute(ApplicationConstant.MESSAGE, ErrorConstant.INCORRECT_LOGIN_DATA);
-		return "loginPage";
+		return "login";
 	}
 }

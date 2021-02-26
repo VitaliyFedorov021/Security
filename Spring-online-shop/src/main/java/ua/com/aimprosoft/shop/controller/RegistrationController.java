@@ -21,11 +21,14 @@ import ua.com.aimprosoft.shop.util.converters.CustomerConverter;
 @Controller
 public class RegistrationController
 {
+	@Autowired
 	private final CustomerService customerService;
+	@Autowired
+	@Qualifier("customerValidator")
 	private final Validator validator;
+	@Autowired
 	private final SecurityService securityService;
 
-	@Autowired
 	public RegistrationController(final CustomerService customerService,
 			@Qualifier("customerValidator") final Validator validator,
 			final SecurityService securityService)
@@ -39,7 +42,7 @@ public class RegistrationController
 	public String signUpPage(final Model model)
 	{
 		model.addAttribute(ApplicationConstant.CUSTOMER, new CustomerForm());
-		return "signUpPage";
+		return "signUp";
 	}
 
 	@PostMapping("/sign_up")
@@ -49,7 +52,7 @@ public class RegistrationController
 		validator.validate(customer, bindingResult);
 		if (bindingResult.hasErrors())
 		{
-			return "signUpPage";
+			return "signUp";
 		}
 		final CustomerDto customerDto = CustomerConverter.formToDto(customer);
 		customerService.registerCustomer(customerDto);

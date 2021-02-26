@@ -31,7 +31,7 @@ public class ProductController
 	{
 		final List<ProductDto> productsDto = productService.getAllByCategoryCode(categoryCode);
 		model.addAttribute(ApplicationConstant.PRODUCTS, productsDto);
-		return "plp";
+		return "products";
 	}
 
 	@GetMapping("/product/{productCode}")
@@ -40,6 +40,6 @@ public class ProductController
 		final Product product = productService.getByProductCode(productCode);
 		final ProductDto productDto = ProductConverter.entityToDto(product);
 		model.addAttribute(ApplicationConstant.PRODUCT, productDto);
-		return "pdp";
+		return "product";
 	}
 }

@@ -47,7 +47,7 @@ public class CartController
 		final CustomerDto customerDto = securityService.getCurrentCustomer();
 		final CartDto cartDto = cartService.getActiveCart(customerDto);
 		model.addAttribute(ApplicationConstant.CART, cartDto);
-		return "showCart";
+		return "cart";
 	}
 
 	@PostMapping("/delete_product")
