@@ -23,18 +23,15 @@ import ua.com.aimprosoft.shop.util.converters.CartConverter;
 public class CartEntryServiceImpl implements CartEntryService
 {
 	@Autowired
-	private final CartDao cartDao;
-	@Autowired
 	private final CartEntryDao cartEntryDao;
 	@Autowired
 	private final ProductService productService;
 	@Autowired
 	private final CalculationService calculationService;
 
-	public CartEntryServiceImpl(final CartDao cartDao, final CartEntryDao cartEntryDao,
+	public CartEntryServiceImpl(final CartEntryDao cartEntryDao,
 			final ProductService productService, final CalculationService calculationService)
 	{
-		this.cartDao = cartDao;
 		this.cartEntryDao = cartEntryDao;
 		this.productService = productService;
 		this.calculationService = calculationService;
@@ -53,11 +50,13 @@ public class CartEntryServiceImpl implements CartEntryService
 			cartEntry = createEntry(product, cart, quantity);
 			cartEntryDao.insertEntry(cartEntry);
 			calculationService.calculation(cart);
+			cartDto.setTotalPrice(cart.getTotalPrice());
 			return;
 		}
 		cartEntry = entryOptional.get();
 		final int newQuantity = cartEntry.getQuantity() + quantity;
 		updateEntry(cart, newQuantity, cartEntry);
+		cartDto.setTotalPrice(cart.getTotalPrice());
 	}
 
 	@Override

@@ -29,15 +29,12 @@ public class CustomerForm
 		this.password = password;
 	}
 
-	public CustomerForm(final String email, final String password, final String firstName, final String lastName,
-			final Gender gender, final Date birthdayDate, final String phoneNumber)
+	public CustomerForm(final String email, final String firstName, final String lastName,
+			final String phoneNumber)
 	{
 		this.email = email;
-		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.gender = gender;
-		this.birthdayDate = birthdayDate;
 		this.phoneNumber = phoneNumber;
 	}
 

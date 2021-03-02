@@ -84,7 +84,7 @@
             <br>
         </div>
         </spring:bind>
-        <input type="submit" class="btn btn-primary" value="Submit">
+            <button type="submit" class="btn btn-primary">Confirm</button>
     </form:form>
 
 </body>

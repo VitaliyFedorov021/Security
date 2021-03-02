@@ -14,9 +14,9 @@ import ua.com.aimprosoft.shop.util.converters.CustomerConverter;
 @Service
 public class CustomerDetailsServiceImpl implements UserDetailsService
 {
+	@Autowired
 	private final CustomerService customerService;
 
-	@Autowired
 	public CustomerDetailsServiceImpl(final CustomerService customerService)
 	{
 		this.customerService = customerService;

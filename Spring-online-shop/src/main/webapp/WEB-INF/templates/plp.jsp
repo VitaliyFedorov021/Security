@@ -31,12 +31,10 @@
             <td>${p.code}</td>
             <td><a href="/product/${p.code}">${p.name}</a></td>
             <td>${p.price}<br>
-                <sec:authorize access="isAuthenticated()">
                     <div>
                         <button type="button" value="${p.code}" id="productCode" name="productCode" class="btn btn-cart">Add to cart</button>
                         <input type="hidden" id="quantity" name="quantity" value="1">
                     </div>
-                </sec:authorize>
             </td>
         </tr>
     </c:forEach>

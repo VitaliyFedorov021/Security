@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import ua.com.aimprosoft.shop.entities.CartEntry;
 import ua.com.aimprosoft.shop.exceptions.IncorrectOperationException;
 import ua.com.aimprosoft.shop.service.CartEntryService;
 import ua.com.aimprosoft.shop.service.CartService;
+import ua.com.aimprosoft.shop.util.constant.ApplicationConstant;
 import ua.com.aimprosoft.shop.util.converters.AddressConverter;
 import ua.com.aimprosoft.shop.util.converters.CartConverter;
 import ua.com.aimprosoft.shop.util.converters.CustomerConverter;
@@ -50,6 +53,13 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
+	public void addProductToAnonymousCart(final HttpSession session, final String productCode, final int quantity)
+	{
+		CartDto cartDto = getActiveCart(session);
+		cartEntryService.addEntry(productCode, cartDto, quantity);
+	}
+
+	@Override
 	public CartDto getActiveCart(final CustomerDto customerDto)
 	{
 		final Optional<Cart> cartOptional = cartDao.findActiveCart(customerDto.getEmail());
@@ -68,6 +78,25 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
+	public CartDto getActiveCart(HttpSession session)
+	{
+		String cartCode = (String) session.getAttribute(ApplicationConstant.CART_CODE);
+		Optional<Cart> cartOptional = cartDao.findCartByCode(cartCode);
+		if (!cartOptional.isPresent())
+		{
+			Cart newCart = new Cart();
+			newCart.setCode(generateCode());
+			cartDao.insertCart(newCart);
+			session.setAttribute(ApplicationConstant.CART_CODE, newCart.getCode());
+			return CartConverter.entityToDto(newCart);
+		}
+		Cart cart = cartOptional.get();
+		final List<CartEntry> entries = cartEntryService.getEntriesByCartCode(cart.getCode());
+		cart.setCartEntries(entries);
+		return CartConverter.entityToDto(cart);
+	}
+
+	@Override
 	public void deleteProductFromCart(final CustomerDto customerDto, final String productCode)
 			throws IncorrectOperationException
 	{
@@ -76,10 +105,26 @@ public class CartServiceImpl implements CartService
 	}
 
 	@Override
+	public void deleteProductFromAnonymousCart(final HttpSession session, final String productCode)
+			throws IncorrectOperationException
+	{
+		final CartDto cartDto = getActiveCart(session);
+		cartEntryService.deleteEntry(cartDto, productCode);
+	}
+
+	@Override
 	public void updateProductQuantity(final CustomerDto customerDto, final int quantity, final String code)
 			throws IncorrectOperationException
 	{
 		final CartDto cartDto = getActiveCart(customerDto);
+		cartEntryService.updateEntryQuantity(code, quantity, cartDto);
+	}
+
+	@Override
+	public void updateProductQuantityAnonymous(final HttpSession session, final int quantity, final String code)
+			throws IncorrectOperationException
+	{
+		final CartDto cartDto = getActiveCart(session);
 		cartEntryService.updateEntryQuantity(code, quantity, cartDto);
 	}
 

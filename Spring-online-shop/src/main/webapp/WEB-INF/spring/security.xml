@@ -16,8 +16,8 @@
 			invalidate-session="true"
 		        delete-cookies="JSESSIONID"
 		/>
-		<intercept-url pattern="/cart" access="isAuthenticated()"/>
-		<intercept-url pattern="/place_order" access="isAuthenticated()"/>
+<!--		<intercept-url pattern="/cart" access="isAuthenticated()"/>-->
+<!--		<intercept-url pattern="/place_order" access="isAuthenticated()"/>-->
 	</http>
 
 

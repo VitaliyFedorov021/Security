@@ -28,12 +28,10 @@
     <br>
     <h1>Price:</h1>
     <h3 class="display-3">${product.price}$</h3>
-    <sec:authorize access="isAuthenticated()">
         <button type="button" value="${product.code}" id="productCode" name="productCode" class="btn btn-cart">Add to cart</button>
         <div class="form-group col-md-1">
             <label for="quantity">Quantity</label>
             <input type="number" id="quantity" name="quantity" min="1" max="15" value="1">
         </div>
-    </sec:authorize>
 </body>
 </html>

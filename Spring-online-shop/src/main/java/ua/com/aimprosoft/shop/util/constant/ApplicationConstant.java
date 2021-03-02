@@ -38,6 +38,7 @@ public class ApplicationConstant
 	public static final String TOWN = "town";
 
 	public static final String CART = "cart";
+	public static final String CART_CODE = "cartCode";
 	public static final String CUSTOMER = "customer";
 
 	public static final String ENTRY_NUMBER_DB = "entry_number";

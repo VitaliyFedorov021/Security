@@ -1,5 +1,7 @@
 package ua.com.aimprosoft.shop.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,28 +36,39 @@ public class CartController
 	@PostMapping("/add_product")
 	public @ResponseBody
 	String addToCart(@RequestParam("productCode") final String productCode,
-			@RequestParam("quantity") final int quantity)
+			@RequestParam("quantity") final int quantity,
+			final HttpSession session)
 	{
 		final CustomerDto customerDto = securityService.getCurrentCustomer();
+		if (customerDto == null)
+		{
+			cartService.addProductToAnonymousCart(session, productCode, quantity);
+			return ApplicationConstant.SUCCESS_TEXT;
+		}
 		cartService.addProductToCart(customerDto, productCode, quantity);
 		return ApplicationConstant.SUCCESS_TEXT;
 	}
 
 	@GetMapping("/cart")
-	public String showCart(final Model model)
+	public String showCart(final Model model, final HttpSession session)
 	{
 		final CustomerDto customerDto = securityService.getCurrentCustomer();
-		final CartDto cartDto = cartService.getActiveCart(customerDto);
+		final CartDto cartDto = getCart(customerDto, session);
 		model.addAttribute(ApplicationConstant.CART, cartDto);
 		return "cart";
 	}
 
 	@PostMapping("/delete_product")
-	public String deleteProduct(@RequestParam("productCode") final String productCode)
+	public String deleteProduct(@RequestParam("productCode") final String productCode, final HttpSession session)
 	{
 		try
 		{
 			final CustomerDto customerDto = securityService.getCurrentCustomer();
+			if (customerDto == null)
+			{
+				cartService.deleteProductFromAnonymousCart(session, productCode);
+				return "redirect:/cart";
+			}
 			cartService.deleteProductFromCart(customerDto, productCode);
 			return "redirect:/cart";
 		}
@@ -67,11 +80,16 @@ public class CartController
 
 	@PostMapping("/change_quantity")
 	public String changeQuantity(@RequestParam("productCode") final String productCode,
-			@RequestParam("quantity") final int quantity)
+			@RequestParam("quantity") final int quantity, final HttpSession session)
 	{
 		try
 		{
 			final CustomerDto customerDto = securityService.getCurrentCustomer();
+			if (customerDto == null)
+			{
+				cartService.updateProductQuantityAnonymous(session, quantity, productCode);
+				return "redirect:/cart";
+			}
 			cartService.updateProductQuantity(customerDto, quantity, productCode);
 			return "redirect:/cart";
 		}
@@ -79,5 +97,19 @@ public class CartController
 		{
 			return "redirect:/cart";
 		}
+	}
+
+	private CartDto getCart(final CustomerDto customerDto, final HttpSession session)
+	{
+		CartDto cartDto = null;
+		if (customerDto == null)
+		{
+			cartDto = cartService.getActiveCart(session);
+		}
+		else
+		{
+			cartDto = cartService.getActiveCart(customerDto);
+		}
+		return cartDto;
 	}
 }

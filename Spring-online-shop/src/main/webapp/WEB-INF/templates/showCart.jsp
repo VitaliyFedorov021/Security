@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <title>Cart</title>
@@ -56,7 +57,12 @@
                 <h3 class="display-3">Total price: ${cart.totalPrice}</h3>
             </div>
         </table>
-        <a href="/place_order"><button class="btn btn-primary" type="button">Place order</button></a>
+        <security:authorize access="!isAuthenticated()">
+            <a href="/personal_data"><button type="button" class="btn btn-primary">Confirm</button></a>
+        </security:authorize>
+        <sec:authorize access="isAuthenticated()">
+            <a href="/place_order"><button class="btn btn-primary" type="button">Place order</button></a>
+        </sec:authorize>
     </c:otherwise>
 </c:choose>
 </body>
