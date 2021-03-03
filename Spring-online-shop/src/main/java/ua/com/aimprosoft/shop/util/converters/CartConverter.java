@@ -46,4 +46,12 @@ public class CartConverter
 		cart.setCartEntries(CartEntryConverter.castToEntry(entries));
 		return cart;
 	}
+
+	public static List<CartDto> castToDto(final List<Cart> carts) {
+		List<CartDto> dtos = new ArrayList<>();
+		for (Cart c : carts) {
+			dtos.add(entityToDto(c));
+		}
+		return dtos;
+	}
 }

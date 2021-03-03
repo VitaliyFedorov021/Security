@@ -29,6 +29,7 @@ public class CustomerConverter
 		dto.setFirstName(customer.getFirstName());
 		dto.setLastName(customer.getLastName());
 		dto.setPhoneNumber(customer.getPhoneNumber());
+		dto.setBirthdayDate(customer.getBirthdayDate());
 		return dto;
 	}
 

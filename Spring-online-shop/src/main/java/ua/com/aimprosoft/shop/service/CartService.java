@@ -1,5 +1,6 @@
 package ua.com.aimprosoft.shop.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -31,4 +32,6 @@ public interface CartService
 	void placeOrder(CartDto cartDto, AddressDto addressDto);
 
 	Optional<CartDto> getCartByCode(String cartCode);
+
+	List<CartDto> getCartsByEmail(String email);
 }

@@ -152,6 +152,17 @@ public class CartServiceImpl implements CartService
 		return cartOptional.map(CartConverter::entityToDto);
 	}
 
+	@Override
+	public List<CartDto> getCartsByEmail(final String email)
+	{
+		List<Cart> carts = cartDao.findCartsByEmail(email);
+		for (Cart c : carts) {
+			List<CartEntry> entries = cartEntryService.getEntriesByCartCode(c.getCode());
+			c.setCartEntries(entries);
+		}
+		return CartConverter.castToDto(carts);
+	}
+
 	private String generateCode()
 	{
 		final int leftLimit = 97;

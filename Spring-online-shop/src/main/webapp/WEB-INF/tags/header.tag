@@ -23,6 +23,7 @@
     </sec:authorize>
     <sec:authorize access="isAuthenticated()">
         <a class="nav-link" href="/logout">Logout</a>
+        <a class="nav-link" href="/info">Info</a>
         <sec:authentication property="principal.username"/>
     </sec:authorize>
 

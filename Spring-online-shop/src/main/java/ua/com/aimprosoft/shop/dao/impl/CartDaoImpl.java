@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import ua.com.aimprosoft.shop.dao.CartDao;
 import ua.com.aimprosoft.shop.entities.Address;
 import ua.com.aimprosoft.shop.entities.Cart;
+import ua.com.aimprosoft.shop.entities.Customer;
 import ua.com.aimprosoft.shop.mappers.CartMapper;
 
 
@@ -34,6 +36,9 @@ public class CartDaoImpl implements CartDao
 					+ "WHERE email = ? AND cart.placed_date IS NULL";
 	public static final String FIND_CART_BY_CODE =
 			"SELECT * FROM cart WHERE code = ?";
+	public static final String FIND_ALL_CART_BY_EMAIL = "SELECT * FROM cart "
+			+ "JOIN customer ON customer.id = cart.customer_id "
+			+ "WHERE email = ? AND cart.placed_date IS NOT NULL";
 
 	@Autowired
 	public CartDaoImpl(final JdbcTemplate jdbcTemplate)
@@ -57,8 +62,15 @@ public class CartDaoImpl implements CartDao
 		final PreparedStatement pStatement = connection.prepareStatement(ADD_TO_CART, Statement.RETURN_GENERATED_KEYS);
 		pStatement.setString(1, cart.getCode());
 		pStatement.setDouble(2, cart.getTotalPrice());
-		pStatement.setInt(3, cart.getCustomer().getId());
+		pStatement.setObject(3, getCustomerId(cart.getCustomer()));
 		return pStatement;
+	}
+
+	private Object getCustomerId(Customer customer) {
+		if (customer != null) {
+			return customer.getId();
+		}
+		return null;
 	}
 
 	@Override
@@ -95,6 +107,12 @@ public class CartDaoImpl implements CartDao
 		{
 			return Optional.empty();
 		}
+	}
+
+	@Override
+	public List<Cart> findCartsByEmail(final String email)
+	{
+		return jdbcTemplate.query(FIND_ALL_CART_BY_EMAIL, new CartMapper(), email);
 	}
 
 	private Object getAddressId(final Address address) {
