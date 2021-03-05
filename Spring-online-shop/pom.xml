@@ -28,11 +28,14 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring-version}</version>
+			<version>5.3.3</version>
 		</dependency>
+
+
 
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -113,12 +116,6 @@
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>5.2.6.RELEASE</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>

@@ -21,7 +21,7 @@
 	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
 		<property name="driverClassName" value="${jdbcDriver}"/>
 		<property name="url" value="${jdbcUrl}"/>
-		<property name="username" value="${username}"/>
+		<property name="username" value="root"/>
 		<property name="password" value="${password}"/>
 	</bean>
 
